@@ -13,6 +13,7 @@ The SONATA Data Format provides:
 
 * A systematic schema for describing simulation output/reports making it easy for users to exchange their simulation output data, and moreover the underlying hdf5 based format permits efficient storage of variables such as spike times, membrane potential, and Ca2+ concentration.
 
-For further details on SONATA, see: 
+For further details on SONATA, see:
+
 https://github.com/AllenInstitute/sonnet/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
 
