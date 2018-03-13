@@ -1,4 +1,4 @@
-SONATA Data Format: A common data model for representing biophysical and point neuron circuits proposed by the AIBS and BBP
+# SONATA Data Format: A common data model for representing biophysical and point neuron circuits proposed by the AIBS and BBP
 
 Contributors: Eilif Muller, Sergey Gratiy, Werner Van Geit, Jean-Denis Courcol, Anton Arkhipov, Mike Gevaert, Adrien Devresse, Yazan Billeh, Kael Dai, James King, Juan Hernando …
 
@@ -6,21 +6,17 @@ Version 0.1
 
 Date: Q1-2018
 
-# Abstract
+## Abstract
 
 The need has arisen at both the Blue Brain Project (BBP) and the Allen Institute for Brain Science (AIBS) for efficient ways of representing circuits of neurons (composed of biophysically detailed neuron and point-neuron models) and the output of simulation thereof for analysis and visualization.  Such representations are not generally available as open-source tools in the computational neuroscience community, so both the BBP and AIBS have developed internally their own representations to meet these needs.  As the public release of these circuits is on both the AIBS and BBP roadmaps, it is desirable to converge on a data model to release these circuits, so as to provide a foundation to foster an emerging ecosystem of tools around the data model, developed by the AIBS, BBP and the community at large.
 
 The objective of this document is to specify a common data model for neural circuits and simulation output which can be used and supported in the future by both AIBS and BBP.  The data model will be novel compared to other community approaches (e.g. NeuroML) in that it will be optimized for performance for simulation, analysis and visualization of large-scale circuits. This document is accompanied by an example network in the presented data format.
 
-# Contents
-
-[[TOC]]
-
-# Mission Statement
+## Mission Statement
 
 This document is intended to present the rationale and outcomes of discussions and analysis towards convergence.  It is a high-level document which can guide the development and public release of a standard "performance representation" data model and associated specifications, including user and developer documentation by the BBP and AIBS.  It is understood that such a data model is complementary, and should co-exist with and leverage existing model representation efforts, such as NeuroML, wherever performance considerations allow.  The latter focuses on flexible and open exchange, cross-simulator reproducibility, and rigorous declarative representation.  In contrast, the present effort focuses on representing a curated subset of models expressible in NeuroML, in compact and efficient representations leveraging existing technologies such as hdf5, SQLite, graph databases, spatial indexing, etc. to enable an ecosystem of performant simulation, analysis and visualization tools.  An import-export bridge between these two approaches will ensure a complementary and mutual benefit.
 
-# Representing Circuits
+## Representing Circuits
 
 The common circuit representation format is described in subsequent subsections as follows:
 
@@ -38,7 +34,7 @@ The common circuit representation format is described in subsequent subsections 
 
 * Tying it all together - the circuit config file
 
-## Representing biophysical neuron morphologies
+### Representing biophysical neuron morphologies
 
 The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html](http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html) ) with additional requirements as described below.
 
@@ -111,7 +107,7 @@ It is not required that the soma is located at 0,0,0 in the SWC file, but in cas
 
 It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.  For circuits for which this is true, the circuit producer can declare it with the "standardized_morphology_orientation" entry in the circuit_config.json, so downstream users can safely assume it.  See "Tying it all together - the circuit_config file" for more details.
 
-## Representing ion channel, point neuron and synapse models
+### Representing ion channel, point neuron and synapse models
 
 To represent point neuron models, synapses and ion channels NEURON MOD files are used.  Models provided as standard by NEURON are also valid, such as ExpSyn, IntFire1. 
 
@@ -119,11 +115,11 @@ To support reproducible random numbers in NEURON, it is required to define conve
 
 The forthcoming NeuroML/LEMS format shows promise for representing synapses and ion channels.  Adopting such representations promises simulator independence, and significant improvements for modernizing code-generation pipelines for NEURON, coreNEURON and NEST, and exotic compute architectures, such as GPU, SpiNNaker. However, this issue is recommended to be left to a later date, when LEMS has matured enough to represent stochastic synapses.  
 
-## Representing biophysical neuron channel distribution and composition
+### Representing biophysical neuron channel distribution and composition
 
 For representing the parameterization and distribution of ion channels and passive properties of neurons three formats will be supported: 1), an xml file using a NeuroML "biophysicalProperties" and “concentrationModel” block schema (cf [https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd](https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd) ) 2) a JSON file using Allen Cell Types Data Base schema. 3) a HOC template.
 
-### NeuroML
+#### NeuroML
 
 Channel names (the "id" attribute) and parameter name attributes are expected to map one-to-one with the MOD files used.
 
@@ -225,7 +221,7 @@ Electrophysiology on which this model is based: http://celltypes.brain-map.org/m
 
 </neuroml>
 
-### Allen Cell Types Database JSON
+#### Allen Cell Types Database JSON
 
 Example:
 
@@ -499,7 +495,7 @@ Example:
 
 }
 
-## HOC template
+#### HOC template
 
 Parameters may be specified inside the HOC template in an arbitrary manner.
 
@@ -507,9 +503,9 @@ Example:
 
 https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=139653&file=/L5bPCmodelsEH/models/L5PCbiophys2.hoc#tabs-2
 
-## Representing networks of neurons
+### Representing networks of neurons
 
-### Overview
+#### Overview
 
 We consider a network of neurons as a graph made up of of nodes (neurons) and edges (connections between the neurons). Nodes of a network can be arranged into multiple populations of neurons. For instance, a population may correspond to a brain region or a particular cell type.   The connectivity between a source population and a target population is defined by an edge population.  Nodes and edges in their respective populations are also assigned respective node and edge *types.  *Parameters assigned to node or edge types are inherited for all nodes or edges of the respective type. * *A given node or edge can be associated with one and only one node or edge type, respectively.
 
@@ -517,9 +513,7 @@ All nodes and edges, and likewise node and edge types can have be assigned  attr
 
 The details of how node and edge populations are defined and represented are described in the following sections.
 
-### Representing nodes
-
-#### Nodes
+#### Representing nodes
 
 In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces. 
 
@@ -611,7 +605,7 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
 
 Table 1: The Layout  of the HDF5 file format for describing nodes.
 
-#### Nodes - Required Attributes
+##### Nodes - Required Attributes
 
 **/nodes** - The top-level group that will contain populations.  This group must always be present. 
 
@@ -744,9 +738,7 @@ user mechanism</td>
 
 Table 2: A conceptual schematic of the architecture relating node attributes* model*, and *dynamics_params* overrides at the node_type and nodes level for each model_type.  The namespace of both node_type and node level parameter overrides are given uniquely by the model object parameter namespace.  Node level parameter overrides take precedence over node_type level parameter overrides.
 
-### Representing Edges
-
-#### Edges
+#### Representing Edges
 
 Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.  
 
@@ -836,7 +828,7 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
 
 Table 2: Layout of the file format for describing edges.
 
-#### Edges - Required Attributes
+##### Edges - Required Attributes
 
 **edge_type_id**** -  **Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate a edge_type_id with its associated attribute values.
 
@@ -874,7 +866,7 @@ Table 2: Layout of the file format for describing edges.
 
 Note, that similar to the nodes description, if a variable exists in both the edges HDF5 file and the edge_types CSV file, then the HDF5 file will override the latter.
 
-#### Edges - Optional indexing
+##### Edges - Optional indexing
 
 The edge populations as defined above only allow fast enumeration of the edges from one node population to another population, but finding out the target nodes of a given source node or vice-versa cannot be performed in sublinear time. This optional extension of an edge file provides an indexing scheme that allows to query the source or target nodes of a given node more efficiently. This specification is based on the Syn2 proposal from BBP (NOTE:  https://github.com/adevress/syn2_spec).
 
@@ -916,7 +908,7 @@ The source_to_target/range_to_edge_id dataset defines ranges of edges in the edg
 
 The datasets from the target_to_source group are defined symmetrically. From this symmetry is easy to infer that edges should be grouped by source, target pairs, otherwise an important overhead will be incurred in one or both of the indices.  
 
-## Tying it all together - the config file
+### Tying it all together - the network/circuit config file
 
 The config file is a .json file that defines the relative location of each part of the network:
 
@@ -1014,7 +1006,7 @@ The network is defined by nodes and edges. In the example below, a V1 model is b
 
  
 
-# Representing Simulations
+## Representing Simulations
 
 The simulation config file is a json file which ties together the definition of a simulation on a circuit.  It specifies the circuit to be used, simulator parameters, load balancing and time stepping information, stimuli (simulation input), reports (simulation output), and the specification of neuron targets (sub groups of neurons) in a node_sets_file.  Like the circuit_config.json, the simulation_config.json may contain a "manifest" block which defines paths to be re-used elsewhere in the .json file:
 
@@ -1032,7 +1024,7 @@ The simulation config file is a json file which ties together the definition of 
 
   },
 
-## Specifying the Circuit to Simulate
+### Specifying the Circuit/Network to Simulate
 
 The circuit to simulate is specified by including a key "network", with value pointing to the circuit_config.json for which the simulation should be performed.
 
@@ -1040,7 +1032,7 @@ Example:
 
 "network": "${BASE_DIR}/circuit_config.json"
 
-## Time Stepping Parameters
+### Time Stepping Parameters
 
 The "run" block specifies some global parameters of the simulation run, such as total duration
 
@@ -1058,7 +1050,7 @@ The "run" block specifies some global parameters of the simulation run, such as 
 
   },
 
-## Conditions Configuration
+### Conditions Configuration
 
 This block specifies optional global parameters with reserved meaning associated with manipulation of the "in silico preparation".
 
@@ -1072,7 +1064,7 @@ Example:
 
   },
 
-## Output Configuration
+### Output Configuration
 
 The "output" block configures the location where output reports should be written, and if output should be overwritten.
 
@@ -1086,17 +1078,17 @@ The "output" block configures the location where output reports should be writte
 
   },
 
-## Implementation Specific Parameters
+### Implementation Specific Parameters
 
 Implementations of software interpreting the simulation config may need to embed additional sections defined by key:dict so long as the key does not collide with any keys with reserved meaning in the simulation config.  Some examples may include simulator or implementation specific parameters, such as load balancing hints, numerical methods, parallelization approaches, etc.
 
-## Specifying Targets - Sub-groups of Neurons
+### Specifying Targets - Sub-groups of Neurons
 
 "node_sets_file": "<node_sets_file>"
 
 See below "Node Sets File".
 
-## Simulation input - Stimuli
+### Simulation input - Stimuli
 
 The "inputs" block of the simulation config allows the definition of inputs to the simulation. There can be one or more inputs defined in this block.ells Cells in the circuit may receive multiple inputs and others may receive no input.
 
@@ -1316,7 +1308,7 @@ Example of the corresponding input_file (column names):
 </table>
 
 
-## Simulation output - Reports
+### Simulation output - Reports
 
  
 
@@ -1442,7 +1434,7 @@ Note, spikes are always reported, and a report specification needn’t be specif
 
  
 
-### **Example**
+#### **Example**
 
 "reports": {
 
@@ -1514,7 +1506,7 @@ Note, spikes are always reported, and a report specification needn’t be specif
 
  
 
-### **Node Sets**** File**
+#### **Node Sets**** File**
 
 A Node Sets json file contains subsets of cells that act as targets for different reports or stimulations, or can also be used to name and define the target subpopulation to simulate. Each item in the file is a unique referenced "set_name", followed by a collection of a key-value pairs corresponding to the properties of the nodes. At time of interpretation of the Node Sets file, gids must also be defined for each node in the network to be simulated, for that "gid" is also a valid property to appear in key-value pairs. Multiple key-value selections are combined assuming a logical AND operation.  Node populations and their names are implicitly defined in the Node Set namespace, and needn’t be declared explicitly.  The general schema is as follows.
 
@@ -1534,7 +1526,7 @@ A Node Sets json file contains subsets of cells that act as targets for differen
 
 }
 
-#### An Example of a Node Set File
+##### An Example of a Node Set File
 
 {
 
@@ -1560,11 +1552,11 @@ A Node Sets json file contains subsets of cells that act as targets for differen
 
  
 
-## **Output file formats**
+### **Output file formats**
 
 Each report name in the "reports" block results in a separate HDF5 file with the filename <report_name>.h5.
 
-### Spike file
+#### Spike file
 
 Spikes from all cells will be stored in a single HDF5 file that contains (gid, spike time) pairs in separate datasets. These datasets may be unsorted, sorted by gid or sorted by spike time. The gids are not to be confused with node_ids from populations, see below for details about gid to node_id and population mapping. 
 
@@ -1588,7 +1580,7 @@ The layout of a spike file is as follows:
 
 The spikes group contains an enum attribute named *sorting* with one of these values: none, by_gid, by_time. Both datasets are sorted using as sorting key the dataset specified by the attribute. When sorting by gid, spikes of the same gid are expected to be also sorted by timestamp as secondary key. When sorting by timestamp, spikes with the same timestamp can be in any order. 
 
-### Multi and single compartment recordings
+#### Multi and single compartment recordings
 
 Using when recording simulation data from one or more cells
 
@@ -1618,7 +1610,7 @@ are used to specify the compartment’s section id and the relative position, re
 
  
 
-### Extracellular report
+#### Extracellular report
 
 Used when reporting variables that are not associated with the individual cells.
 
@@ -1636,7 +1628,7 @@ The data for a particular electrode channel_id[i] found in data[i,:]
 
  
 
-## Mapping between gids and cells in the network
+### Mapping between gids and cells in the network
 
 In the model description, the cells are uniquely defined by their population name and node_id, whereas in the simulation output they are uniquely defined by the gids. To relate the two, we need to have a mapping: (population,node_id) <-> gid
 
@@ -1664,9 +1656,9 @@ The location of the mapping file is specified in the simulation_config.json as f
 
 For implementations that generate the mapping at runtime, this location should be used to write the file.
 
-# Appendix
+## Appendix
 
-## Background material
+### Background material
 
 See CodeJam talks on this topic:
 
@@ -1674,7 +1666,7 @@ See CodeJam talks on this topic:
 
 [http://neuralensemble.org/media/slides/bluepy.pdf](http://neuralensemble.org/media/slides/bluepy.pdf)
 
-## Valid Values for "model_processing"
+### Valid Values for "model_processing"
 
 model_processing is a string attribute of nodes allowing the specification of alternative 
 
@@ -1694,7 +1686,7 @@ For model_processing="aibs_perisomatic”, the axon is removed, and is replaced 
 
 For model_processing="...”, ...
 
-## Model Template Structure 
+### Model Template Structure 
 
 For the case that the model_template follows the *hoc* schema, the following is the expected structure of the hoc template.
 
