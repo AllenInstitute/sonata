@@ -20,21 +20,21 @@ This document is intended to present the rationale and outcomes of discussions a
 
 The common circuit representation format is described in subsequent subsections as follows:
 
-* Representing biophysical neuron morphologies
+* [Representing biophysical neuron morphologies](#biophysical_morphologies)
 
-* Representing ion channels, point neuron and synapse models
+* [Representing ion channels, point neuron and synapse models](#ion_channels)
 
-* Representing biophysical neuron channel distribution and composition
+* [Representing biophysical neuron channel distribution and composition](#biophysical_neuron_channels)
 
-* Representing networks of neurons
+* [Representing networks of neurons](#neuron_networks)
 
-    * The node table
+    * [The node table](#neuron_networks_nodes)
 
-    * The edge table
+    * [The edge table](#neuron_networks_edges)
 
-* Tying it all together - the circuit config file
+* [Tying it all together - the circuit config file](#network_config)
 
-### Representing biophysical neuron morphologies
+### <a name="biophysical_morphologies"></a>Representing biophysical neuron morphologies
 
 The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html](http://www.neuronland.org/NLMorphologyConverter/MorphologyFormats/SWC/Spec.html) ) with additional requirements as described below.
 
@@ -107,7 +107,7 @@ It is not required that the soma is located at 0,0,0 in the SWC file, but in cas
 
 It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.  For circuits for which this is true, the circuit producer can declare it with the "standardized_morphology_orientation" entry in the circuit_config.json, so downstream users can safely assume it.  See "Tying it all together - the circuit_config file" for more details.
 
-### Representing ion channel, point neuron and synapse models
+### <a name="ion_channels">Representing ion channel, point neuron and synapse models
 
 To represent point neuron models, synapses and ion channels NEURON MOD files are used.  Models provided as standard by NEURON are also valid, such as ExpSyn, IntFire1. 
 
@@ -115,7 +115,7 @@ To support reproducible random numbers in NEURON, it is required to define conve
 
 The forthcoming NeuroML/LEMS format shows promise for representing synapses and ion channels.  Adopting such representations promises simulator independence, and significant improvements for modernizing code-generation pipelines for NEURON, coreNEURON and NEST, and exotic compute architectures, such as GPU, SpiNNaker. However, this issue is recommended to be left to a later date, when LEMS has matured enough to represent stochastic synapses.  
 
-### Representing biophysical neuron channel distribution and composition
+### <a name="biophysical_neuron_channels">Representing biophysical neuron channel distribution and composition
 
 For representing the parameterization and distribution of ion channels and passive properties of neurons three formats will be supported: 1), an xml file using a NeuroML "biophysicalProperties" and “concentrationModel” block schema (cf [https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd](https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd) ) 2) a JSON file using Allen Cell Types Data Base schema. 3) a HOC template.
 
@@ -503,7 +503,7 @@ Example:
 
 https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=139653&file=/L5bPCmodelsEH/models/L5PCbiophys2.hoc#tabs-2
 
-### Representing networks of neurons
+### <a name="neuron_networks">Representing networks of neurons
 
 #### Overview
 
@@ -513,7 +513,7 @@ All nodes and edges, and likewise node and edge types can have be assigned  attr
 
 The details of how node and edge populations are defined and represented are described in the following sections.
 
-#### Representing nodes
+#### <a name="neuron_networks_nodes">Representing nodes
 
 In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces. 
 
@@ -611,7 +611,7 @@ Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 **/nodes/<population_name>** - defines a node population with the given name, which is also the node population name that will be used in edge files to specify the source or target node populations of an edge population (see below).  Multiple populations may be defined in one HDF5 file.
 
-**n****ode_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type .  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a key-value store, such as a dictionary to associate a node_type_id with its associated column values.
+**node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type .  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a key-value store, such as a dictionary to associate a node_type_id with its associated column values.
 
 **model_type** - Has four valid values: , "biophysical"”,“virtual”, “single_compartment”, “point_process”.  In the future, more model_types may be defined. The meaning of each of these model types is as follows. 
 
@@ -623,7 +623,7 @@ The model_type=*"virtual"* results in a placeholder neuron, which is not otherwi
 
 The model_type=*"biophysical"* results in a compartmental neuron.  The attribute morphology_file must be defined, either via the node or node_type.   
 
-**model_template -**** **Used to reference a template or class describing the electrophysical properties and mechanisms of the node(s). Its value and interpretation is context-dependent on the corresponding ‘model_type’. When there is no applicable model template for a given model type (i.e. model_type=virtual) it is assigned a value of NULL. Otherwise it uses a colon-separated string-pair with the following syntax:
+**model_template** - Used to reference a template or class describing the electrophysical properties and mechanisms of the node(s). Its value and interpretation is context-dependent on the corresponding ‘model_type’. When there is no applicable model template for a given model type (i.e. model_type=virtual) it is assigned a value of NULL. Otherwise it uses a colon-separated string-pair with the following syntax:
 
 *<schema>*:*<resource>*
 
@@ -641,19 +641,19 @@ nrn: Valid for both point_process and single_compartment model types. For a poin
 
  
 
-**node_group****_id**** - ** Assigns each node to a specific group of nodes.
+**node_group_id** - Assigns each node to a specific group of nodes.
 
-**node_group_index - **After determining the node_group_id of a specific node, the node_group_index indicates the index within that <node-group-id> that contains all the attributes for a particular node under consideration.
+**node_group_index** - After determining the node_group_id of a specific node, the node_group_index indicates the index within that <node-group-id> that contains all the attributes for a particular node under consideration.
 
 #### Nodes - Optional Reserved Attributes
 
-**node_id - **Assigns a key to uniquely identify and lookup a node within a population.  It is primarily used to specify the source and target of an edge (connection). If not provided, node_ids are implicitly contiguous starting from zero.
+**node_id** - Assigns a key to uniquely identify and lookup a node within a population.  It is primarily used to specify the source and target of an edge (connection). If not provided, node_ids are implicitly contiguous starting from zero.
 
-**model_processing - **A string to specify alternative processing approaches in the model construction behaviour of biophysical neurons. For valid model_processing values, and their meanings, see the Appendix *Valid Values for "model_processing"*.   It is currently not valid to specify this attribute for model_type != ”biophysical”. 
+**model_processing** - A string to specify alternative processing approaches in the model construction behaviour of biophysical neurons. For valid model_processing values, and their meanings, see the Appendix *Valid Values for "model_processing"*.   It is currently not valid to specify this attribute for model_type != ”biophysical”. 
 
 Example:
 
-For model_processing=*"fullaxon",* the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
+For model_processing=*"fullaxon"*, the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
 
 **x, y, z** - position of the soma in world coordinates.
 
@@ -665,13 +665,13 @@ Each morphology is first moved from its original coordinates in SWC to such a lo
 
 **morphology_file** - The name of the SWC file (potentially, with the path) containing the morphology for a given node or node type.
 
-**dynamics_params - **  Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group, in the corresponding nodes HDF5.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group. 
+**dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group, in the corresponding nodes HDF5.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group. 
 
 Note that if an override is defined  for a given name in both the nodes HDF5 file and the nodes_types CSV file, then the HDF5 file will override the latter.
 
 The namespace of parameters depends on model_type, and are defined as follows. 
 
-**For point_soma models****,** it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.  
+**For point_soma models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.  
 
 **For point_process models**, it is the namespace of the point_process/artificial cell mechanism.  
 
@@ -738,7 +738,7 @@ user mechanism</td>
 
 Table 2: A conceptual schematic of the architecture relating node attributes* model*, and *dynamics_params* overrides at the node_type and nodes level for each model_type.  The namespace of both node_type and node level parameter overrides are given uniquely by the model object parameter namespace.  Node level parameter overrides take precedence over node_type level parameter overrides.
 
-#### Representing Edges
+#### <a name="neuron_networks_edges">Representing Edges
 
 Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.  
 
@@ -830,39 +830,39 @@ Table 2: Layout of the file format for describing edges.
 
 ##### Edges - Required Attributes
 
-**edge_type_id**** -  **Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate a edge_type_id with its associated attribute values.
+**edge_type_id** -  Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate a edge_type_id with its associated attribute values.
 
-**source_node_id - **Specifies the sender node id of the connection. The "node_population" attribute of this dataset specifies the name of the source node population in which the node is valid. 
+**source_node_id** - Specifies the sender node id of the connection. The "node_population" attribute of this dataset specifies the name of the source node population in which the node is valid. 
 
-**target_node_id - **Specifies the receiver node id of the connection. The "node_population" attribute of this dataset specifies the name of the target node population in which the node is valid. 
+**target_node_id** - Specifies the receiver node id of the connection. The "node_population" attribute of this dataset specifies the name of the target node population in which the node is valid. 
 
-**edge_group_id - ** Assigns each edge to a specific group of edges.
+**edge_group_id** - Assigns each edge to a specific group of edges.
 
-**edge_group_index - **After determining the edge_group_id of a specific edge, the edge_group_index indicates the index within that <edge-group-id> that contains all the attributes for a particular edge under consideration.
+**edge_group_index** - After determining the edge_group_id of a specific edge, the edge_group_index indicates the index within that <edge-group-id> that contains all the attributes for a particular edge under consideration.
 
 **edge_id** - Assigns a key to uniquely identify and look up an edge within a population. If If not provided, node_ids are implicitly contiguous starting from zero.
 
 #### Edges - Optional Reserved Attributes
 
-**d****elay - **Axonal delay when the synaptic event begins relative to a spike from the presynaptic source.  Units depend on the application; for example, in NEURON-based simulations, the expected units are milliseconds (ms).
+**delay** - Axonal delay when the synaptic event begins relative to a spike from the presynaptic source.  Units depend on the application; for example, in NEURON-based simulations, the expected units are milliseconds (ms).
 
-**s****yn_weight - **Strength of the connection between the source and target nodes. The units depend on the requirements of the target mechanism. For example, if the target mechanism is NEURON's Exp2Syn, then the syn_weight is interpreted as a peak conductance measured in microSiemens (uS)
+**syn_weight** - Strength of the connection between the source and target nodes. The units depend on the requirements of the target mechanism. For example, if the target mechanism is NEURON's Exp2Syn, then the syn_weight is interpreted as a peak conductance measured in microSiemens (uS)
 
-**sec_id ****- **The specific section on the target node where a synapse is placed.
+**sec_id**- The specific section on the target node where a synapse is placed.
 
-**sec_x - **Given the section of where a synapse is placed on the target node, the position along the length of that section a (normalized to the range [0, 1], where 0 is at the start of the section and 1 is at the end of the section).** **
+**sec_x** - Given the section of where a synapse is placed on the target node, the position along the length of that section a (normalized to the range [0, 1], where 0 is at the start of the section and 1 is at the end of the section).
 
-**dynamics_params - ** Contains the dynamic parameter overrides for edges. This can exist in the edge types CSV file in which case a .json file is referenced. Alternatively, it can be in the edges HDF5 file for each edge group as a dynamics_params HDF5 group containing datasets, one for each parameter  (see Table 2).  The namespace of parameters is defined as the namespace of the template.  Overrides specified at the level of the HDF5 file take precedence over overrides specified at the edge_type level.
+**dynamics_params** - Contains the dynamic parameter overrides for edges. This can exist in the edge types CSV file in which case a .json file is referenced. Alternatively, it can be in the edges HDF5 file for each edge group as a dynamics_params HDF5 group containing datasets, one for each parameter  (see Table 2).  The namespace of parameters is defined as the namespace of the template.  Overrides specified at the level of the HDF5 file take precedence over overrides specified at the edge_type level.
 
-**model_****t****emplate - **String name of the template to create an object from parameters in dynamics_params. Can have NULL entries.
+**model_template** - String name of the template to create an object from parameters in dynamics_params. Can have NULL entries.
 
-**afferent_center_position**** - **For edges that represent synapses in morphologically detailed networks, this attributes specified the x, y, z position in network global spatial coordinates of the synapse along the dendrite axis of the post-synaptic neuron. For synapses on the soma this location is at the soma center.
+**afferent_center_position** - For edges that represent synapses in morphologically detailed networks, this attributes specified the x, y, z position in network global spatial coordinates of the synapse along the dendrite axis of the post-synaptic neuron. For synapses on the soma this location is at the soma center.
 
-**afferent_surface_position - **Same as afferent_center_position, but the for the synapse location on the soma or dendrite surface.
+**afferent_surface_position** - Same as afferent_center_position, but the for the synapse location on the soma or dendrite surface.
 
-**efferent_center_position - **Same as afferent_center_position but for the synapse position at the axon of the presynaptic cell.
+**efferent_center_position** - Same as afferent_center_position but for the synapse position at the axon of the presynaptic cell.
 
-**efferent_surface_position - **Same as efferent_center_position, but the for the synapse location on the axon surface 
+**efferent_surface_position** - Same as efferent_center_position, but the for the synapse location on the axon surface 
 
 Note, that similar to the nodes description, if a variable exists in both the edges HDF5 file and the edge_types CSV file, then the HDF5 file will override the latter.
 
@@ -908,7 +908,7 @@ The source_to_target/range_to_edge_id dataset defines ranges of edges in the edg
 
 The datasets from the target_to_source group are defined symmetrically. From this symmetry is easy to infer that edges should be grouped by source, target pairs, otherwise an important overhead will be incurred in one or both of the indices.  
 
-### Tying it all together - the network/circuit config file
+### <a name="neuron_config">Tying it all together - the network/circuit config file
 
 The config file is a .json file that defines the relative location of each part of the network:
 
@@ -1006,7 +1006,7 @@ The network is defined by nodes and edges. In the example below, a V1 model is b
 
  
 
-## Representing Simulations
+## <a name="simulations">Representing Simulations
 
 The simulation config file is a json file which ties together the definition of a simulation on a circuit.  It specifies the circuit to be used, simulator parameters, load balancing and time stepping information, stimuli (simulation input), reports (simulation output), and the specification of neuron targets (sub groups of neurons) in a node_sets_file.  Like the circuit_config.json, the simulation_config.json may contain a "manifest" block which defines paths to be re-used elsewhere in the .json file:
 
@@ -1506,7 +1506,7 @@ Note, spikes are always reported, and a report specification needn’t be specif
 
  
 
-#### **Node Sets**** File**
+#### **Node Sets** File
 
 A Node Sets json file contains subsets of cells that act as targets for different reports or stimulations, or can also be used to name and define the target subpopulation to simulate. Each item in the file is a unique referenced "set_name", followed by a collection of a key-value pairs corresponding to the properties of the nodes. At time of interpretation of the Node Sets file, gids must also be defined for each node in the network to be simulated, for that "gid" is also a valid property to appear in key-value pairs. Multiple key-value selections are combined assuming a logical AND operation.  Node populations and their names are implicitly defined in the Node Set namespace, and needn’t be declared explicitly.  The general schema is as follows.
 
@@ -1656,7 +1656,7 @@ The location of the mapping file is specified in the simulation_config.json as f
 
 For implementations that generate the mapping at runtime, this location should be used to write the file.
 
-## Appendix
+## <a name="appendix">Appendix
 
 ### Background material
 
