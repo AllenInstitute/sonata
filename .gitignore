@@ -1,0 +1,6 @@
+**/*.pyc
+**/*.egg-info/
+**/*~
+src/pysonata/sonata/tests/tmp
+.idea
+.cache
