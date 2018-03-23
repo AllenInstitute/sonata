@@ -848,9 +848,13 @@ Table 2: Layout of the file format for describing edges.
 
 **syn_weight** - Strength of the connection between the source and target nodes. The units depend on the requirements of the target mechanism. For example, if the target mechanism is NEURON's Exp2Syn, then the syn_weight is interpreted as a peak conductance measured in microSiemens (uS)
 
-**sec_id**- The specific section on the target node where a synapse is placed.
+**afferent_section_id**- The specific section on the target node where a synapse is placed.
 
-**sec_x** - Given the section of where a synapse is placed on the target node, the position along the length of that section a (normalized to the range [0, 1], where 0 is at the start of the section and 1 is at the end of the section).
+**afferent_section_pos** - Given the section of where a synapse is placed on the target node, the position along the length of that section a (normalized to the range [0, 1], where 0 is at the start of the section and 1 is at the end of the section).
+
+**efferent_section_id** - Same as **afferent_section_id**, but for source node.
+
+**efferent_section_pos** - - Same as **afferent_section_pos**, but for source node.
 
 **dynamics_params** - Contains the dynamic parameter overrides for edges. This can exist in the edge types CSV file in which case a .json file is referenced. Alternatively, it can be in the edges HDF5 file for each edge group as a dynamics_params HDF5 group containing datasets, one for each parameter  (see Table 2).  The namespace of parameters is defined as the namespace of the template.  Overrides specified at the level of the HDF5 file take precedence over overrides specified at the edge_type level.
 
