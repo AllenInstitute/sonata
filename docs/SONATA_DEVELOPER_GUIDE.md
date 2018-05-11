@@ -657,9 +657,9 @@ For model_processing=*"fullaxon"*, the biophysical neuron will construct and sim
 
 **x, y, z** - position of the soma in world coordinates.
 
-**rotation_angle_zaxis, rotation_angle_yaxis, rotation_angle_xaxis** - rotation of the morphology around the soma.
+**rotation_angle_zaxis [FLOAT], rotation_angle_yaxis[FLOAT], rotation_angle_xaxis[FLOAT]** - rotation of the morphology around the soma.
 
-Each morphology is first moved from its original coordinates in SWC to such a location that the soma is at (0, 0, 0).  Then, three rotations are applied to each morphology, in exactly the following sequence: (1) rotation around the z-axis; (2) rotation around the y-axis; (3) rotation around the x-axis.  Then, each morphology is shifted to such a location that its soma is at (x, y, z) coordinates specified in the node/node_type files.  The angles for the three rotations are also provided in the nodes/node_types files, in radians.  If a column is not provided, it is assumed that the rotation angle around that axis is 0 (that is, no rotation around that axis is applied).  The order of rotations is always the same – first around z, then around y, then around x.
+Each morphology is first moved from its original coordinates in SWC to such a location that the soma is at (0, 0, 0).  Then, three rotations are applied to each morphology, in exactly the following sequence: (1) rotation around the z-axis; (2) rotation around the y-axis; (3) rotation around the x-axis; all rotations are around the axes of the global coordinate system.  Then, each morphology is shifted to such a location that its soma is at (x, y, z) coordinates specified in the node/node_type files.  The angles for the three rotations are also provided in the nodes/node_types files, in radians.  If a column is not provided, it is assumed that the rotation angle around that axis is 0 (that is, no rotation around that axis is applied).
 
 **morphology** [TEXT] - Name of the detailed morphology for a given node or node type. For name `foo`, the corresponding SWC file would be found at `$morphologies_dir/foo.swc`, where `$morphologies_dir` is specified in the [network config](#network_config).
 
