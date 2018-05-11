@@ -1314,13 +1314,7 @@ Example of the corresponding input_file (column names):
 
 ### Simulation output - Reports
 
-
-
-The output of the simulation is reported based on the specifications of the output variables described in the simulation configuration file under the "reports" block.
-
-
-
-
+The output of the simulation is reported based on the specifications of the output variables described in the simulation configuration file under the "reports" block. Spikes are always reported, and a report specification needn’t be specified to have the simulation report the spikes. Simulators are expected to write spike reports to a file called spikes.h5 (whole file format is explained [below](#spike_file)) located at the output_dir.
 
 There can be one or more reports in the block, each one identified by a unique name:
 
@@ -1355,8 +1349,6 @@ There can be one or more reports in the block, each one identified by a unique n
 
 
 On simulation launch, a file for each specified report is then created with filename <report_name>.h5
-
-
 
 <table>
   <tr>
@@ -1430,12 +1422,6 @@ On simulation launch, a file for each specified report is then created with file
     <td>Simulator default</td>
   </tr>
 </table>
-
-
-
-
-Note, spikes are always reported, and a report specification needn’t be specified to have the simulation report the spikes.
-
 
 
 #### **Example**
@@ -1560,7 +1546,7 @@ A Node Sets json file contains subsets of cells that act as targets for differen
 
 Each report name in the "reports" block results in a separate HDF5 file with the filename <report_name>.h5.
 
-#### Spike file
+#### <a name="spike_file"></a>Spike file
 
 Spikes from all cells will be stored in a single HDF5 file that contains (gid, spike time) pairs in separate datasets. These datasets may be unsorted, sorted by gid or sorted by spike time. The gids are not to be confused with node_ids from populations, see below for details about gid to node_id and population mapping.
 
