@@ -637,7 +637,7 @@ hoc: Template is described using a customized hoc file. Valid for both biophysic
 
 nrn: Valid for both point_process and single_compartment model types. For a point_process model type, <resource> should specify the name of NEURON simulator point_process (i.e. IntFire1, IntFire2).  For a single_compartment type, <resource> should specify the name of the mechanism to insert.
 
-*<resource>* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components_dir" in the config file to find the full path (see below).
+*<resource>* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
 
 
 
@@ -934,7 +934,7 @@ The "manifest" section of the config file provides a convenient handle on settin
 
     },
 
-    "components_dir": {
+    "components": {
 
 The directory in which to find the neuronal morphology files:
 
