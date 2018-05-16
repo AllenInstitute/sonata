@@ -16,6 +16,39 @@ The objective of this document is to specify a common data model for neural circ
 
 This document is intended to present the rationale and outcomes of discussions and analysis towards convergence.  It is a high-level document which can guide the development and public release of a standard "performance representation" data model and associated specifications, including user and developer documentation by the BBP and AIBS.  It is understood that such a data model is complementary, and should co-exist with and leverage existing model representation efforts, such as NeuroML, wherever performance considerations allow.  The latter focuses on flexible and open exchange, cross-simulator reproducibility, and rigorous declarative representation.  In contrast, the present effort focuses on representing a curated subset of models expressible in NeuroML, in compact and efficient representations leveraging existing technologies such as hdf5, SQLite, graph databases, spatial indexing, etc. to enable an ecosystem of performant simulation, analysis and visualization tools.  An import-export bridge between these two approaches will ensure a complementary and mutual benefit.
 
+## Common conventions
+
+This specification is supported by several file syntax/container formats, the
+most important being HDF5, JSON and CSV. Some conventions apply to how these
+formats are used in the specification.
+
+### HDF5
+
+The following conventions apply to all SONATA h5 files:
+
+* Data sets are described by their shape and data type (dtype).
+* Datatypes are declared using the following nomenclature:
+    * **str**: a H5T_C_S1 type string with UTF-8 encoding
+    * **float**: H5T_IEEE_F32LE
+    * **double**: H5T_IEEE_F64LE
+    * **int32**: H5T_STD_I32LE
+    * **uint32**: H5T_STD_U32LE
+    * **int64**: H5T_STD_I64LE
+    * **uint64**: H5T_STD_U64LE
+* Each h5 file must contain the following two top level attributes:
+    * **version** A 2-element uint32 dataset containing the spec version which
+      the file conforms.
+    * **magic** A uint32 with the value 0x0A7A
+
+### CSV
+
+The CSV dialect is the following:
+
+* ASCII encoded text files with UNIX line terminators.
+* Columns are separated by one or multiple spaces
+* Fields containing spaces can be quoted using ". To include the quoting
+  character inside a field it must appear twice.
+
 ## Representing Circuits
 
 The common circuit representation format is described in subsequent subsections as follows:
@@ -143,357 +176,193 @@ How specific NeuroML files are combined with specific morphology files to repres
 
 An example:
 
-<neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="NeuroML2_file_exported_from_NEURON">
+    <neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta5.xsd" id="NeuroML2_file_exported_from_NEURON">
 
-    <concentrationModel id="CaDynamics" type="CaDynamics" minCai="1e-4 mM" decay="991.140696832 ms" depth="0.1 um" gamma="0.0040218816981199999" ion="ca"/>
+        <concentrationModel id="CaDynamics" type="CaDynamics" minCai="1e-4 mM" decay="991.140696832 ms" depth="0.1 um" gamma="0.0040218816981199999" ion="ca"/>
 
-    <cell id="473863510">
+        <cell id="473863510">
 
-        <notes>
+            <notes>
+    Export of a cell model (473863510) obtained from the Allen Institute Cell Types Database into NeuroML2
 
-Export of a cell model (473863510) obtained from the Allen Institute Cell Types Database into NeuroML2
+    Electrophysiology on which this model is based: http://celltypes.brain-map.org/mouse/experiment/electrophysiology/314804042
 
-Electrophysiology on which this model is based: http://celltypes.brain-map.org/mouse/experiment/electrophysiology/314804042
+    ******************************************************
+    *  This export to NeuroML2 has not yet been fully validated!!
+    *  Use with caution!!
+    ******************************************************
+            </notes>
 
-******************************************************
+            <biophysicalProperties id="biophys">
+                <membraneProperties>
+                    <channelDensity id="gbar_Im" ionChannel="Im" condDensity="0.00043788364247700001 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
+                    <channelDensity id="gbar_Ih" ionChannel="Ih" condDensity="0.0019922075246600001 S_per_cm2" erev="-45 mV" segmentGroup="soma" ion="hcn"/>
+                    <channelDensity id="gbar_NaTs" ionChannel="NaTs" condDensity="0.71282189194800005 S_per_cm2" erev="53.0 mV" segmentGroup="soma" ion="na"/>
+                    <channelDensity id="gbar_Nap" ionChannel="Nap" condDensity="0.0012493753876800001 S_per_cm2" erev="53.0 mV" segmentGroup="soma" ion="na"/>
+                    <channelDensity id="gbar_K_P" ionChannel="K_P" condDensity="0.034836377263399998 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
+                    <channelDensity id="gbar_K_T" ionChannel="K_T" condDensity="0.0166428509042 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
+                    <channelDensity id="gbar_SK" ionChannel="SK" condDensity="0.00024972209054299998 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
+                    <channelDensity id="gbar_Kv3_1" ionChannel="Kv3_1" condDensity="0.28059766435600003 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
+                    <channelDensity id="g_pas_soma" ionChannel="pas" condDensity="0.00092865666454699993 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="soma" ion="non_specific"/>
+                    <channelDensity id="g_pas_axon" ionChannel="pas" condDensity="0.000914230933548999861 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="axon" ion="non_specific"/>
+                    <channelDensity id="g_pas_dend" ionChannel="pas" condDensity="3.8264043188599994e-06 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="dend" ion="non_specific"/>
+                    <channelDensity id="g_pas_apic" ionChannel="pas" condDensity="2.11145615996e-06 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="apic" ion="non_specific"/>
+                    <channelDensityNernst id="gbar_Ca_HVA" ionChannel="Ca_HVA" condDensity="0.00015339031713199999 S_per_cm2" segmentGroup="soma" ion="ca"/>
+                    <channelDensityNernst id="gbar_Ca_LVA" ionChannel="Ca_LVA" condDensity="0.0033469316039000004 S_per_cm2" segmentGroup="soma" ion="ca"/>
+                    <specificCapacitance value="1.0 uF_per_cm2" segmentGroup="soma"/>
+                    <specificCapacitance value="1.0 uF_per_cm2" segmentGroup="axon"/>
+                    <specificCapacitance value="2.19 uF_per_cm2" segmentGroup="dend"/>
+                    <specificCapacitance value="2.19 uF_per_cm2" segmentGroup="apic"/>
+                </membraneProperties>
 
-*  This export to NeuroML2 has not yet been fully validated!!
+                <intracellularProperties>
+                    <species segmentGroup="soma" id="ca" concentrationModel="CaDynamics" ion="ca" initialConcentration="0.0001 mM" initialExtConcentration="2 mM"/>
+                    <resistivity value="35.64 ohm_cm"/>
+                </intracellularProperties>
 
-*  Use with caution!!
-
-******************************************************
-
-        </notes>
-
-        <biophysicalProperties id="biophys">
-
-            <membraneProperties>
-
-                <channelDensity id="gbar_Im" ionChannel="Im" condDensity="0.00043788364247700001 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
-
-                <channelDensity id="gbar_Ih" ionChannel="Ih" condDensity="0.0019922075246600001 S_per_cm2" erev="-45 mV" segmentGroup="soma" ion="hcn"/>
-
-                <channelDensity id="gbar_NaTs" ionChannel="NaTs" condDensity="0.71282189194800005 S_per_cm2" erev="53.0 mV" segmentGroup="soma" ion="na"/>
-
-                <channelDensity id="gbar_Nap" ionChannel="Nap" condDensity="0.0012493753876800001 S_per_cm2" erev="53.0 mV" segmentGroup="soma" ion="na"/>
-
-                <channelDensity id="gbar_K_P" ionChannel="K_P" condDensity="0.034836377263399998 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
-
-                <channelDensity id="gbar_K_T" ionChannel="K_T" condDensity="0.0166428509042 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
-
-                <channelDensity id="gbar_SK" ionChannel="SK" condDensity="0.00024972209054299998 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
-
-                <channelDensity id="gbar_Kv3_1" ionChannel="Kv3_1" condDensity="0.28059766435600003 S_per_cm2" erev="-107.0 mV" segmentGroup="soma" ion="k"/>
-
-                <channelDensity id="g_pas_soma" ionChannel="pas" condDensity="0.00092865666454699993 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="soma" ion="non_specific"/>
-
-                <channelDensity id="g_pas_axon" ionChannel="pas" condDensity="0.000914230933548999861 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="axon" ion="non_specific"/>
-
-                <channelDensity id="g_pas_dend" ionChannel="pas" condDensity="3.8264043188599994e-06 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="dend" ion="non_specific"/>
-
-                <channelDensity id="g_pas_apic" ionChannel="pas" condDensity="2.11145615996e-06 S_per_cm2" erev="-85.6125717163 mV" segmentGroup="apic" ion="non_specific"/>
-
-                <channelDensityNernst id="gbar_Ca_HVA" ionChannel="Ca_HVA" condDensity="0.00015339031713199999 S_per_cm2" segmentGroup="soma" ion="ca"/>
-
-                <channelDensityNernst id="gbar_Ca_LVA" ionChannel="Ca_LVA" condDensity="0.0033469316039000004 S_per_cm2" segmentGroup="soma" ion="ca"/>
-
-                <specificCapacitance value="1.0 uF_per_cm2" segmentGroup="soma"/>
-
-                <specificCapacitance value="1.0 uF_per_cm2" segmentGroup="axon"/>
-
-                <specificCapacitance value="2.19 uF_per_cm2" segmentGroup="dend"/>
-
-                <specificCapacitance value="2.19 uF_per_cm2" segmentGroup="apic"/>
-
-            </membraneProperties>
-
-            <intracellularProperties>
-
-                <species segmentGroup="soma" id="ca" concentrationModel="CaDynamics" ion="ca" initialConcentration="0.0001 mM" initialExtConcentration="2 mM"/>
-
-                <resistivity value="35.64 ohm_cm"/>
-
-            </intracellularProperties>
-
-        </biophysicalProperties>
-
-    </cell>
-
-</neuroml>
+            </biophysicalProperties>
+        </cell>
+    </neuroml>
 
 #### Allen Cell Types Database JSON
 
 Example:
 
-{
-
-  "passive": [
-
-	{
-
-  	"ra": 113.558283035,
-
-  	"cm": [
-
-    	{
-
-      	"section": "soma",
-
-      	"cm": 2.99126584079
-
-    	},
-
-    	{
-
-      	"section": "axon",
-
-      	"cm": 2.99126584079
-
-    	},
-
-    	{
-
-      	"section": "dend",
-
-      	"cm": 2.99126584079
-
-    	}
-
-  	],
-
-  	"e_pas": -77.77002716064453
-
-	}
-
-  ],
-
-  "fitting": [
-
-	{
-
-  	"junction_potential": -14.0,
-
-  	"sweeps": [
-
-    	29
-
-  	]
-
-	}
-
-  ],
-
-  "conditions": [
-
-	{
-
-  	"celsius": 34.0,
-
-  	"erev": [
-
-    	{
-
-      	"ena": 53.0,
-
-      	"section": "soma",
-
-      	"ek": -107.0
-
-    	}
-
-  	],
-
-  	"v_init": -77.77002716064453
-
-	}
-
-  ],
-
-  "genome": [
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Ih",
-
-  	"value": 0.0007483146089529596,
-
-  	"mechanism": "Ih"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_NaV",
-
-  	"value": 0.056101742007372987,
-
-  	"mechanism": "NaV"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Kd",
-
-  	"value": 0.00017519914026510974,
-
-  	"mechanism": "Kd"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Kv2like",
-
-  	"value": 3.9813942512016004e-05,
-
-  	"mechanism": "Kv2like"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Kv3_1",
-
-  	"value": 0.14292671428791784,
-
-  	"mechanism": "Kv3_1"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_K_T",
-
-  	"value": 6.2099957475404229e-07,
-
-  	"mechanism": "K_T"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Im_v2",
-
-  	"value": 0.0025519715891636685,
-
-  	"mechanism": "Im_v2"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_SK",
-
-  	"value": 0.02123536247580915,
-
-  	"mechanism": "SK"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Ca_HVA",
-
-  	"value": 0.00029467875153102062,
-
-  	"mechanism": "Ca_HVA"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gbar_Ca_LVA",
-
-  	"value": 0.0032854032146529648,
-
-  	"mechanism": "Ca_LVA"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "gamma_CaDynamics",
-
-  	"value": 0.0001916236273002056,
-
-  	"mechanism": "CaDynamics"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "decay_CaDynamics",
-
-  	"value": 533.54574062570703,
-
-  	"mechanism": "CaDynamics"
-
-	},
-
-	{
-
-  	"section": "soma",
-
-  	"name": "g_pas",
-
-  	"value": 0.00079694107853819723,
-
-  	"mechanism": ""
-
-	},
-
-	{
-
-  	"section": "axon",
-
-  	"name": "g_pas",
-
-  	"value": 0.00059005234857028601,
-
-  	"mechanism": ""
-
-	},
-
-	{
-
-  	"section": "dend",
-
-  	"name": "g_pas",
-
-  	"value": 3.5492496289639374e-07,
-
-  	"mechanism": ""
-
-	}
-
-  ]
-
-}
+    {
+        "passive": [
+        	{
+          	    "ra": 113.558283035,
+          	    "cm": [
+            	    {
+              	        "section": "soma",
+              	        "cm": 2.99126584079
+            	    },
+            	    {
+              	        "section": "axon",
+              	        "cm": 2.99126584079
+            	    },
+            	    {
+              	        "section": "dend",
+              	        "cm": 2.99126584079
+            	    }
+          	    ],
+          	    "e_pas": -77.77002716064453
+        	}
+        ],
+        "fitting": [
+        	{
+          	    "junction_potential": -14.0,
+          	    "sweeps": [
+            	    29
+          	    ]
+        	}
+        ],
+        "conditions": [
+        	{
+          	    "celsius": 34.0,
+          	    "erev": [
+            	    {
+              	        "ena": 53.0,
+              	        "section": "soma",
+              	        "ek": -107.0
+            	    }
+          	    ],
+          	    "v_init": -77.77002716064453
+        	}
+        ],
+        "genome": [
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Ih",
+          	    "value": 0.0007483146089529596,
+          	    "mechanism": "Ih"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_NaV",
+          	    "value": 0.056101742007372987,
+          	    "mechanism": "NaV"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Kd",
+          	    "value": 0.00017519914026510974,
+          	    "mechanism": "Kd"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Kv2like",
+          	    "value": 3.9813942512016004e-05,
+          	    "mechanism": "Kv2like"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Kv3_1",
+          	    "value": 0.14292671428791784,
+          	    "mechanism": "Kv3_1"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_K_T",
+          	    "value": 6.2099957475404229e-07,
+          	    "mechanism": "K_T"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Im_v2",
+          	    "value": 0.0025519715891636685,
+          	    "mechanism": "Im_v2"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_SK",
+          	    "value": 0.02123536247580915,
+          	    "mechanism": "SK"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Ca_HVA",
+          	    "value": 0.00029467875153102062,
+          	    "mechanism": "Ca_HVA"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gbar_Ca_LVA",
+          	    "value": 0.0032854032146529648,
+          	    "mechanism": "Ca_LVA"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "gamma_CaDynamics",
+          	    "value": 0.0001916236273002056,
+          	    "mechanism": "CaDynamics"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "decay_CaDynamics",
+          	    "value": 533.54574062570703,
+          	    "mechanism": "CaDynamics"
+        	},
+        	{
+          	    "section": "soma",
+          	    "name": "g_pas",
+          	    "value": 0.00079694107853819723,
+          	    "mechanism": ""
+        	},
+        	{
+          	    "section": "axon",
+          	    "name": "g_pas",
+          	    "value": 0.00059005234857028601,
+          	    "mechanism": ""
+        	},
+        	{
+          	    "section": "dend",
+          	    "name": "g_pas",
+          	    "value": 3.5492496289639374e-07,
+          	    "mechanism": ""
+        	}
+        ]
+    }
 
 #### HOC template
 
@@ -916,117 +785,79 @@ The datasets from the target_to_source group are defined symmetrically. From thi
 
 The config file is a .json file that defines the relative location of each part of the network:
 
-{
-
-    "target_simulator":"NEURON",
+    {
+        "target_simulator":"NEURON",
 
 target_simulator can be "NEURON", “PyNN”, “NEST”, etc.  It specifies the intended target simulator of the circuit description.  For now, this field is intended as a declaration, and an implementation may decide to throw an error for unsupported targets.  In practice, mechanism and parameter names are tailored to the given target simulator.  For model_type=biophysical NEURON is supported, but not PyNN or NEST.
 
 The "manifest" section of the config file provides a convenient handle on setting variables that point to base paths.  These variables can be then used in the rest of the config file to point to various directories that share the first portion of the path.
 
-    "manifest": {
-
-        "$BASE_DIR": "/path/to/my/workspace",
-
-        "$NETWORK_DIR": "$BASE_DIR/networks",
-
-        "$COMPONENT_DIR": "$BASE_DIR/components"
-
-    },
-
-    "components": {
+        "manifest": {
+            "$BASE_DIR": "/path/to/my/workspace",
+            "$NETWORK_DIR": "$BASE_DIR/networks",
+            "$COMPONENT_DIR": "$BASE_DIR/components"
+        },
+        "components": {
 
 The directory in which to find the neuronal morphology files:
 
-        "morphologies_dir": "$COMPONENT_DIR/morphologies",
+            "morphologies_dir": "$COMPONENT_DIR/morphologies",
 
 The directory in which to find the edge_types and point neuron node_types dynamics_params .json files, respectively:
 
-        "synaptic_models_dir": "$COMPONENT_DIR/synapse_dynamics",
-
-        "point_neuron_models_dir": "$COMPONENT_DIR/point_neuron_dynamics",
+            "synaptic_models_dir": "$COMPONENT_DIR/synapse_dynamics",
+            "point_neuron_models_dir": "$COMPONENT_DIR/point_neuron_dynamics",
 
 Mechanisms may need to be compiled in advance, depending on implementation.  This field is optional, and is relevant for NEURON networks:
 
-        "mechanisms_dir":"$COMPONENT_DIR/mechanisms",
+            "mechanisms_dir":"$COMPONENT_DIR/mechanisms",
 
 Where to find the .nml for biophysical neuron model types:
 
-        "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_dynamics",
+            "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_dynamics",
 
 Where to find the hoc templates for the edges:
 
-       "templates": "$COMPONENT_DIR/hoc_templates",
-
-    },
+           "templates": "$COMPONENT_DIR/hoc_templates",
+        },
 
 The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.  Gids are assigned to nodes in advance (using another tool) or during the simulation, depending on implementation, and are global across all  populations in the network.
 
-	"networks": {
-
-   	 "nodes": [
-
-        	{
-
-		    "nodes_file":   		"$NETWORK_DIR/V1/v1_nodes.h5",
-
-            	    "node_types_file":    	"$NETWORK_DIR/V1/v1_node_types.csv"
-
-   	 	},
-
-   	 	{
-
-		    "nodes_file":   		"$NETWORK_DIR/LGN/lgn_nodes.h5",
-
-            	    "node_types_file":    	"$NETWORK_DIR/LGN/lgn_node_types.csv"
-
-   	 	}
-
-   	 ],
-
-    	"edges":[
-
-        	{
-
-		    "edges_file":   		"$NETWORK_DIR/V1/v1_edges.h5",
-
-            	    "edge_types_file":    	"$NETWORK_DIR/V1/v1_edge_types.csv"
-
-   	 	},
-
-        	{
-
-		    "edges_file":   		"$NETWORK_DIR/LGN/lgn_v1_edges.h5",
-
-            	    "edge_types_file":    	"$NETWORK_DIR/LGN/lgn_v1_edge_types.csv"
-
-   		}
-
-   	 ]
-
-	}
-
-}
-
-
+        "networks": {
+            "nodes": [
+                {
+                    "nodes_file":       "$NETWORK_DIR/V1/v1_nodes.h5",
+                    "node_types_file":  "$NETWORK_DIR/V1/v1_node_types.csv"
+                },
+                {
+                    "nodes_file":       "$NETWORK_DIR/LGN/lgn_nodes.h5",
+                    "node_types_file":  "$NETWORK_DIR/LGN/lgn_node_types.csv"
+                }
+            ],
+            "edges":[
+                {
+                    "edges_file":       "$NETWORK_DIR/V1/v1_edges.h5",
+                    "edge_types_file":  "$NETWORK_DIR/V1/v1_edge_types.csv"
+                },
+                {
+                    "edges_file":       "$NETWORK_DIR/LGN/lgn_v1_edges.h5",
+                    "edge_types_file":  "$NETWORK_DIR/LGN/lgn_v1_edge_types.csv"
+                }
+            ]
+        }
+    }
 
 ## <a name="simulations">Representing Simulations
 
 The simulation config file is a json file which ties together the definition of a simulation on a circuit.  It specifies the circuit to be used, simulator parameters, load balancing and time stepping information, stimuli (simulation input), reports (simulation output), and the specification of neuron targets (sub groups of neurons) in a node_sets_file.  Like the circuit_config.json, the simulation_config.json may contain a "manifest" block which defines paths to be re-used elsewhere in the .json file:
 
-  "manifest": {
-
-	"$BASE_DIR": "/path/to/my/workspace",
-
-	"$OUTPUT_DIR": "$BASE_DIR/output",
-
-	"$INPUT_DIR": "$BASE_DIR/input",
-
-	"$NETWORK_DIR": "$BASE_DIR/network",
-
-	"$COMPONENT_DIR": "$BASE_DIR/components"
-
-  },
+    "manifest": {
+        "$BASE_DIR": "/path/to/my/workspace",
+        "$OUTPUT_DIR": "$BASE_DIR/output",
+        "$INPUT_DIR": "$BASE_DIR/input",
+        "$NETWORK_DIR": "$BASE_DIR/network",
+        "$COMPONENT_DIR": "$BASE_DIR/components"
+    },
 
 ### Specifying the Circuit/Network to Simulate
 
@@ -1034,25 +865,18 @@ The circuit to simulate is specified by including a key "network", with value po
 
 Example:
 
-"network": "${BASE_DIR}/circuit_config.json"
+    "network": "${BASE_DIR}/circuit_config.json"
 
 ### Time Stepping Parameters
 
 The "run" block specifies some global parameters of the simulation run, such as total duration
 
-"run": {
-
-	"tstop": 3000.0,
-
-	"dt": 0.1,
-
-	"dL": 20,
-
-		"spike_threshold": -15,
-
-
-
-  },
+    "run": {
+        "tstop": 3000.0,
+        "dt": 0.1,
+        "dL": 20,
+        "spike_threshold": -15,
+    },
 
 ### Conditions Configuration
 
@@ -1060,27 +884,20 @@ This block specifies optional global parameters with reserved meaning associated
 
 Example:
 
-"conditions": {
-
-	"celsius": 34.0,
-
-	"v_init": -80
-
-  },
+    "conditions": {
+        "celsius": 34.0,
+        "v_init": -80
+      },
 
 ### Output Configuration
 
 The "output" block configures the location where output reports should be written, and if output should be overwritten.
 
-"output": {
-
-	"log_file": "$OUTPUT_DIR/log.txt",
-
-		"output_dir": "$OUTPUT_DIR",
-
-"overwrite_output_dir": true,
-
-  },
+    "output": {
+        "log_file": "$OUTPUT_DIR/log.txt",
+        "output_dir": "$OUTPUT_DIR",
+        "overwrite_output_dir": true,
+    },
 
 ### Implementation Specific Parameters
 
@@ -1088,7 +905,7 @@ Implementations of software interpreting the simulation config may need to embed
 
 ### Specifying Targets - Sub-groups of Neurons
 
-"node_sets_file": "<node_sets_file>"
+    "node_sets_file": "<node_sets_file>"
 
 See below "Node Sets File".
 
@@ -1096,31 +913,19 @@ See below "Node Sets File".
 
 The "inputs" block of the simulation config allows the definition of inputs to the simulation. There can be one or more inputs defined in this block.ells Cells in the circuit may receive multiple inputs and others may receive no input.
 
-{
-
-  "inputs": {
-
-    "<input_name_1>": {
-
-        "<Key1>": <Value1>,
-
-        "<Key2>": <Value2>,
-
-         ...
-
-    },
-
-   "input_name_2>": {
-
-        "<Key1>": <ValueN>,
-
-        ...
-
+    {
+        "inputs": {
+            "<input_name_1>": {
+                "<Key1>": <Value1>,
+                "<Key2>": <Value2>,
+                ...
+            },
+            "input_name_2>": {
+                "<Key1>": <ValueN>,
+                ...
+            }
+        }
     }
-
-  }
-
-}
 
 <table>
   <tr>
@@ -1185,132 +990,66 @@ The "inputs" block of the simulation config allows the definition of inputs to t
   </tr>
 </table>
 
-
-
-
 The source_file may point to either the nodes file ( type:"spikes”) or the electrode file ( type:”extracellular stimulation”,”current_clamp”,”voltage_clamp”.) The input from the sources may be defined as a set of parameters (e.g., amplitude, tstart, tstop) or as a collection of  time courses (e.g., a time trace of a current). In the former, the parameters are specified in the source file, in the latter they are specified in the time_course_file.
 
 Examples:
 
-"inputs": {
-
-    	"LGN_spikes_from_nwb":
-
-           	{
-
-           	  "input_type": "spikes",
-
-           	  "module": "nwb",
-
-           	  "input_file": "$INPUT_DIR/lgn_spikes.nwb",           			  "node_set": ”LGN”
-
-           	  "trial": "trial_0"
-
-           	},
-
-     	"background_spikes_poisson":
-
-           	{
-
-           	  "input_type": "spikes",
-
-           	  "module": "poisson"
-
-  "input_file":"$INPUT_DIR/BKG/bkg_input.csv",
-
-     			  "node_set": ”BKG”
-
-           	},
-
-       "V1_input_current_from_nwb":
-
-           	{
-
-           	  "input_type": "voltage_clamp"
-
-           	  "module": "SEClamp",
-
-           	  "electrode_file": "el2.csv",
-
-  		  	  "input_file": "el2.nwb",
-
-           	  "trial": "trial_0"
-
-           	},
-
-     	"V1_input_current_parametric":
-
-            	{
-
-           	  "input_type": "current_clamp",
-
-           	  "module": "IClamp",
-
-           	  "electrode_file": "el1.csv"
-
-           	  "input_file": "el1_input_trial01.csv"
-
-           	},
-
-     	"V1_extracellular_current_from_h5":
-
-            	{
-
-           	  "input_type": "extracellular_current",
-
-    	    	  	  "module": "extra_stim_h5",
-
-           	  "electrode_file": "exel.csv",
-
-           	  "input_file": "exel_time_course.h5",
-
-           	  "trial": "trial_0"
-
-           	}
-
-   },
+        "inputs": {
+            "LGN_spikes_from_nwb":
+            {
+                "input_type": "spikes",
+                "module": "nwb",
+                "input_file": "$INPUT_DIR/lgn_spikes.nwb",
+                "node_set": ”LGN”
+                "trial": "trial_0"
+            },
+            "background_spikes_poisson":
+            {
+                "input_type": "spikes",
+                "module": "poisson"
+                "input_file":"$INPUT_DIR/BKG/bkg_input.csv",
+                "node_set": ”BKG”
+            },
+            "V1_input_current_from_nwb":
+            {
+                "input_type": "voltage_clamp"
+                "module": "SEClamp",
+                "electrode_file": "el2.csv",
+                "input_file": "el2.nwb",
+                "trial": "trial_0"
+            },
+            "V1_input_current_parametric":
+            {
+                "input_type": "current_clamp",
+                "module": "IClamp",
+                "electrode_file": "el1.csv"
+                "input_file": "el1_input_trial01.csv"
+            },
+            "V1_extracellular_current_from_h5":
+            {
+                "input_type": "extracellular_current",
+                "module": "extra_stim_h5",
+                "electrode_file": "exel.csv",
+                "input_file": "exel_time_course.h5",
+                "trial": "trial_0"
+            }
+        },
 
 Examples of the electrode_file for current clamp stimulation (column names):
 
-<table>
-  <tr>
-    <td>electrode_id</td>
-  </tr>
-  <tr>
-    <td>node_id</td>
-  </tr>
-  <tr>
-    <td>population</td>
-  </tr>
-  <tr>
-    <td>sec_id</td>
-  </tr>
-  <tr>
-    <td>seg_x</td>
-  </tr>
-</table>
-
+* electrode_id
+* node_id
+* population
+* sec_id
+* seg_x
 
 Example of the corresponding input_file (column names):
 
-<table>
-  <tr>
-    <td>electrode_id</td>
-  </tr>
-  <tr>
-    <td>dur</td>
-  </tr>
-  <tr>
-    <td>amp</td>
-  </tr>
-  <tr>
-    <td>delay</td>
-  </tr>
-  <tr>
-    <td>i</td>
-  </tr>
-</table>
-
+* electrode_id
+* dur
+* amp
+* delay
+* i
 
 ### Simulation output - Reports
 
@@ -1318,35 +1057,17 @@ The output of the simulation is reported based on the specifications of the outp
 
 There can be one or more reports in the block, each one identified by a unique name:
 
-{
-
-  "reports": {
-
-
-
-    "<report_name_1>": {
-
-        "<Key1>": <Value1>,
-
-        "<Key2>": <Value2>,
-
-         ...
-
-    },
-
-   "<report_name_2>": {
-
-        "<Key1>": <ValueN>,
-
-        ...
-
-    }
-
-  }
-
-}
-
-
+        "reports": {
+            "<report_name_1>": {
+                "<Key1>": <Value1>,
+                "<Key2>": <Value2>,
+                ...
+            },
+            "<report_name_2>": {
+                "<Key1>": <ValueN>,
+                ...
+            }
+        }
 
 On simulation launch, a file for each specified report is then created with filename <report_name>.h5
 
@@ -1426,121 +1147,64 @@ On simulation launch, a file for each specified report is then created with file
 
 #### **Example**
 
-"reports": {
-
-
-
-	"calcium_bio": {
-
-  	"cells": "biophysical",
-
-  	"variable_name": "cai",
-
-  	"module": "membrane_report",
-
-  	"sections": "all",
-
-  	"start_time": 0.0,
-
-  	"end_time": 500.0,
-
-  	"dt": 0.25
-
-	},
-
-	"membrane_voltage": {
-
-  	"cells":  "all_cells",
-
-  	"variable_name": "v",
-
-  	"module": "membrane_report",
-
-  	"sections": "soma"
-
-	},
-
-
-
-	"extracellular_potential": {
-
-  	"cells": "all_cells",
-
-  	"variable_name": "ecp",
-
-  	"module": "extracellular",
-
-  	"sections": "all",
-
-  	"electrode_channels": "all"
-
-	},
-
-
-
-	"voltage_clamp": {
-
-  	"cells": "biophysical",
-
-  	"variable_name": "i",
-
-  	"module": "SEClamp",
-
-  	"sections": "soma"
-
-	},
-
-
-
-  },
-
+        "reports": {
+            "calcium_bio": {
+                "cells": "biophysical",
+                "variable_name": "cai",
+                "module": "membrane_report",
+                "sections": "all",
+                "start_time": 0.0,
+                "end_time": 500.0,
+                "dt": 0.25
+            },
+            "membrane_voltage": {
+                "cells":  "all_cells",
+                "variable_name": "v",
+                "module": "membrane_report",
+                "sections": "soma"
+            },
+            "extracellular_potential": {
+                "cells": "all_cells",
+                "variable_name": "ecp",
+                "module": "extracellular",
+                "sections": "all",
+                "electrode_channels": "all"
+            },
+            "voltage_clamp": {
+                "cells": "biophysical",
+                "variable_name": "i",
+                "module": "SEClamp",
+                "sections": "soma"
+            },
+        },
 
 
 #### **Node Sets** File
 
 A Node Sets json file contains subsets of cells that act as targets for different reports or stimulations, or can also be used to name and define the target subpopulation to simulate. Each item in the file is a unique referenced "set_name", followed by a collection of a key-value pairs corresponding to the properties of the nodes. At time of interpretation of the Node Sets file, gids must also be defined for each node in the network to be simulated, for that "gid" is also a valid property to appear in key-value pairs. Multiple key-value selections are combined assuming a logical AND operation.  Node populations and their names are implicitly defined in the Node Set namespace, and needn’t be declared explicitly.  The general schema is as follows.
 
-{
-
-	"<Node_Set_1>": {
-
-   		"<Property_Key1>": ["<Prop_Val_11>", "<Prop_Val_12>", …],
-
-   		"<Property_Key2>": ["<Prop_Val_21>", "<Prop_Val_22>", …],
-
-},
-
-"<Node_Set_2>": [<Node_Set_X>, <Node_Set_Y>, …],
-
-...
-
-}
+    {
+        "<Node_Set_1>": {
+            "<Property_Key1>": ["<Prop_Val_11>", "<Prop_Val_12>", ...],
+            "<Property_Key2>": ["<Prop_Val_21>", "<Prop_Val_22>", ...],
+        },
+        "<Node_Set_2>": [<Node_Set_X>, <Node_Set_Y>, …],
+        ...
+    }
 
 ##### An Example of a Node Set File
 
-{
-
-	"bio_layer45": {
-
-   			"model_type": "biophysical",
-
-   	            "location": ["layer4", "layer5"]
-
-},
-
-	"V1_point_prime": {
-
-   			"population": "biophysical",
-
-   			"model_type": "point",
-
-   	            "node_id": [1,2,3,5,7,9,…]
-
-}
-
-}
-
-
+    {
+        "bio_layer45": {
+            "model_type": "biophysical",
+            "location": ["layer4", "layer5"]
+        },
+        "V1_point_prime": {
+            "population": "biophysical",
+            "model_type": "point",
+            "node_id": [1, 2, 3, 5, 7, 9, ...]
+        }
+    }
 
 ### **Output file formats**
 
@@ -1552,53 +1216,43 @@ Spikes from all cells will be stored in a single HDF5 file that contains (gid, s
 
 The layout of a spike file is as follows:
 
-<table>
-  <tr>
-    <td>/spikes</td>
-    <td>Group</td>
-  </tr>
-  <tr>
-    <td>/spikes/timestamps</td>
-    <td>Dataset {N spikes}, double</td>
-  </tr>
-  <tr>
-    <td>/spikes/gids</td>
-    <td>Dataset {N spikes}, 64-bit integer</td>
-  </tr>
-</table>
+* **/spikes/timestamps** (dytpe: double, shape: N spikes)
+* **/spikes/gids** (dytpe: uint64, shape: N spikes), attributes:
+    - **sorting** (dtype: enum)
 
-
-The spikes group contains an enum attribute named *sorting* with one of these values: none, by_gid, by_time. Both datasets are sorted using as sorting key the dataset specified by the attribute. When sorting by gid, spikes of the same gid are expected to be also sorted by timestamp as secondary key. When sorting by timestamp, spikes with the same timestamp can be in any order.
+The *sorting* attribute can take one of these values: `none`, `by_gid`,
+`by_time`. Both datasets are sorted using as sorting key the dataset specified
+by the attribute. When sorting by gid, spikes of the same gid are expected to
+be also sorted by timestamp as secondary key. When sorting by timestamp,
+spikes with the same timestamp can be in any order.
 
 #### Multi and single compartment recordings
 
 Using when recording simulation data from one or more cells
 
-* ** /data (dtype:float, shape: N_time x N_compartments), attrs=units**
+* **/data** (dtype:float, shape: N_time x N_compartments). Writers are
+  encouraged to use chunking for efficient read access. Attributes:
+    - **units** (dtype: str)
+* **/mapping/gids** (dtype: uint64, shape: N_cells)
+* **/mapping/index_pointer** (dtype: uint64, shape: N_cells)
+* **/mapping/element_id** (dtype: uint32, shape: N_compartments)
+* **/mapping/element_pos** (dtype: float, shape: N_compartments)
+* **/mapping/time** (dtype: double, shape: 3),
+  the values of the data set are start time, stop time and time step. The
+  interval is open on the right (i.e. no data frame for t=stop). Attributes:
+    - **units** (dtype: str)
 
-    * **/mapping/gids (dtype: int, shape: N_cells)**
+For a particular gid[ix], the data for all the recorded compartments is
+determined by `data[index_pointer[ix], index_pointer[ix+1]]`.
 
-    * **/mapping/index_pointer (dtype: int, shape: N_cells)**
-
-    * **/mapping/element_id (dtype: int, shape: N_compartments)**
-
-    * **/mapping/element_pos (dtype: float, shape: N_compartments)**
-
-    * **/mapping/time (begin, end, step), attrs=unit**
-
-For a particular gid[ix], the data for all the recorded compartments is determined by
-
-data[index_pointer[ix], index_pointer[ix+1]]
-
-The values in
-
-element_id[index_pointer[ix], index_pointer[ix+1]]
-
-element_pos[index_pointer[ix], index_pointer[ix+1]]
-
-are used to specify the compartment’s section id and the relative position, respectively, for each gid[ix]’s data column. Note that for recording from a single compartment element_id and element_pos are just arrays of 1. If element_pos dataset is not present then all segments are being represented for every recorded section.
-
-
+The values in `element_id[index_pointer[ix], index_pointer[ix+1]]` and
+`element_pos[index_pointer[ix], index_pointer[ix+1]]` are used to specify the
+compartment’s section id and the relative position, respectively, for each
+gid[ix]’s data column. Note that for recording from a single compartment
+element_id and element_pos are just arrays of 1s. If element_pos dataset is not
+present then all segments are being represented for every recorded section and
+they will appear in the morphological order (closest to section start first) in
+the dataset.
 
 #### Extracellular report
 
@@ -1606,17 +1260,15 @@ Used when reporting variables that are not associated with the individual cells.
 
 **Extracellular_potential**
 
-* **data (dtype: float, shape: N_rec_electrodes x N_time), attr=units**
-
-* **channel_id (dtype: int, shape: N_rec_electrodes)**
-
-* **time (start,stop,step); attr=units**
+* **data** (dtype: float, shape: N_rec_electrodes x N_time), attributes:
+     - *units*: str
+* **channel_id** (dtype: int, shape: N_rec_electrodes)
+* **time** (dtype: double, shape: 3),
+  the values of the data set are start time, stop time and time step. The
+  interval is open on the right (i.e. no data frame for t=stop). Attributes:
+     - *units*: str
 
 The data for a particular electrode channel_id[i] found in data[i,:]
-
-
-
-
 
 ### Mapping between gids and cells in the network
 
@@ -1626,23 +1278,18 @@ The mapping could be created by the simulator or prior to simulation (implementa
 
 **GlobalReferencing**
 
-* **gid (dtype: int, shape: N_gid)**
-
-* **population (dtype: int, shape: N_gid)**
-
-* **node_id (dtype: int, shape: N_gid)**
-
-* **population_names(dtype: str, shape: N_population)**
+* **gid** (dtype: uint64, shape: N_gid)
+* **population** (dtype: uint32, shape: N_gid)
+* **node_id** (dtype: uint32, shape: N_gid)
+* **population_names**(dtype: str, shape: N_population)
 
 One can search these datasets to find gid corresponding to a particular (population, node_id) pair or vice versa. The population dataset contains indices in the population_names dataset.
 
 The location of the mapping file is specified in the simulation_config.json as follows:
 
-{
-
-	"gid_mapping_file":”<path_to_h5>”
-
-}
+    {
+        "gid_mapping_file": ”<path_to_h5>”
+    }
 
 For implementations that generate the mapping at runtime, this location should be used to write the file.
 
@@ -1664,7 +1311,7 @@ processing approaches in the model construction behaviour of biophysical neurons
 
 For model_processing=*"fullaxon",* the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
 
-For model_processing="axon_bbpv5", the axon is removed, and is replaced by two cylindrical se	ctions of 30 μm each, representing the axon initial segment (AIS).
+For model_processing="axon_bbpv5", the axon is removed, and is replaced by two cylindrical sections of 30 μm each, representing the axon initial segment (AIS).
 
 The diameter of the first section is determined by the diameter at midpoint of the first section of the original axon. The diameter of the second section is the diameter at midpoint of the first original axon section who’s midpoint crosses 60 μm. If the latter section doesn’t exist in the original morphology, the second section gets the same diameter as the first section.
 
