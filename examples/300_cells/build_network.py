@@ -75,7 +75,7 @@ for i, model_props in enumerate(cell_models):
                        rotation_angle_yaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  # randomly rotate y axis
                        rotation_angle_zaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  #
                        model_type='biophysical',
-                       model_processing='NONE',
+                       model_processing='aibs_perisomatic',
                        **model_props)
 
 if build_recurrent_edges:

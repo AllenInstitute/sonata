@@ -30,7 +30,7 @@ for i, model_props in enumerate(cell_models):
     cortex.add_nodes(N=3,
                      x=[i*30.0 + j for j in range(3)],  y=[0.0]*3, z=[0.0]*3,  # space cells every 10nm along x axs
                      model_type='biophysical',
-                     model_processing='NONE' if use_nml else 'aibs_perisomatic',
+                     model_processing='aibs_perisomatic',
                      **model_props)
 
 cortex.build()
