@@ -1233,10 +1233,13 @@ Using when recording simulation data from one or more cells
 * **/data** (dtype:float, shape: N_time x N_compartments). Writers are
   encouraged to use chunking for efficient read access. Attributes:
     - **units** (dtype: str)
-* **/mapping/gids** (dtype: uint64, shape: N_cells)
+* **/mapping/gids** (dtype: uint64, shape: N_cells). Attributes:
+    - **sorted** (dtype: bool) Optional. Indicates whether the GID list is
+      sorted or not. The list is considered unsorted if not present.
 * **/mapping/index_pointer** (dtype: uint64, shape: N_cells)
-* **/mapping/element_id** (dtype: uint32, shape: N_compartments)
-* **/mapping/element_pos** (dtype: float, shape: N_compartments)
+* **/mapping/element_id** (dtype: uint32, shape: N_compartments). All
+  compartments referring to the same element must appear together.
+* **/mapping/element_pos** (dtype: float, shape: N_compartments). Optional
 * **/mapping/time** (dtype: double, shape: 3),
   the values of the data set are start time, stop time and time step. The
   interval is open on the right (i.e. no data frame for t=stop). Attributes:
