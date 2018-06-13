@@ -491,7 +491,7 @@ The model_type=*"point_process"* results in a point process neuron, i.e. a NEURO
 
 The model_type=*"virtual"* results in a placeholder neuron, which is not otherwise simulated, but can be the source of spikes which result in post-synaptic events.
 
-The model_type=*"biophysical"* results in a compartmental neuron.  The attribute morphology_file must be defined, either via the node or node_type.
+The model_type=*"biophysical"* results in a compartmental neuron.  The attribute **morphology** must be defined, either via the node or node_type.
 
 **model_template** - Used to reference a template or class describing the electrophysical properties and mechanisms of the node(s). Its value and interpretation is context-dependent on the corresponding ‘model_type’. When there is no applicable model template for a given model type (i.e. model_type=virtual) it is assigned a value of NULL. Otherwise it uses a colon-separated string-pair with the following syntax:
 
