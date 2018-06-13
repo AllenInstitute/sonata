@@ -1,0 +1,123 @@
+{
+  "soma": [
+    {
+      "name": "decay_CaDynamics", 
+      "value": 20.3002467886, 
+      "mechanism": "CaDynamics"
+    }, 
+    {
+      "name": "gamma_CaDynamics", 
+      "value": 0.00772044334117, 
+      "mechanism": "CaDynamics"
+    }, 
+    {
+      "name": "gbar_Ih", 
+      "value": 5.11628604301e-05, 
+      "mechanism": "Ih"
+    }, 
+    {
+      "name": "gbar_NaV", 
+      "value": 0.0585201851293, 
+      "mechanism": "NaV"
+    }, 
+    {
+      "name": "gbar_Kd", 
+      "value": 0.000311925293274, 
+      "mechanism": "Kd"
+    }, 
+    {
+      "name": "gbar_Kv2like", 
+      "value": 0.0510602382643, 
+      "mechanism": "Kv2like"
+    }, 
+    {
+      "name": "gbar_Kv3_1", 
+      "value": 0.650760553897, 
+      "mechanism": "Kv3_1"
+    }, 
+    {
+      "name": "gbar_K_T", 
+      "value": 0.0333859464163, 
+      "mechanism": "K_T"
+    }, 
+    {
+      "name": "gbar_Im_v2", 
+      "value": 0.00775048605222, 
+      "mechanism": "Im_v2"
+    }, 
+    {
+      "name": "gbar_SK", 
+      "value": 0.00273400919959, 
+      "mechanism": "SK"
+    }, 
+    {
+      "name": "g_pas", 
+      "value": 0.000267055343513
+    }, 
+    {
+      "name": "gbar_Ca_HVA", 
+      "value": 0.000564789720542, 
+      "mechanism": "Ca_HVA"
+    }, 
+    {
+      "name": "gbar_Ca_LVA", 
+      "value": 0.00321147794875, 
+      "mechanism": "Ca_LVA"
+    }, 
+    {
+      "name": "cm", 
+      "value": 2.16
+    }, 
+    {
+      "name": "Ra", 
+      "value": 143.65
+    }, 
+    {
+      "name": "ek", 
+      "value": -107.0
+    }, 
+    {
+      "name": "ena", 
+      "value": 53.0
+    }
+  ], 
+  "axon": [
+    {
+      "name": "g_pas", 
+      "value": 0.000662463571112
+    }, 
+    {
+      "name": "cm", 
+      "value": 2.16
+    }, 
+    {
+      "name": "Ra", 
+      "value": 143.65
+    }
+  ], 
+  "e_pas": {
+    "soma": -95.5370941162, 
+    "axon": -95.5370941162, 
+    "dend": -95.5370941162
+  }, 
+  "apic": [
+    {
+      "name": "Ra", 
+      "value": 143.65
+    }
+  ], 
+  "dend": [
+    {
+      "name": "g_pas", 
+      "value": 9.80198332219e-06
+    }, 
+    {
+      "name": "cm", 
+      "value": 2.16
+    }, 
+    {
+      "name": "Ra", 
+      "value": 143.65
+    }
+  ]
+}
