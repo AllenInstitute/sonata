@@ -9,17 +9,17 @@ use_nml = True  # True to build network with NEUROML files, false to build netwo
 
 cell_models = [
     {
-        'model_name': 'Scnn1a', 'ei': 'e', 'morphology_file': 'Scnn1a_473845048_m.swc',
+        'model_name': 'Scnn1a', 'ei': 'e', 'morphology': 'Scnn1a_473845048_m.swc',
         'model_template': 'nml:nml/Cell_472363762.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/472363762_fit.json'
     },
     {
-        'model_name': 'Rorb', 'ei': 'e', 'morphology_file': 'Rorb_325404214_m.swc',
+        'model_name': 'Rorb', 'ei': 'e', 'morphology': 'Rorb_325404214_m.swc',
         'model_template': 'nml:nml/Cell_473863510.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/473863510_fit.json'
     },
     {
-        'model_name': 'Nr5a1', 'ei': 'e', 'morphology_file': 'Nr5a1_471087815_m.swc',
+        'model_name': 'Nr5a1', 'ei': 'e', 'morphology': 'Nr5a1_471087815_m.swc',
         'model_template': 'nml:nml/Cell_473863035.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/473863035_fit.json'
     }
@@ -36,7 +36,7 @@ for i, model_props in enumerate(cell_models):
 cortex.build()
 cortex.save_nodes(output_dir='network')
 
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology_file']))
+morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology']))
                 for p in cell_models}
 
 
