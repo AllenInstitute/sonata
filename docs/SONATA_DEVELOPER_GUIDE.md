@@ -129,15 +129,29 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
 
 * IDs must increase without 'jumps' or 'gaps'
 
-* A sample point is the end-point of a segment
-
 * All neurites must be connected to the soma (no 'floating'/unconnected trees)
+
+* A chain of connected sample points where the end points are either terminal
+  points of bifurcating points are called a section. Points from sections
+  connected to the same first order section (emanating from the soma) must have
+  the same sample type.
+
+* A sample point is the end-point of a segment. It's previous sample is the
+  start point of the segment
 
 * All segments of a section must be sequential and contiguous
 
 * All parent sample points must exist before children sample points
 
-It is not required that the soma is located at 0,0,0 in the SWC file, but in cases where the morphology has a soma, the soma will be re-centered to 0,0,0 upon loading into the circuit.  Node translations will then be applied to this recentered morphology. This behavior can be overridden by the morph_translate=0 optional reserved attribute for nodes and node_types.  See "Representing networks of neurons" for more details.
+* For the purpose of mapping information to morphologies, each section has a
+  designated section ID, which is a integer in [0, #sections - 1]. The soma is
+  always section 0. The reset of the sections are first grouped by section
+  type in this order: axon, basal and apical. All sections in a group are given
+  IDs incrementally, starting at the last ID from the previous section plus
+  1. The order in which sections are assigned an ID is the order in which
+  their first segment appears in the file.
+
+It is not required that the soma is located at 0,0,0 in the SWC file, but in cases where the morphology has a soma, the soma will be re-centered to 0,0,0 upon loading into the circuit.  Node translations will then be applied to this recentered morphology. This behavior can be overridden by the optional reserved attribute "recenter" for nodes and node_types.  See "Representing networks of neurons" for more details.
 
 It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.  For circuits for which this is true, the circuit producer can declare it with the "standardized_morphology_orientation" entry in the circuit_config.json, so downstream users can safely assume it.  See "Tying it all together - the circuit_config file" for more details.
 
