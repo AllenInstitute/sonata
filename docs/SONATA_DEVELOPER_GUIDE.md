@@ -31,6 +31,7 @@ The following conventions apply to all SONATA h5 files:
     * **str**: a H5T_C_S1 type string with UTF-8 encoding
     * **float**: H5T_IEEE_F32LE
     * **double**: H5T_IEEE_F64LE
+    * **bool**: H5T_STD_I8LE with value 1 or 0
     * **int32**: H5T_STD_I32LE
     * **uint32**: H5T_STD_U32LE
     * **int64**: H5T_STD_I64LE
