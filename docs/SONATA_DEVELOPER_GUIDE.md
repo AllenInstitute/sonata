@@ -495,7 +495,7 @@ Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 **/nodes/<population_name>** - defines a node population with the given name, which is also the node population name that will be used in edge files to specify the source or target node populations of an edge population (see below).  Multiple populations may be defined in one HDF5 file.
 
-**node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type .  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a key-value store, such as a dictionary to associate a node_type_id with its associated column values.
+**node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type.  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.
 
 **model_type** - Has four valid values: , "biophysical"”,“virtual”, “single_compartment”, “point_process”.  In the future, more model_types may be defined. The meaning of each of these model types is as follows.
 
@@ -522,8 +522,6 @@ hoc: Template is described using a customized hoc file. Valid for both biophysic
 nrn: Valid for both point_process and single_compartment model types. For a point_process model type, <resource> should specify the name of NEURON simulator point_process (i.e. IntFire1, IntFire2).  For a single_compartment type, <resource> should specify the name of the mechanism to insert.
 
 *<resource>* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
-
-
 
 **node_group_id** - Assigns each node to a specific group of nodes.
 
@@ -836,7 +834,7 @@ Where to find the hoc templates for the edges:
            "templates": "$COMPONENT_DIR/hoc_templates",
         },
 
-The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.  Gids are assigned to nodes in advance (using another tool) or during the simulation, depending on implementation, and are global across all  populations in the network.
+The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.  Gids are assigned to nodes in advance (using another tool) or during the simulation, depending on implementation, and are global across all  populations in the network (see the (gid mapping)[#gid_mapping] section for details)
 
         "networks": {
             "nodes": [
@@ -1196,16 +1194,56 @@ On simulation launch, a file for each specified report is then created with file
 
 #### **Node Sets** File
 
-A Node Sets json file contains subsets of cells that act as targets for different reports or stimulations, or can also be used to name and define the target subpopulation to simulate. Each item in the file is a unique referenced "set_name", followed by a collection of a key-value pairs corresponding to the properties of the nodes. At time of interpretation of the Node Sets file, gids must also be defined for each node in the network to be simulated, for that "gid" is also a valid property to appear in key-value pairs. Multiple key-value selections are combined assuming a logical AND operation.  Node populations and their names are implicitly defined in the Node Set namespace, and needn’t be declared explicitly.  The general schema is as follows.
+A Node Sets json file contains subsets of cells that act as targets for
+different reports or stimulations, or can also be used to name and define the
+target subpopulation to simulate. The top level element in the json schema
+is a dictionary with one entry per node set. The keys are the node set names
+and the values and depends on whether a node set is basic or compound.
+
+The general schema is as follows.
 
     {
-        "<Node_Set_1>": {
+        "<Basic_Node_Set_1>": {
             "<Property_Key1>": ["<Prop_Val_11>", "<Prop_Val_12>", ...],
             "<Property_Key2>": ["<Prop_Val_21>", "<Prop_Val_22>", ...],
         },
-        "<Node_Set_2>": [<Node_Set_X>, <Node_Set_Y>, …],
+        ...
+        "<Compound_Node_Set_N>": [<Basic_Node_Set_1>, <Compound_Node_Set_M>, ...],
         ...
     }
+
+Basic node sets are declared using a dictionary of node attributes and
+attribute values. An attribute value can be either a scalar (number, string,
+bool) or an array of scalars. Scalar values in the json must be compatible
+with the H5 types in the node files according to the following equivalence:
+
+|  Json  |             H5            |
+|--------|---------------------------|
+| number | H5T_IEEE_*LE, H5T_STD_*LE |
+| string | H5T_C_S1                  |
+|  bool  | H5T_STD_I8LE              |
+|  null  | **invalid**               |
+
+Each entry specifies a rule. For scalar attributes a node matches the rule if
+the value of its attribute matches the value in the entry. For arrays, a node
+matches if its value matches any of the values in the array. A node is part of
+a node set if it matches all the rules in the node set definition (logical
+AND).
+
+Compound node sets are declared as an array of node sets names, where each name
+may refer to another compound node set or a basic node set. The final node set
+is the union of all the node sets in the array.
+
+Two special attributes are allowed in the key-value pairs of basic node sets.
+The first one is "population", this attribute refers to the node populations
+to be considered. Node populations and their names are implicitly defined in
+the Node Set namespace, and needn’t be declared explicitly.
+
+At time of interpretation of the node set file, gids must also be defined for
+each node in the network to be simulated. For that purpose, "gid" is also a
+valid node attribute to appear in key-value pairs. The "gid" to population and
+node_id mapping is specified according to [description below](#gid_mapping).
+
 
 ##### An Example of a Node Set File
 
@@ -1219,6 +1257,9 @@ A Node Sets json file contains subsets of cells that act as targets for differen
             "model_type": "point",
             "node_id": [1, 2, 3, 5, 7, 9, ...]
         }
+        "layer4": {
+            "gids": [1, 2, 3, 4, 5, ...]
+        },
     }
 
 ### **Output file formats**
@@ -1288,7 +1329,7 @@ Used when reporting variables that are not associated with the individual cells.
 
 The data for a particular electrode channel_id[i] found in data[i,:]
 
-### Mapping between gids and cells in the network
+### <a name="gid_mapping"></a> Mapping between gids and cells in the network
 
 In the model description, the cells are uniquely defined by their population name and node_id, whereas in the simulation output they are uniquely defined by the gids. To relate the two, we need to have a mapping: (population,node_id) <-> gid
 
