@@ -145,11 +145,11 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
 
 * For the purpose of mapping information to morphologies, each section has a
   designated section ID, which is a integer in [0, #sections - 1]. The soma is
-  always section 0. The reset of the sections are first grouped by section
-  type in this order: axon, basal and apical. All sections in a group are given
-  IDs incrementally, starting at the last ID from the previous section plus
-  1. The order in which sections are assigned an ID is the order in which
-  their first segment appears in the file.
+  always section 0. The rest of the sections are first grouped by section
+  type in this order: 1 = axon, 2 = basal and 3 = apical. All sections in a
+  group are given IDs incrementally, starting at the last ID from the previous
+  section plus 1. The order in which sections are assigned an ID is the order
+  in which their first segment appears in the file.
 
 It is not required that the soma is located at 0,0,0 in the SWC file, but in cases where the morphology has a soma, the soma will be re-centered to 0,0,0 upon loading into the circuit.  Node translations will then be applied to this recentered morphology. This behavior can be overridden by the optional reserved attribute "recenter" for nodes and node_types.  See "Representing networks of neurons" for more details.
 
