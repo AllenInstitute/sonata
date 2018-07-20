@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "$BASE_DIR": "${configdir}",
+    "$BASE_DIR": ".",
     "$OUTPUT_DIR": "$BASE_DIR/output",
     "$INPUT_DIR": "$BASE_DIR/inputs"
   },
@@ -14,6 +14,8 @@
   },
 
   "target_simulator":"NEURON",
+
+  "network": "$BASE_DIR/circuit_config.json",
 
   "conditions": {
     "celsius": 34.0,
@@ -38,7 +40,7 @@
     }
   },
 
-  "output":{ 
+  "output":{
     "log_file": "$OUTPUT_DIR/log.txt",
     "output_dir": "$OUTPUT_DIR",
     "spikes_file": "$OUTPUT_DIR/spikes.h5",
