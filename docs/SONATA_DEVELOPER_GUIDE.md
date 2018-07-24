@@ -904,13 +904,25 @@ Example:
 
 ### Output Configuration
 
-The "output" block configures the location where output reports should be written, and if output should be overwritten.
+The "output" block configures the location where output reports should be
+written. An optional attribute named "overwrite_output_dir" provides a hint
+to simulators to let them know if already existing output files must be
+overwritten.
 
+The default behaviour is for simulators to produce spike data (a series of
+gid, timestamp pairs). By default the name of the file is "spikes.h5" and it
+is written to <output_dir>. The name of the output file for spikes can be
+configured with the optional attribute "spikes_file" (using a relative or
+absolute path in spikes_file has undefined behaviour)
+
+Example
     "output": {
         "log_file": "$OUTPUT_DIR/log.txt",
         "output_dir": "$OUTPUT_DIR",
         "overwrite_output_dir": true,
+        "spikes_file": "run0.h5",
     },
+
 
 ### Implementation Specific Parameters
 
@@ -1066,7 +1078,9 @@ Example of the corresponding input_file (column names):
 
 ### Simulation output - Reports
 
-The output of the simulation is reported based on the specifications of the output variables described in the simulation configuration file under the "reports" block. Spikes are always reported, and a report specification needn’t be specified to have the simulation report the spikes. Simulators are expected to write spike reports to a file called spikes.h5 (whole file format is explained [below](#spike_file)) located at the output_dir.
+The output of the simulation is reported based on the specifications of the
+output variables described in the simulation configuration file under the
+"reports" block.
 
 There can be one or more reports in the block, each one identified by a unique name:
 
@@ -1082,7 +1096,12 @@ There can be one or more reports in the block, each one identified by a unique n
             }
         }
 
-On simulation launch, a file for each specified report is then created with filename <report_name>.h5
+Simulators are expected to create a file for each specified report under the
+output directory using the file name <report_name>.<ext>, where ext is the
+file extension specific to the report configuration. The file name can be
+overriden with the attribute "file_name".
+
+Some reserved attributes are the following:
 
 <table>
   <tr>
@@ -1155,6 +1174,15 @@ On simulation launch, a file for each specified report is then created with file
     <td>False</td>
     <td>Simulator default</td>
   </tr>
+  <tr>
+    <td>file_name</td>
+    <td>Report file name including extension. Reports are always written to the
+      output directory given in the output configuration block</td>
+    <td>string</td>
+    <td>False</td>
+    <td>-</td>
+  </tr>
+
 </table>
 
 
@@ -1264,7 +1292,9 @@ node_id mapping is specified according to [description below](#gid_mapping).
 
 ### **Output file formats**
 
-Each report name in the "reports" block results in a separate HDF5 file with the filename <report_name>.h5.
+Each report name in the "reports" block results in a separate HDF5 file with
+the filename <report_name>.h5 written to the output directory (unless the user
+provides a different file name).
 
 #### <a name="spike_file"></a>Spike file
 
