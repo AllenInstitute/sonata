@@ -13,27 +13,27 @@ print('Building internal network')
 cell_models = [
     {
         'model_name': 'Scnn1a', 'ei': 'e',
-        'morphology': 'Scnn1a_473845048_m.swc',
+        'morphology': 'Scnn1a_473845048_m',
         'model_template': 'nml:Cell_472363762.cell.nml'
     },
     {
         'model_name': 'Rorb', 'ei': 'e',
-        'morphology': 'Rorb_325404214_m.swc',
+        'morphology': 'Rorb_325404214_m',
         'model_template': 'nml:Cell_473863510.cell.nml'
     },
     {
         'model_name': 'Nr5a1', 'ei': 'e',
-        'morphology': 'Nr5a1_471087815_m.swc',
+        'morphology': 'Nr5a1_471087815_m',
         'model_template': 'nml:Cell_473863035.cell.nml'
     },
     {
         'model_name': 'PV1', 'ei': 'i',
-        'morphology': 'Pvalb_470522102_m.swc',
+        'morphology': 'Pvalb_470522102_m',
         'model_template': 'nml:Cell_472912177.cell.nml'
     },
     {
         'model_name': 'PV2', 'ei': 'i',
-        'morphology': 'Pvalb_469628681_m.swc',
+        'morphology': 'Pvalb_469628681_m',
         'model_template': 'nml:Cell_473862421.cell.nml'
     }
 ]
