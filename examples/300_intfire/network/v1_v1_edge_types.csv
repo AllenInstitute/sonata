@@ -1,0 +1,5 @@
+edge_type_id target_query source_query delay weight_function syn_weight dynamics_params
+100 model_type=='point_process'&ei=='i' ei=='i' 2.0 wmax 0.01 instanteneousInh.json
+101 model_type=='point_process'&ei=='e' ei=='i' 2.0 wmax 0.15 instanteneousInh.json
+102 pop_name=='LIF_inh' ei=='e' 2.0 wmax 0.3 instanteneousExc.json
+103 pop_name=='LIF_exc' ei=='e' 2.0 wmax 0.002 instanteneousExc.json
