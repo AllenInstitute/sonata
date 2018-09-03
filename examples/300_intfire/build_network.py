@@ -73,7 +73,7 @@ net.save(output_dir='network')
 def generate_positions(N, x0=0.0, x1=300.0, y0=0.0, y1=100.0):
     X = np.random.uniform(x0, x1, N)
     Y = np.random.uniform(y0, y1, N)
-    return np.column_stack((X, Y))
+    return X, Y
 
 
 def select_source_cells(src_cells, trg_cell, n_syns):
@@ -86,16 +86,19 @@ def select_source_cells(src_cells, trg_cell, n_syns):
 
 
 lgn = NetworkBuilder("lgn")
+pos_x, pos_y = generate_positions(30)
 lgn.add_nodes(N=30, pop_name='tON', ei='e', location='LGN',
-              positions=generate_positions(30),
+              x=pos_x, y=pos_y,
               model_type='virtual')
 
+pos_x, pos_y = generate_positions(30)
 lgn.add_nodes(N=30, pop_name='tOFF', ei='e', location='LGN',
-              positions=generate_positions(30),
+              x=pos_x, y=pos_y,
               model_type='virtual')
 
+pos_x, pos_y = generate_positions(30)
 lgn.add_nodes(N=30, pop_name='tONOFF', ei='e', location='LGN',
-              positions=generate_positions(30),
+              x=pos_x, y=pos_y,
               model_type='virtual')
 
 
