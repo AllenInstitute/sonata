@@ -421,27 +421,27 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_type_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_type_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_group_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_group_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_group_index</td>
+    <td>/nodes/&lt;population_name&gt;/node_group_index</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/my_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/my_attribute</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -449,11 +449,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/dynamics_params/neuron_param1</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/dynamics_params/neuron_param1</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -461,11 +461,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/my_other_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -473,11 +473,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/dynamics_params/neuron_param2</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/dynamics_params/neuron_param2</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -638,31 +638,31 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_type_id</td>
+    <td>/edges/&lt;population_name&gt;/edge_type_id</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/source_node_id</td>
+    <td>/edges/&lt;population_name&gt;/source_node_id</td>
     <td>Dataset{N_total_edges} - with attribute specifying source population name</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/target_node_id</td>
+    <td>/edges/&lt;population_name&gt;/target_node_id</td>
     <td>Dataset{N_total_edges} - with attribute specifying target population name</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_group_id</td>
+    <td>/edges/&lt;population_name&gt;/edge_group_id</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_group_index</td>
+    <td>/edges/&lt;population_name&gt;/edge_group_index</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/my_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/my_attribute</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -670,11 +670,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/dynamics_params/edge_param1</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/dynamics_params/edge_param1</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -682,11 +682,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/my_other_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
@@ -694,11 +694,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/dynamics_params/edge_param2</td>
+    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/dynamics_params/edge_param2</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
@@ -722,7 +722,7 @@ Table 2: Layout of the file format for describing edges.
 
 **edge_group_index** - After determining the edge_group_id of a specific edge, the edge_group_index indicates the index within that <edge-group-id> that contains all the attributes for a particular edge under consideration.
 
-**edge_id** - Assigns a key to uniquely identify and look up an edge within a population. If If not provided, node_ids are implicitly contiguous starting from zero.
+**edge_id** - Assigns a key to uniquely identify and look up an edge within a population. If If not provided, edge_ids are implicitly contiguous starting from zero.
 
 #### Edges - Optional Reserved Attributes
 
