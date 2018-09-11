@@ -157,7 +157,10 @@ It is recommended, but not required, that morphologies in a network have a stand
 
 ### <a name="ion_channels">Representing ion channel, point neuron and synapse models
 
-To represent point neuron models, synapses and ion channels NEURON MOD files are used.  Models provided as standard by NEURON are also valid, such as ExpSyn, IntFire1.
+Representation of point neuron models, synapses and ion channels depends on the target simulator.
+
+For NEURON, synapses and ion channels NEURON MOD files are used.  Models provided as standard by NEURON are also valid, such as ExpSyn, IntFire1. For NEST and PyNN, the names of built-in/standard
+point neuron and synapse models are used.
 
 To support reproducible random numbers in NEURON, it is required to define conventions for the configuration of random number generators, and how they are assigned to channel models, synapses random number generators.  To this end, NEURON mechanisms should follow idioms in the MOD files, so that a uniform and automated approach to random number configuration can be employed.  Such an approach was out of scope of the current format specification, and will be the subject of future versions.
 
@@ -497,29 +500,37 @@ Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 **node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type.  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.
 
-**model_type** - Has four valid values: , "biophysical"”,“virtual”, “single_compartment”, “point_process”.  In the future, more model_types may be defined. The meaning of each of these model types is as follows.
+**model_type** - Has five valid values: "biophysical"”, "virtual", "single_compartment", "point_process", "point_neuron".  In the future, more model_types may be defined. The meaning of each of these model types is as follows.
 
 The model_type=*"single_compartment"”* is a single-compartment model of a neuron.   A cylindrical compartment is created with length equal to diameter, and the diameter being defined by an additional expected dynamics_param “D”, which if not specified defaults to 1 micron.  The voltage of the neuron is defined by the voltage of the compartment.  Further, the passive mechanism is inserted, and the additional mechanism named in the “model_template” required attribute. Note that a single compartment of length = diameter has the same effective area as that of a sphere of the same diameter (see [NEURON documentation](https://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/geometry.html)).
 
-The model_type=*"point_process"* results in a point process neuron, i.e. a NEURON artificial cell.  The point process model is named in the “model_template” required attribute.
+The model_type=*"point_process"* results in a point process neuron defined by an NMODL file, i.e. a NEURON artificial cell.  The point process model is named in the “model_template” required attribute.
+
+The model_type=*"point_neuron"* results in a point process neuron defined by the name of a built-in neuron model, for the NEST and PyNN simulators.
 
 The model_type=*"virtual"* results in a placeholder neuron, which is not otherwise simulated, but can be the source of spikes which result in post-synaptic events.
 
 The model_type=*"biophysical"* results in a compartmental neuron.  The attribute **morphology** must be defined, either via the node or node_type.
 
+
+
 **model_template** - Used to reference a template or class describing the electrophysical properties and mechanisms of the node(s). Its value and interpretation is context-dependent on the corresponding ‘model_type’. When there is no applicable model template for a given model type (i.e. model_type=virtual) it is assigned a value of NULL. Otherwise it uses a colon-separated string-pair with the following syntax:
 
-*<schema>*:*<resource>*
+`<`*schema*`>`:`<`*resource*`>`
 
-*<schema>* is a keyword used to identify the type of template being specified. Reserved options include:
+`<`*schema*`>` is a keyword used to identify the type of template being specified. Reserved options include:
 
 nml: Template is described by a NeuroML file. Valid for biophysical model types.
 
-actdb: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types
+actdb: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types.
 
-hoc: Template is described using a customized hoc file. Valid for both biophysical and single_compartmentmodel types
+hoc: Template is described using a customized hoc file. Valid for both biophysical and single_compartmentmodel types.
 
 nrn: Valid for both point_process and single_compartment model types. For a point_process model type, <resource> should specify the name of NEURON simulator point_process (i.e. IntFire1, IntFire2).  For a single_compartment type, <resource> should specify the name of the mechanism to insert.
+
+nest: Indicates that the model is a built-in NEST model.
+
+pynn: Indicates that the model is a standard PyNN model.
 
 *<resource>* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
 
@@ -556,6 +567,8 @@ The namespace of parameters depends on model_type, and are defined as follows.
 **For point_soma models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.
 
 **For point_process models**, it is the namespace of the point_process/artificial cell mechanism.
+
+**For point_neuron models**, it is the namespace of the neuron parameter dictionary.
 
 **For biophysical models** defined according to the *nml *schema (see above), names take the form "<id>.<attribute>", where <id> is the id of an element and <attribute> an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
 
