@@ -16,6 +16,8 @@
 
   "target_simulator":"NEURON",
 
+  "node_sets_file": "node_sets.json",
+
   "conditions": {
     "celsius": 34.0,
     "v_init": -80
