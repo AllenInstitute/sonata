@@ -437,11 +437,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/my_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/my_attribute</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -449,11 +449,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id1&gt;/dynamics_params/neuron_param1</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params/neuron_param1</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -461,11 +461,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/my_other_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -473,11 +473,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/&lt;population_name&gt;/&lt;node-group-id2&gt;/dynamics_params/neuron_param2</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params/neuron_param2</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -658,11 +658,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/my_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/my_attribute</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -670,11 +670,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id1&gt;/dynamics_params/edge_param1</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params/edge_param1</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -682,11 +682,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/my_other_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
@@ -694,11 +694,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/&lt;population_name&gt;/&lt;edge-group-id2&gt;/dynamics_params/edge_param2</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params/edge_param2</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
