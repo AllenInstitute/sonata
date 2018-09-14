@@ -33,5 +33,6 @@
         "edge_types_file": "$NETWORK_DIR/external_internal_edge_types.csv"
       }
     ]
+
   }
 }

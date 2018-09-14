@@ -38,7 +38,8 @@ cell_models = [
     }
 ]
 
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology']))
+morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies',
+                                                        '{}.swc'.format(p['morphology'])))
                 for p in cell_models}
 def build_edges(src, trg, sections=['basal', 'apical'], dist_range=[50.0, 150.0]):
     """Function used to randomly assign a synaptic location based on the section (soma, basal, apical) and an
@@ -74,7 +75,7 @@ for i, model_props in enumerate(cell_models):
                        x=positions[:, 0], y=positions[:, 1], z=positions[:, 2],
                        rotation_angle_yaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  # randomly rotate y axis
                        rotation_angle_zaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  #
-                       model_type='bigophysical',
+                       model_type='biophysical',
                        model_processing='aibs_perisomatic',
                        **model_props)
 
