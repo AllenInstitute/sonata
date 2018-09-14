@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "$BASE_DIR": "${configdir}",
+    "$BASE_DIR": ".",
     "$OUTPUT_DIR": "$BASE_DIR/output",
     "$INPUT_DIR": "$BASE_DIR/inputs",
     "$NETWORK_DIR": "$BASE_DIR/network",
@@ -32,7 +32,7 @@
  	"current_clamp_1": {
       "input_type": "current_clamp",
       "module": "IClamp",
-      "node_set": [0, 1, 2, 3, 4],
+      "node_set": "biophys_cells",
       "amp": 0.1500,
       "delay": 500.0,
       "duration": 500.0
@@ -40,7 +40,7 @@
     "current_clamp_2": {
       "input_type": "current_clamp",
       "module": "IClamp",
-      "node_set": [0, 1, 2, 3, 4],
+      "node_set": "biophys_cells",
       "amp": 0.1750,
       "delay": 1500.0,
       "duration": 500.0
@@ -48,7 +48,7 @@
     "current_clamp_3": {
       "input_type": "current_clamp",
       "module": "IClamp",
-      "node_set": [0, 1, 2, 3, 4],
+      "node_set": "biophys_cells",
       "amp": 0.2000,
       "delay": 2500.0,
       "duration": 500.0
@@ -56,41 +56,36 @@
   },
 
   "output":{ 
-    "log_file": "$OUTPUT_DIR/log.txt",
     "output_dir": "$OUTPUT_DIR",
-    "spikes_file": "$OUTPUT_DIR/spikes.h5",
-    "spikes_file_csv": "$OUTPUT_DIR/spikes.csv",
+    "log_file": "log.txt",
+    "spikes_file": "spikes.h5",
     "spikes_sort_order": "time"
   },
 
   "components": {
     "morphologies_dir": "$COMPONENT_DIR/morphologies",
-    "synaptic_models_dir": "$COMPONENT_DIR/synaptic_models",
     "mechanisms_dir":"$COMPONENT_DIR/mechanisms",
-    "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_templates/nml",
-    "point_neuron_models_dir": "$COMPONENT_DIR/point_neuron_templates"
+    "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_templates/json"
   },
 
 
   "reports": {
     "calcium_concentration": {
-      "cells": "biophysical",
+      "cells": "biophys_cells",
       "variable_name": "cai",
       "module": "membrane_report",
-      "file_name": "$OUTPUT_DIR/cell_vars.h5",
       "sections": "soma"
     },
 
     "membrane_potential": {
-      "cells": "biophysical",
+      "cells": "biophys_cells",
       "variable_name": "v",
       "module": "membrane_report",
-      "file_name": "$OUTPUT_DIR/cell_vars.h5",
       "sections": "soma"
     },
 
     "ecp": {
-      "cells": "biophysical",
+      "cells": "biophys_cells",
       "variable_name": "v",
       "module": "extracellular",
       "electrode_positions": "$COMPONENT_DIR/recXelectrodes/linear_electrode.csv",
