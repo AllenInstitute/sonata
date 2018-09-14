@@ -22,11 +22,7 @@
     "v_init": -80
   },
 
-  "node_sets": {
-    "biophys_cells": {
-      "model_type": "biophysical"
-    }
-  },
+  "node_sets_file": "node_sets.json",
 
   "inputs": {
  	"current_clamp_1": {
@@ -68,7 +64,6 @@
     "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_templates/json"
   },
 
-
   "reports": {
     "calcium_concentration": {
       "cells": "biophys_cells",
@@ -89,9 +84,7 @@
       "variable_name": "v",
       "module": "extracellular",
       "electrode_positions": "$COMPONENT_DIR/recXelectrodes/linear_electrode.csv",
-      "ecp_file": "$OUTPUT_DIR/ecp.h5",
-      "electrode_channels": "all",
-      "contributions_dir": "$OUTPUT_DIR/ecp_contributions"
+      "electrode_channels": "all"
     }
   },
 
