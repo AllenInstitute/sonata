@@ -21,7 +21,7 @@ with and without inhibitory inputs.
 
 * ./output/ - sonata simulation files containing the results of a full network simulation (ran using bmtk)
   * spikes.h5 - spike times of internal network
-  * cell_vars.h5 - recorded biophysical variables of selected cells (see _reports_ section of circuit_config.json)
+  * [membrane_potential|calcium_cocentration].h5 - recorded biophysical variables of selected cells (see _reports_ section of circuit_config.json)
 
 
 __*Optional - Generating and running the network*__  
