@@ -1,0 +1,111 @@
+{
+  "inputs": {
+    "current_clamp_1": {
+      "input_type": "current_clamp", 
+      "node_set": [
+        0, 
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "module": "IClamp", 
+      "delay": 500.0, 
+      "duration": 500.0, 
+      "amp": 0.15
+    }, 
+    "current_clamp_3": {
+      "input_type": "current_clamp", 
+      "node_set": [
+        0, 
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "module": "IClamp", 
+      "delay": 2500.0, 
+      "duration": 500.0, 
+      "amp": 0.2
+    }, 
+    "current_clamp_2": {
+      "input_type": "current_clamp", 
+      "node_set": [
+        0, 
+        1, 
+        2, 
+        3, 
+        4
+      ], 
+      "module": "IClamp", 
+      "delay": 1500.0, 
+      "duration": 500.0, 
+      "amp": 0.175
+    }
+  }, 
+  "target_simulator": "NEURON", 
+  "config_path": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/config.json", 
+  "reports": {
+    "calcium_concentration": {
+      "file_name": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/cell_vars.h5", 
+      "cells": "biophysical", 
+      "sections": "soma", 
+      "module": "membrane_report", 
+      "variable_name": "cai"
+    }, 
+    "membrane_potential": {
+      "file_name": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/cell_vars.h5", 
+      "cells": "biophysical", 
+      "sections": "soma", 
+      "module": "membrane_report", 
+      "variable_name": "v"
+    }, 
+    "ecp": {
+      "electrode_channels": "all", 
+      "ecp_file": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/ecp.h5", 
+      "module": "extracellular", 
+      "electrode_positions": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/recXelectrodes/linear_electrode.csv", 
+      "variable_name": "v", 
+      "contributions_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/ecp_contributions", 
+      "cells": "biophysical"
+    }
+  }, 
+  "run": {
+    "nsteps_block": 10000, 
+    "dt": 0.1, 
+    "dL": 20.0, 
+    "spike_threshold": -15, 
+    "tstop": 4000.0
+  }, 
+  "node_sets": {
+    "biophys_cells": {
+      "model_type": "biophysical"
+    }
+  }, 
+  "components": {
+    "point_neuron_models_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/point_neuron_templates", 
+    "biophysical_neuron_models_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/biophysical_neuron_templates/json", 
+    "mechanisms_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/mechanisms", 
+    "morphologies_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/morphologies", 
+    "synaptic_models_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/components/synaptic_models"
+  }, 
+  "output": {
+    "spikes_file_csv": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/spikes.csv", 
+    "spikes_file": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/spikes.h5", 
+    "log_file": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output/log.txt", 
+    "output_dir": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/output", 
+    "spikes_sort_order": "time"
+  }, 
+  "conditions": {
+    "celsius": 34.0, 
+    "v_init": -80
+  }, 
+  "networks": {
+    "nodes": [
+      {
+        "node_types_file": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/network/biophysical_node_types.csv", 
+        "nodes_file": "/home/kael/workspace/Allen/bmtk_examples/bbp_1cell/5_cells_iclamp/network/biophysical_nodes.h5"
+      }
+    ]
+  }
+}
