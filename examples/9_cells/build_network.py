@@ -36,9 +36,10 @@ for i, model_props in enumerate(cell_models):
 cortex.build()
 cortex.save_nodes(output_dir='network')
 
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', '{}.swc'.format(p['morphology'])))
-                for p in cell_models}
-
+morphologies = {
+    p['model_name']: SWCReader(os.path.join(
+        '../shared_components/morphologies', '{}.swc'.format(p['morphology'])))
+    for p in cell_models}
 
 def build_edges(src, trg, sections=['basal', 'apical'], dist_range=[50.0, 150.0]):
     # Get morphology and soma center for the target cell
