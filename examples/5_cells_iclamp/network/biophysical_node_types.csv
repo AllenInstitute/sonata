@@ -1,0 +1,6 @@
+node_type_id dynamics_params model_processing model_type model_template morphology ei model_name
+104 473862421_fit.json aibs_perisomatic biophysical ctdb:Biophys1.hoc Pvalb_469628681_m i PV2
+100 472363762_fit.json aibs_perisomatic biophysical ctdb:Biophys1.hoc Scnn1a_473845048_m e Scnn1a
+101 473863510_fit.json aibs_perisomatic biophysical ctdb:Biophys1.hoc Rorb_325404214_m e Rorb
+102 473863035_fit.json aibs_perisomatic biophysical ctdb:Biophys1.hoc Nr5a1_471087815_m e Nr5a1
+103 472912177_fit.json aibs_perisomatic biophysical ctdb:Biophys1.hoc Pvalb_470522102_m i PV1
