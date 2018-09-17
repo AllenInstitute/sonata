@@ -1302,15 +1302,16 @@ Spikes from all cells will be stored in a single HDF5 file that contains (gid, s
 
 The layout of a spike file is as follows:
 
-* **/spikes/timestamps** (dytpe: double, shape: N spikes)
+* **/spikes (group), attributes:
+    - **sorting** (dtype: enum) Optional. It can take one of these
+    values: `none`, `by_gid`, `by_time`. Both datasets below are sorted using
+    as sorting key the dataset specified by the attribute. When sorting by gid,
+     spikes of the same gid are expected to be also sorted by timestamp as
+     secondary key. When sorting by timestamp, spikes with the same timestamp
+     can be in any order. If missing, no sorting can be assumed.
+* **/spikes/timestamps** (dytpe: double, shape: N spikes), attributes:
+    - **units** (dytpe: str)
 * **/spikes/gids** (dytpe: uint64, shape: N spikes), attributes:
-    - **sorting** (dtype: enum)
-
-The *sorting* attribute can take one of these values: `none`, `by_gid`,
-`by_time`. Both datasets are sorted using as sorting key the dataset specified
-by the attribute. When sorting by gid, spikes of the same gid are expected to
-be also sorted by timestamp as secondary key. When sorting by timestamp,
-spikes with the same timestamp can be in any order.
 
 #### Multi and single compartment recordings
 
