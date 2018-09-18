@@ -22,14 +22,7 @@
     "v_init": -80
   },
 
-  "node_sets": {
-    "biophys_cells": {
-      "model_type": "biophysical"
-    },
-    "virtual_cells": {
-      "model_type": "virtual"
-    }
-  },
+  "node_sets_file": "node_sets.json",
 
   "inputs": {
     "external_spike_trains": {
@@ -44,16 +37,14 @@
     "log_file": "log.txt",
     "output_dir": "$OUTPUT_DIR",
     "spikes_file": "spikes.h5",
-    "spikes_file_csv": "spikes.csv",
     "spikes_sort_order": "time"
   },
 
   "reports": {
     "membrane_potential": {
-      "cells": [0, 80, 160, 240, 270],
+      "cells": "recorded_cells",
       "variable_name": "v",
       "module": "membrane_report",
-      "file_name": "cell_vars.h5",
       "sections": "soma"
     }
   }
