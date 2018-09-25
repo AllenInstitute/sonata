@@ -1,0 +1,9 @@
+{
+  "external": {
+    "population": "external"
+  },
+
+  "recorded_cells":{
+    "gids": [0, 80, 160, 240, 270]
+  }
+}

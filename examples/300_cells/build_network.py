@@ -13,32 +13,33 @@ print('Building internal network')
 cell_models = [
     {
         'model_name': 'Scnn1a', 'ei': 'e',
-        'morphology': 'Scnn1a_473845048_m.swc',
+        'morphology': 'Scnn1a_473845048_m',
         'model_template': 'nml:Cell_472363762.cell.nml'
     },
     {
         'model_name': 'Rorb', 'ei': 'e',
-        'morphology': 'Rorb_325404214_m.swc',
+        'morphology': 'Rorb_325404214_m',
         'model_template': 'nml:Cell_473863510.cell.nml'
     },
     {
         'model_name': 'Nr5a1', 'ei': 'e',
-        'morphology': 'Nr5a1_471087815_m.swc',
+        'morphology': 'Nr5a1_471087815_m',
         'model_template': 'nml:Cell_473863035.cell.nml'
     },
     {
         'model_name': 'PV1', 'ei': 'i',
-        'morphology': 'Pvalb_470522102_m.swc',
+        'morphology': 'Pvalb_470522102_m',
         'model_template': 'nml:Cell_472912177.cell.nml'
     },
     {
         'model_name': 'PV2', 'ei': 'i',
-        'morphology': 'Pvalb_469628681_m.swc',
+        'morphology': 'Pvalb_469628681_m',
         'model_template': 'nml:Cell_473862421.cell.nml'
     }
 ]
 
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology']))
+morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies',
+                                                        '{}.swc'.format(p['morphology'])))
                 for p in cell_models}
 def build_edges(src, trg, sections=['basal', 'apical'], dist_range=[50.0, 150.0]):
     """Function used to randomly assign a synaptic location based on the section (soma, basal, apical) and an
@@ -74,7 +75,7 @@ for i, model_props in enumerate(cell_models):
                        x=positions[:, 0], y=positions[:, 1], z=positions[:, 2],
                        rotation_angle_yaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  # randomly rotate y axis
                        rotation_angle_zaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  #
-                       model_type='bigophysical',
+                       model_type='biophysical',
                        model_processing='aibs_perisomatic',
                        **model_props)
 

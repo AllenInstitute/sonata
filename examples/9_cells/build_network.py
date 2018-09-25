@@ -9,17 +9,17 @@ use_nml = True  # True to build network with NEUROML files, false to build netwo
 
 cell_models = [
     {
-        'model_name': 'Scnn1a', 'ei': 'e', 'morphology': 'Scnn1a_473845048_m.swc',
+        'model_name': 'Scnn1a', 'ei': 'e', 'morphology': 'Scnn1a_473845048_m',
         'model_template': 'nml:nml/Cell_472363762.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/472363762_fit.json'
     },
     {
-        'model_name': 'Rorb', 'ei': 'e', 'morphology': 'Rorb_325404214_m.swc',
+        'model_name': 'Rorb', 'ei': 'e', 'morphology': 'Rorb_325404214_m',
         'model_template': 'nml:nml/Cell_473863510.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/473863510_fit.json'
     },
     {
-        'model_name': 'Nr5a1', 'ei': 'e', 'morphology': 'Nr5a1_471087815_m.swc',
+        'model_name': 'Nr5a1', 'ei': 'e', 'morphology': 'Nr5a1_471087815_m',
         'model_template': 'nml:nml/Cell_473863035.cell.nml' if use_nml else 'ctdb:Biophys1.hoc',
         'dynamics_params': 'NONE' if use_nml else 'json/473863035_fit.json'
     }

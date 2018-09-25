@@ -421,27 +421,27 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_type_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_type_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_group_id</td>
+    <td>/nodes/&lt;population_name&gt;/node_group_id</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/node_group_index</td>
+    <td>/nodes/&lt;population_name&gt;/node_group_index</td>
     <td>Dataset{N_total_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/my_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/my_attribute</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -449,11 +449,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id1>/dynamics_params/neuron_param1</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params/neuron_param1</td>
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
@@ -461,11 +461,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {M_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/my_other_attribute</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -473,11 +473,11 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/dynamics_params</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/nodes/<population_name>/<node-group-id2>/dynamics_params/neuron_param2</td>
+    <td>/nodes/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params/neuron_param2</td>
     <td>Dataset {K_nodes}</td>
   </tr>
   <tr>
@@ -638,31 +638,31 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_type_id</td>
+    <td>/edges/&lt;population_name&gt;/edge_type_id</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/source_node_id</td>
+    <td>/edges/&lt;population_name&gt;/source_node_id</td>
     <td>Dataset{N_total_edges} - with attribute specifying source population name</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/target_node_id</td>
+    <td>/edges/&lt;population_name&gt;/target_node_id</td>
     <td>Dataset{N_total_edges} - with attribute specifying target population name</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_group_id</td>
+    <td>/edges/&lt;population_name&gt;/edge_group_id</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/edge_group_index</td>
+    <td>/edges/&lt;population_name&gt;/edge_group_index</td>
     <td>Dataset{N_total_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/my_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/my_attribute</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -670,11 +670,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id1>/dynamics_params/edge_param1</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id1&gt;/dynamics_params/edge_param1</td>
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
@@ -682,11 +682,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {M_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/my_other_attribute</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/my_other_attribute</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
@@ -694,11 +694,11 @@ The HDF5 edges file layout is designed to store multiple populations of multiple
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/dynamics_params</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params</td>
     <td>Group</td>
   </tr>
   <tr>
-    <td>/edges/<population_name>/<edge-group-id2>/dynamics_params/edge_param2</td>
+    <td>/edges/&lt;population_name&gt;/&lt;group-id2&gt;/dynamics_params/edge_param2</td>
     <td>Dataset {K_edges}</td>
   </tr>
   <tr>
@@ -722,7 +722,7 @@ Table 2: Layout of the file format for describing edges.
 
 **edge_group_index** - After determining the edge_group_id of a specific edge, the edge_group_index indicates the index within that <edge-group-id> that contains all the attributes for a particular edge under consideration.
 
-**edge_id** - Assigns a key to uniquely identify and look up an edge within a population. If If not provided, node_ids are implicitly contiguous starting from zero.
+**edge_id** - Assigns a key to uniquely identify and look up an edge within a population. If If not provided, edge_ids are implicitly contiguous starting from zero.
 
 #### Edges - Optional Reserved Attributes
 
@@ -904,13 +904,25 @@ Example:
 
 ### Output Configuration
 
-The "output" block configures the location where output reports should be written, and if output should be overwritten.
+The "output" block configures the location where output reports should be
+written. An optional attribute named "overwrite_output_dir" provides a hint
+to simulators to let them know if already existing output files must be
+overwritten.
 
+The default behaviour is for simulators to produce spike data (a series of
+gid, timestamp pairs). By default the name of the file is "spikes.h5" and it
+is written to <output_dir>. The name of the output file for spikes can be
+configured with the optional attribute "spikes_file" (using a relative or
+absolute path in spikes_file has undefined behaviour)
+
+Example
     "output": {
         "log_file": "$OUTPUT_DIR/log.txt",
         "output_dir": "$OUTPUT_DIR",
         "overwrite_output_dir": true,
+        "spikes_file": "run0.h5",
     },
+
 
 ### Implementation Specific Parameters
 
@@ -1066,7 +1078,9 @@ Example of the corresponding input_file (column names):
 
 ### Simulation output - Reports
 
-The output of the simulation is reported based on the specifications of the output variables described in the simulation configuration file under the "reports" block. Spikes are always reported, and a report specification needn’t be specified to have the simulation report the spikes. Simulators are expected to write spike reports to a file called spikes.h5 (whole file format is explained [below](#spike_file)) located at the output_dir.
+The output of the simulation is reported based on the specifications of the
+output variables described in the simulation configuration file under the
+"reports" block.
 
 There can be one or more reports in the block, each one identified by a unique name:
 
@@ -1082,7 +1096,12 @@ There can be one or more reports in the block, each one identified by a unique n
             }
         }
 
-On simulation launch, a file for each specified report is then created with filename <report_name>.h5
+Simulators are expected to create a file for each specified report under the
+output directory using the file name <report_name>.<ext>, where ext is the
+file extension specific to the report configuration. The file name can be
+overriden with the attribute "file_name".
+
+Some reserved attributes are the following:
 
 <table>
   <tr>
@@ -1155,6 +1174,15 @@ On simulation launch, a file for each specified report is then created with file
     <td>False</td>
     <td>Simulator default</td>
   </tr>
+  <tr>
+    <td>file_name</td>
+    <td>Report file name including extension. Reports are always written to the
+      output directory given in the output configuration block</td>
+    <td>string</td>
+    <td>False</td>
+    <td>-</td>
+  </tr>
+
 </table>
 
 
@@ -1264,7 +1292,9 @@ node_id mapping is specified according to [description below](#gid_mapping).
 
 ### **Output file formats**
 
-Each report name in the "reports" block results in a separate HDF5 file with the filename <report_name>.h5.
+Each report name in the "reports" block results in a separate HDF5 file with
+the filename <report_name>.h5 written to the output directory (unless the user
+provides a different file name).
 
 #### <a name="spike_file"></a>Spike file
 
@@ -1272,15 +1302,16 @@ Spikes from all cells will be stored in a single HDF5 file that contains (gid, s
 
 The layout of a spike file is as follows:
 
-* **/spikes/timestamps** (dytpe: double, shape: N spikes)
+* **/spikes (group), attributes:
+    - **sorting** (dtype: enum) Optional. It can take one of these
+    values: `none`, `by_gid`, `by_time`. Both datasets below are sorted using
+    as sorting key the dataset specified by the attribute. When sorting by gid,
+     spikes of the same gid are expected to be also sorted by timestamp as
+     secondary key. When sorting by timestamp, spikes with the same timestamp
+     can be in any order. If missing, no sorting can be assumed.
+* **/spikes/timestamps** (dytpe: double, shape: N spikes), attributes:
+    - **units** (dytpe: str)
 * **/spikes/gids** (dytpe: uint64, shape: N spikes), attributes:
-    - **sorting** (dtype: enum)
-
-The *sorting* attribute can take one of these values: `none`, `by_gid`,
-`by_time`. Both datasets are sorted using as sorting key the dataset specified
-by the attribute. When sorting by gid, spikes of the same gid are expected to
-be also sorted by timestamp as secondary key. When sorting by timestamp,
-spikes with the same timestamp can be in any order.
 
 #### Multi and single compartment recordings
 
