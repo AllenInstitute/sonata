@@ -3,7 +3,7 @@
     "$BASE_DIR": ".",
     "$OUTPUT_DIR": "$BASE_DIR/output",
     "$INPUT_DIR": "$BASE_DIR/inputs",
-    "$COMPONENT_DIR": "$BASE_DIR/../shared_components"
+    "$COMPONENTS_DIR": "$BASE_DIR/../shared_components"
   },
 
   "run": {
@@ -76,7 +76,7 @@
       "cells": "biophys_cells",
       "variable_name": "v",
       "module": "extracellular",
-      "electrode_positions": "$COMPONENT_DIR/recXelectrodes/linear_electrode.csv",
+      "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "electrode_channels": "all"
     }
   }
