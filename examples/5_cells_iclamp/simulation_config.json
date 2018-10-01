@@ -2,7 +2,8 @@
   "manifest": {
     "$BASE_DIR": ".",
     "$OUTPUT_DIR": "$BASE_DIR/output",
-    "$INPUT_DIR": "$BASE_DIR/inputs"
+    "$INPUT_DIR": "$BASE_DIR/inputs",
+    "$COMPONENT_DIR": "$BASE_DIR/../shared_components"
   },
 
   "run": {
