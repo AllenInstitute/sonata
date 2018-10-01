@@ -36,7 +36,7 @@ for i, model_props in enumerate(cell_models):
 cortex.build()
 cortex.save_nodes(output_dir='network')
 
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology']))
+morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', '{}.swc'.format(p['morphology'])))
                 for p in cell_models}
 
 

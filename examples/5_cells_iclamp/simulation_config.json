@@ -76,7 +76,7 @@
       "cells": "biophys_cells",
       "variable_name": "v",
       "module": "extracellular",
-      "electrode_positions": "$COMPONENT_DIR/recXelectrodes/linear_electrode.csv",
+      "electrode_positions": "$COMPONENTS_DIR/recXelectrodes/linear_electrode.csv",
       "electrode_channels": "all"
     }
   }
