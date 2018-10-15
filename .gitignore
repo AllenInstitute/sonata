@@ -4,3 +4,4 @@
 src/pysonata/sonata/tests/tmp
 .idea
 .cache
+**/mechanisms/x86_64

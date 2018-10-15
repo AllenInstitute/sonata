@@ -1,0 +1,3 @@
+edge_type_id target_query source_query delay weight_function syn_weight dynamics_params
+100 pop_name=='LIF_exc' * 2.0 wmax 0.01 instanteneousExc.json
+101 pop_name=='LIF_inh' * 2.0 wmax 0.02 instanteneousExc.json
