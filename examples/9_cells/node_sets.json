@@ -1,0 +1,9 @@
+{
+  "biophys_cells": {
+    "model_type": "biophysical"
+  },
+
+  "virtual_cells": {
+    "model_type": "virtual"
+  }
+}
