@@ -15,6 +15,8 @@
 
   "target_simulator":"NEURON",
 
+  "network": "$BASE_DIR/circuit_config.json",
+
   "conditions": {
     "celsius": 34.0,
     "v_init": -80
@@ -37,7 +39,7 @@
     }
   },
 
-  "output":{
+  "output": {
     "log_file": "log.txt",
     "output_dir": "$OUTPUT_DIR",
     "spikes_file": "spikes.h5",
