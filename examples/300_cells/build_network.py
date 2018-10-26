@@ -74,7 +74,6 @@ for i, model_props in enumerate(cell_models):
     internal.add_nodes(N=n_cells,
                        x=positions[:, 0], y=positions[:, 1], z=positions[:, 2],
                        rotation_angle_yaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  # randomly rotate y axis
-                       rotation_angle_zaxis=xiter_random(N=n_cells, min_x=0.0, max_x=2 * np.pi),  #
                        model_type='biophysical',
                        model_processing='aibs_perisomatic',
                        **model_props)
