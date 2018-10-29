@@ -787,7 +787,7 @@ Where to find the hoc templates for the edges:
            "templates": "$COMPONENT_DIR/hoc_templates",
         },
 
-The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.  Gids are assigned to nodes in advance (using another tool) or during the simulation, depending on implementation, and are global across all  populations in the network (see the (gid mapping)[#gid_mapping] section for details)
+The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.
 
         "networks": {
             "nodes": [
@@ -863,10 +863,10 @@ to simulators to let them know if already existing output files must be
 overwritten.
 
 The default behaviour is for simulators to produce spike data (a series of
-gid, timestamp pairs). By default the name of the file is "spikes.h5" and it
-is written to "output_dir". The name of the output file for spikes can be
-configured with the optional attribute "spikes_file" (using a relative or
-absolute path in spikes_file has undefined behaviour)
+population, node id, timestamp tuples). By default the name of the file is
+"spikes.h5" and it is written to "output_dir". The name of the output file for
+spikes can be configured with the optional attribute "spikes_file" (using a
+relative or absolute path in spikes_file has undefined behaviour)
 
 Example
     "output": {
@@ -1066,7 +1066,7 @@ Some reserved attributes are the following:
   </tr>
   <tr>
     <td>cells</td>
-    <td>Defines what cells will be reported. The value is a reference to a cell-group found in the cell-groups json file, which is used to resolve which subset of gids will be included in the report. </td>
+    <td>Defines what cells will be reported. The value is a reference to a cell-group found in the cell-groups json file, which is used to resolve which subset of nodes will be included in the report. </td>
     <td>string (cell-group)</td>
     <td>True</td>
     <td> </td>
@@ -1175,17 +1175,17 @@ Some reserved attributes are the following:
 
 #### **Node Sets** File
 
-A Node Sets json file contains subsets of cells that act as targets for
+A *node sets* json file contains subsets of cells that act as targets for
 different reports or stimulations, or can also be used to name and define the
 target subpopulation to simulate. The top level element in the json schema
 is a dictionary with one entry per node set. The keys are the node set names
-and the values and depends on whether a node set is basic or compound.
+and the values depend on whether a node set is basic or compound.
 
 The general schema is as follows.
 
     {
         "<Basic_Node_Set_1>": {
-            "<Property_Key1>": ["<Prop_Val_11>", "<Prop_Val_12>", ...],
+            "<Property_Key1>": "<Prop_Val_11>"
             "<Property_Key2>": ["<Prop_Val_21>", "<Prop_Val_22>", ...],
         },
         ...
@@ -1209,7 +1209,8 @@ Each entry specifies a rule. For scalar attributes a node matches the rule if
 the value of its attribute matches the value in the entry. For arrays, a node
 matches if its value matches any of the values in the array. A node is part of
 a node set if it matches all the rules in the node set definition (logical
-AND).
+AND). Valid node attributes can be either the mandatory and reserved attributes
+or user defined ones.
 
 Compound node sets are declared as an array of node sets names, where each name
 may refer to another compound node set or a basic node set. The final node set
@@ -1219,12 +1220,6 @@ Two special attributes are allowed in the key-value pairs of basic node sets.
 The first one is "population", this attribute refers to the node populations
 to be considered. Node populations and their names are implicitly defined in
 the Node Set namespace, and needn’t be declared explicitly.
-
-At time of interpretation of the node set file, gids must also be defined for
-each node in the network to be simulated. For that purpose, "gid" is also a
-valid node attribute to appear in key-value pairs. The "gid" to population and
-node_id mapping is specified according to [description below](#gid_mapping).
-
 
 ##### An Example of a Node Set File
 
@@ -1238,9 +1233,7 @@ node_id mapping is specified according to [description below](#gid_mapping).
             "model_type": "point",
             "node_id": [1, 2, 3, 5, 7, 9, ...]
         }
-        "layer4": {
-            "gids": [1, 2, 3, 4, 5, ...]
-        },
+        "combined": ["bio_layer45", "V1_point_prime"]
     }
 
 ### **Output file formats**
@@ -1251,55 +1244,66 @@ provides a different file name).
 
 #### <a name="spike_file"></a>Spike file
 
-Spikes from all cells will be stored in a single HDF5 file that contains (gid, spike time) pairs in separate datasets. These datasets may be unsorted, sorted by gid or sorted by spike time. The gids are not to be confused with node_ids from populations, see below for details about gid to node_id and population mapping.
+Spikes from all cells will be stored in a single HDF5 file that contains
+per population (node id, spike time) pairs.
+Each pair element is stored in a separate dataset.
+These datasets may be unsorted, sorted by node id or sorted by spike time.
 
 The layout of a spike file is as follows:
 
-* **/spikes** (group), attributes:
-    - **sorting** (dtype: enum) Optional. It can take one of these
-    values: `none`, `by_gid`, `by_time`. Both datasets below are sorted using
-    as sorting key the dataset specified by the attribute. When sorting by gid,
-     spikes of the same gid are expected to be also sorted by timestamp as
-     secondary key. When sorting by timestamp, spikes with the same timestamp
-     can be in any order. If missing, no sorting can be assumed.
-* **/spikes/timestamps** (dytpe: double, shape: N spikes), attributes:
+* **/spikes** (group): contains one or more groups of per population spikes.
+* **/spikes/<population_name>** (group), attributes:
+    - **sorting** (dtype: enum, optional): It can take one of these
+    values: `none`, `by_id`, `by_time`. All the datasets below are sorted using
+    the datasets specified by the attribute. When sorting `by_id`, spikes are
+    sorted by `node_id`; spikes from the same node are expected to be also
+    sorted by timestamp as secondary key. When sorting `by_time`, spikes with
+    the same timestamp may be in any order. If missing, no sorting can be
+    assumed.
+* **/spikes/<population_name>/timestamps** (dtype: double, shape: N spikes),
+  attributes:
     - **units** (dytpe: str)
-* **/spikes/gids** (dytpe: uint64, shape: N spikes), attributes:
+* **/spikes/<population_name>/node_ids** (dtype: uint64, shape: N spikes)
 
-#### Frame oriented, cell element recordings
+#### Frame oriented, node element recordings
 
-Used when recording simulation data from elements from one or more cells.
-The reported elements are usually the electrical compartments, but other
-elements such as synapses could also be reported. The only requisite is that
-the cell elements can be identified by an element identifier composed by an
-integer and an optional float value.
+Used when recording simulation data from elements from one or more nodes.
+The reported elements are usually the electrical compartments from cells, but
+other elements such as synapses could also be reported. The only requisite is
+that the node elements can be identified by an element identifier composed by
+an integer and an optional float value.
 
-* **/data** (dtype:float, shape: N_time x N_values). Writers are
-  encouraged to use chunking for efficient read access. Attributes:
+* **/report** (group): contains one or more groups of per population reports.
+* **/report/<population_name>/data** (dtype:float, shape: N_time x N_values):
+  Writers are encouraged to use chunking for efficient read access. Attributes:
     - **units** (dtype: str)
-* **/mapping/gids** (dtype: uint64, shape: N_cells). Attributes:
-    - **sorted** (dtype: bool) Optional. Indicates whether the GID list is
-      sorted or not. The list is considered unsorted if not present.
-* **/mapping/index_pointer** (dtype: uint64, shape: N_cells)
-* **/mapping/element_id** (dtype: uint32, shape: N_values). All
-  values referring to the same element must appear together.
-* **/mapping/element_pos** (dtype: float, shape: N_values). Optional
-* **/mapping/time** (dtype: double, shape: 3),
+* **/report/<population_name>/mapping** (group)
+* **/report/<population_name>/mapping/node_ids** (dtype: uint64, shape: N_nodes)
+  , attributes:
+    - **sorted** (dtype: bool, optional): Indicates whether the ids are sorted
+    or not. Defaults to false if not present.
+* **/report/<population_name>/mapping/index_pointers** (dtype: uint64,
+  shape: N_nodes): Per node frame offsets.
+* **/report/<population_name>/mapping/element_ids** (dtype: uint32,
+  shape: N_values): All values referring to the same element must appear
+  together.
+* **/report/<population_name>/mapping/element_pos** (dtype: float,
+  shape: N_values, optional)
+* **/report/<population_name>/mapping/time** (dtype: double, shape: 3):
   the values of the data set are start time, stop time and time step. The
   interval is open on the right (i.e. no data frame for t=stop). Attributes:
     - **units** (dtype: str)
 
-For a particular gid[ix], the data for all the recorded elements is
-determined by `data[index_pointer[ix], index_pointer[ix+1]]`.
+For a node `node_ids[i]`, the data for all the recorded elements is determined
+by `data[index_pointer[i], index_pointer[i + 1]]`.
 
-For compartment reports, the values in `element_id[index_pointer[ix],
-index_pointer[ix+1]]` and `element_pos[index_pointer[ix], index_pointer[ix+1]]`
+For compartment reports, the values in `element_id[index_pointer[i],
+index_pointer[x + 1]]` and `element_pos[index_pointer[i], index_pointer[i + 1]]`
 are used to specify the compartment’s section id and the relative position,
-respectively, for each gid[ix]’s data column. Note that for single compartment
-reports `element_id` and `element_pos` are just arrays of 1s. If the
-`element_pos` dataset is not present, for every recorded section all its
-compartments will be reported and they will appear in the dataset in
-morphological order.
+respectively, for the node `i`. Note that for single compartment reports
+`element_id` and `element_pos` are just arrays of 1s. If the `element_pos`
+dataset is not present, for every recorded section all its compartments will be
+reported and they will appear in the dataset in morphological order.
 
 #### Extracellular report
 
@@ -1316,29 +1320,6 @@ Used when reporting variables that are not associated with the individual cells.
      - *units*: str
 
 The data for a particular electrode channel_id[i] found in data[i,:]
-
-### <a name="gid_mapping"></a> Mapping between gids and cells in the network
-
-In the model description, the cells are uniquely defined by their population name and node_id, whereas in the simulation output they are uniquely defined by the gids. To relate the two, we need to have a mapping: (population,node_id) <-> gid
-
-The mapping could be created by the simulator or prior to simulation (implementation specific) and stored as an HDF5 file having 3 datasets:
-
-**GlobalReferencing**
-
-* **gid** (dtype: uint64, shape: N_gid)
-* **population** (dtype: uint32, shape: N_gid)
-* **node_id** (dtype: uint32, shape: N_gid)
-* **population_names**(dtype: str, shape: N_population)
-
-One can search these datasets to find gid corresponding to a particular (population, node_id) pair or vice versa. The population dataset contains indices in the population_names dataset.
-
-The location of the mapping file is specified in the simulation_config.json as follows:
-
-    {
-        "gid_mapping_file": ”<path_to_h5>”
-    }
-
-For implementations that generate the mapping at runtime, this location should be used to write the file.
 
 ## <a name="appendix">Appendix
 
