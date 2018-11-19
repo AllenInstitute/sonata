@@ -1302,7 +1302,7 @@ Spikes from all cells will be stored in a single HDF5 file that contains (gid, s
 
 The layout of a spike file is as follows:
 
-* **/spikes (group), attributes:
+* **/spikes** (group), attributes:
     - **sorting** (dtype: enum) Optional. It can take one of these
     values: `none`, `by_gid`, `by_time`. Both datasets below are sorted using
     as sorting key the dataset specified by the attribute. When sorting by gid,
@@ -1313,36 +1313,40 @@ The layout of a spike file is as follows:
     - **units** (dytpe: str)
 * **/spikes/gids** (dytpe: uint64, shape: N spikes), attributes:
 
-#### Multi and single compartment recordings
+#### Frame oriented, cell element recordings
 
-Using when recording simulation data from one or more cells
+Used when recording simulation data from elements from one or more cells.
+The reported elements are usually the electrical compartments, but other
+elements such as synapses could also be reported. The only requisite is that
+the cell elements can be identified by an element identifier composed by an
+integer and an optional float value.
 
-* **/data** (dtype:float, shape: N_time x N_compartments). Writers are
+* **/data** (dtype:float, shape: N_time x N_values). Writers are
   encouraged to use chunking for efficient read access. Attributes:
     - **units** (dtype: str)
 * **/mapping/gids** (dtype: uint64, shape: N_cells). Attributes:
     - **sorted** (dtype: bool) Optional. Indicates whether the GID list is
       sorted or not. The list is considered unsorted if not present.
 * **/mapping/index_pointer** (dtype: uint64, shape: N_cells)
-* **/mapping/element_id** (dtype: uint32, shape: N_compartments). All
-  compartments referring to the same element must appear together.
-* **/mapping/element_pos** (dtype: float, shape: N_compartments). Optional
+* **/mapping/element_id** (dtype: uint32, shape: N_values). All
+  values referring to the same element must appear together.
+* **/mapping/element_pos** (dtype: float, shape: N_values). Optional
 * **/mapping/time** (dtype: double, shape: 3),
   the values of the data set are start time, stop time and time step. The
   interval is open on the right (i.e. no data frame for t=stop). Attributes:
     - **units** (dtype: str)
 
-For a particular gid[ix], the data for all the recorded compartments is
+For a particular gid[ix], the data for all the recorded elements is
 determined by `data[index_pointer[ix], index_pointer[ix+1]]`.
 
-The values in `element_id[index_pointer[ix], index_pointer[ix+1]]` and
-`element_pos[index_pointer[ix], index_pointer[ix+1]]` are used to specify the
-compartment’s section id and the relative position, respectively, for each
-gid[ix]’s data column. Note that for recording from a single compartment
-element_id and element_pos are just arrays of 1s. If element_pos dataset is not
-present then all segments are being represented for every recorded section and
-they will appear in the morphological order (closest to section start first) in
-the dataset.
+For compartment reports, the values in `element_id[index_pointer[ix],
+index_pointer[ix+1]]` and `element_pos[index_pointer[ix], index_pointer[ix+1]]`
+are used to specify the compartment’s section id and the relative position,
+respectively, for each gid[ix]’s data column. Note that for single compartment
+reports `element_id` and `element_pos` are just arrays of 1s. If the
+`element_pos` dataset is not present, for every recorded section all its
+compartments will be reported and they will appear in the dataset in
+morphological order.
 
 #### Extracellular report
 
