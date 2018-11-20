@@ -25,4 +25,4 @@ net.add_nodes(N=1, pop_name='LIF_exc', location='VisL4', ei='e',
 net.build()
 net.save(output_dir='../input/network')
 
-print 'done'
+print 'Built: %s'%net.name

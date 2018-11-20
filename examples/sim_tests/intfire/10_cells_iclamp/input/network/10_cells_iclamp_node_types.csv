@@ -1,0 +1,3 @@
+node_type_id ei pop_name location model_template model_type dynamics_params
+100 e LIF_exc VisL4 nest:iaf_psc_alpha point_process 472363762_point.json
+101 i LIF_inh VisL4 nest:iaf_psc_alpha point_process 472363762_point.json

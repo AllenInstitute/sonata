@@ -9,3 +9,6 @@ src/pysonata/sonata/tests/tmp
 /examples/300_intfire/output/config.json
 /examples/300_intfire/output/log.txt
 /examples/sim_tests/biophysical/one_cell/soma_cm2_hh/.pytest_cache
+/examples/sim_tests/intfire/10_cells_iclamp/bmtk_test/.pytest_cache
+/examples/sim_tests/intfire/10_cells_iclamp/bmtk_test/output
+/examples/sim_tests/intfire/one_cell_iclamp/bmtk_test/.pytest_cache
