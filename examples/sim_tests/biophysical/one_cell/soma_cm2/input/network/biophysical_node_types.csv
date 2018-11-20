@@ -1,0 +1,2 @@
+node_type_id model_type model_template morphology model_name
+100 biophysical nml:soma_cm2.nml soma1 soma_cm
