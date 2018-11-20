@@ -1,0 +1,13 @@
+<neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta4.xsd" id="NeuroML2_file_exported_from_NEURON">
+    <cell id="soma">
+        <biophysicalProperties id="biophys">
+            <membraneProperties>
+                <specificCapacitance segmentGroup="soma" value="1 uF_per_cm2"/>
+                <channelDensity id="gnabar_hh" segmentGroup="soma" ion="na" ionChannel="hh" erev="50 mV" condDensity="0.0 S_per_cm2"/>
+                <channelDensity id="gkbar_hh" segmentGroup="soma" ion="k" ionChannel="hh" erev="-85 mV" condDensity="0.00 S_per_cm2"/>
+                <channelDensity id="gl_hh" segmentGroup="soma" ion="non_specific" ionChannel="hh" erev="-80 mV" condDensity="0.005 S_per_cm2"/>
+                <channelDensity id="el_hh" segmentGroup="soma" ion="non_specific" ionChannel="hh" erev="-80 mV" condDensity="-80"/>
+            </membraneProperties>
+        </biophysicalProperties>
+    </cell>
+</neuroml>

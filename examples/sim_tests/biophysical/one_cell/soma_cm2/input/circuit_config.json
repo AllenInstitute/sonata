@@ -1,0 +1,20 @@
+{
+  "manifest": {
+    "$NETWORK_DIR": "../input/network",
+    "$COMPONENT_DIR": "../shared_components"
+  },
+
+  "components": {
+    "morphologies_dir": "$COMPONENT_DIR/morphologies",
+    "biophysical_neuron_models_dir": "$COMPONENT_DIR/templates/nml"
+  },
+
+  "networks": {
+    "nodes": [
+      {
+        "nodes_file": "$NETWORK_DIR/biophysical_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/biophysical_node_types.csv"
+      }
+    ]
+  }
+}
