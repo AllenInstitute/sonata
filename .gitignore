@@ -5,3 +5,4 @@ src/pysonata/sonata/tests/tmp
 .idea
 .cache
 **/mechanisms/x86_64
+/examples/sim_tests/intfire/one_cell_iclamp/bmtk_test/output
