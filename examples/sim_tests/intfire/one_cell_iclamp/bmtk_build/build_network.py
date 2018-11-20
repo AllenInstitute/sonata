@@ -19,7 +19,7 @@ net.add_nodes(N=1, pop_name='LIF_exc', location='VisL4', ei='e',
               model_type='point_process',  # use point_process to indicate were are using point model cells
               model_template=template,
               x=pos_x, y=pos_y,
-              dynamics_params='472363762_point.json')
+              dynamics_params='473863035_point.json')
               
 
 net.build()
