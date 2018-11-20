@@ -1,7 +1,8 @@
 {
   "manifest": {
-    "$OUTPUT_DIR": "./output",
-    "$INPUT_DIR": "./inputs",
+    "$BASE_DIR": ".",
+    "$OUTPUT_DIR": "$BASE_DIR/output",
+    "$INPUT_DIR": "$BASE_DIR/inputs",
     "$COMPONENT_DIR": "../shared_components"
   },
 
@@ -16,7 +17,7 @@
 
   "target_simulator":"NEURON",
 
-  "node_sets_file": "node_sets.json",
+  "node_sets_file": "$BASE_DIR/node_sets.json",
 
   "conditions": {
     "celsius": 34.0,
