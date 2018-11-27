@@ -113,10 +113,8 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
   </tr>
 </table>
 
-
-* Point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**)
-
-   	Point soma will be interpreted in NEURON as cylinder with L=radius
+* Single sample point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**). NEURON interprets single sample somas as
+cylinders with L=radius.
 
 * Types: The following types are currently used.
 
@@ -524,7 +522,7 @@ The `model_type`=`biophysical` results in a compartmental neuron.  The attribute
 
 - **nml**: Template is described by a NeuroML file. Valid for biophysical model types.
 
-- **actdb**: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types.
+- **ctdb**: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types.
 
 - **hoc**: Template is described using a customized hoc file. Valid for both biophysical and single_compartment model types.
 
@@ -560,7 +558,7 @@ Each morphology is first moved from its original coordinates in SWC to such a lo
 
 **recenter** [INT8] - Optional reserved attribute, if the value is set to 0, morphology would _not_ be moved to (0, 0, 0) prior to rotation / translation.
 
-**dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group, in the corresponding nodes HDF5.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group.
+**dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group in the corresponding H5 dataset.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group.
 
 Note that if an override is defined  for a given name in both the nodes HDF5 file and the nodes_types CSV file, then the HDF5 file will override the latter.
 
@@ -570,11 +568,11 @@ The namespace of parameters depends on model_type, and are defined as follows.
 
 **For `point_neuron` models**, it is the namespace of the point neuron model.
 
-**For `biophysical` models** defined according to the *nml* schema (see above), names take the form "<id>.<attribute>", where <id> is the id of an element and <attribute> an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
+**For `biophysical` models** defined according to the *nml* schema (see above), names take the form **id**.**attribute**, where **id** is the id of an element and **attribute** an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
 
-**For `biophysical` models** defined according to the *bmtk *(see above), the namespace definition is to be filled in by the Allen folks.
+For `biophysical` models defined according to the *bmtk* (see above), the namespace definition is to be filled in by the Allen folks.
 
-**For `biophysical` models** defined according to the *hoc *(see above), the namespace definition is to be filled in by the Allen folks.
+For `biophysical` models defined according to the *hoc* (see above), the namespace definition is to be filled in by the Allen folks.
 
 #### <a name="neuron_networks_edges">Representing Edges
 
@@ -714,7 +712,7 @@ The edge populations as defined above only allow fast enumeration of the edges f
 
 The indexing has been designed for networks where if two nodes are connected, they tend to have multiple edges connecting them (multi-synapse connections in detailed morphology networks). For single edge networks this index has excessive overhead. For maximum space and time efficiency, edges connecting two nodes should be contiguous in the edge population. In any case, the index allows edges between different nodes to be placed in any order in the population datasets.
 
-The indexing is rooted at a single group called indices which is a subgroup of an edge population group. For convenience, the prefix /edges/*<population_name>*/indices/ is stripped from the following layout description:
+The indexing is rooted at a single group called indices which is a subgroup of an edge population group. For convenience, the prefix /edges/**population_name**/indices/ is stripped from the following layout description:
 
 <table>
   <tr>
@@ -867,7 +865,7 @@ overwritten.
 
 The default behaviour is for simulators to produce spike data (a series of
 gid, timestamp pairs). By default the name of the file is "spikes.h5" and it
-is written to <output_dir>. The name of the output file for spikes can be
+is written to "output_dir". The name of the output file for spikes can be
 configured with the optional attribute "spikes_file" (using a relative or
 absolute path in spikes_file has undefined behaviour)
 
