@@ -113,8 +113,7 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
   </tr>
 </table>
 
-* Single sample point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**). NEURON interprets single sample somas as
-cylinders with L=radius.
+* Single sample point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**).
 
 * Types: The following types are currently used.
 
