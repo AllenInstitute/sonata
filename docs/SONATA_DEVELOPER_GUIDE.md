@@ -406,7 +406,7 @@ The details of how node and edge populations are defined and represented are des
 
 In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
 
-A model_type attribute allows nodes to be configured as "biophysical", “point_neuron”, etc. and also “virtual” one may be provided to specify external (or “virtual”) nodes that are not explicitly simulated but provide inputs to the network.
+A model_type attribute allows nodes to be configured as `biophysical`, `point_neuron`, etc. and also `virtual` one may be provided to specify external (or `virtual`) nodes that are not explicitly simulated but provide inputs to the network.
 
 A typical network may include multiple simulated populations as well as multiple populations of external input nodes.
 
@@ -491,7 +491,6 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
   </tr>
 </table>
 
-
 Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 ##### Nodes - Required Attributes
@@ -567,74 +566,15 @@ Note that if an override is defined  for a given name in both the nodes HDF5 fil
 
 The namespace of parameters depends on model_type, and are defined as follows.
 
-**For single_compartment models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.
+**For `single_compartment` models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.
 
-**For `point_process` models**, it is the namespace of the point_process/artificial cell mechanism.
+**For `point_neuron` models**, it is the namespace of the point neuron model.
 
-**For point_neuron models**, it is the namespace of the neuron parameter dictionary.
+**For `biophysical` models** defined according to the *nml* schema (see above), names take the form "<id>.<attribute>", where <id> is the id of an element and <attribute> an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
 
-**For biophysical models** defined according to the *nml *schema (see above), names take the form "<id>.<attribute>", where <id> is the id of an element and <attribute> an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
+**For `biophysical` models** defined according to the *bmtk *(see above), the namespace definition is to be filled in by the Allen folks.
 
-**For biophysical models** defined according to the *bmtk *(see above), the namespace definition is to be filled in by the Allen folks.
-
-**For biophysical models** defined according to the *hoc *(see above), the namespace definition is to be filled in by the Allen folks.
-
-For a conceptual schematic of the architecture relating node attributes *model_type*,* model*, and *dynamics_params* overrides and their namespaces at the node_type and nodes level, see Table 2.
-
-<table>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Model Type</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td>point_process</td>
-    <td>point_soma</td>
-    <td>biophysical</td>
-  </tr>
-  <tr>
-    <td>Parameter
-Override</td>
-    <td>Node
-level</td>
-    <td>dynamics_params HDF5 group</td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>Node_type
-level</td>
-    <td>dynamics_params .json</td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Model
-Object</td>
-    <td>Parameter
-Namespace</td>
-    <td>point process</td>
-    <td>Section ∪ pas ∪
-user mechanism</td>
-    <td><id>.<attr>
-∈ .nml file</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>Model</td>
-    <td>point process name</td>
-    <td>mechanism name</td>
-    <td>.nml file</td>
-  </tr>
-</table>
-
-
-Table 2: A conceptual schematic of the architecture relating node attributes* model*, and *dynamics_params* overrides at the node_type and nodes level for each model_type.  The namespace of both node_type and node level parameter overrides are given uniquely by the model object parameter namespace.  Node level parameter overrides take precedence over node_type level parameter overrides.
+**For `biophysical` models** defined according to the *hoc *(see above), the namespace definition is to be filled in by the Allen folks.
 
 #### <a name="neuron_networks_edges">Representing Edges
 
@@ -1413,7 +1353,7 @@ See CodeJam talks on this topic:
 
 model_processing is a string attribute of nodes allowing the specification of alternative
 
-processing approaches in the model construction behaviour of biophysical neurons. The following values are currently defined (more will be defined in the future, as required).  It is currently not valid to specify this attribute for model_type != "biophysical”.
+processing approaches in the model construction behaviour of biophysical neurons. The following values are currently defined (more will be defined in the future, as required).  It is currently not valid to specify this attribute for model_type != `biophysical`.
 
 For model_processing=*"fullaxon",* the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
 
