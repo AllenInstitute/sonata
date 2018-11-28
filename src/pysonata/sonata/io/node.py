@@ -20,6 +20,8 @@
 # WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+
+
 class NodeSet(object):
     # TODO: Merge NodeSet and NodePopulation
     def __init__(self, node_indicies, population, **parameters):
@@ -71,13 +73,14 @@ class NodeSet(object):
 
 class Node(object):
     # TODO: include population name/reference
-    # TODO: make a dictionary
-    def __init__(self, node_id, node_type_id, node_types_props, group_props, dynamics_params, gid=None):
+    # TODO: make a dictionary (or preferably a collections.MutableMap
+    def __init__(self, node_id, node_type_id, node_types_props, group_id, group_props, dynamics_params, gid=None):
         self._node_id = node_id
         self._gid = gid
         self._node_type_id = node_type_id
-        self._group_props = group_props
         self._node_type_props = node_types_props
+        self._group_id = group_id
+        self._group_props = group_props
 
     @property
     def node_id(self):
@@ -88,8 +91,20 @@ class Node(object):
         return self._gid
 
     @property
+    def group_id(self):
+        return self._group_id
+
+    @property
     def node_type_id(self):
         return self._node_type_id
+
+    @property
+    def group_props(self):
+        return self._group_props
+
+    @property
+    def node_type_properties(self):
+        return self._node_type_props
 
     @property
     def dynamics_params(self):
@@ -100,8 +115,12 @@ class Node(object):
             return self._group_props[prop_key]
         elif prop_key in self._node_type_props:
             return self._node_type_props[prop_key]
+        elif prop_key == 'node_id':
+            return self.node_id
+        elif property == 'node_type_id':
+            return self.node_type_id
         else:
-            raise KeyError
+            raise KeyError('Unknown property {}'.format(prop_key))
 
     def __contains__(self, prop_key):
         return prop_key in self._group_props or prop_key in self._node_type_props
