@@ -70,6 +70,10 @@ class Population(object):
         return self._types_table
 
     @property
+    def type_ids(self):
+        return np.array(self._type_id_ds)
+
+    @property
     def group_id_ds(self):
         return self._group_id_ds
 
@@ -247,7 +251,7 @@ class NodePopulation(Population):
         node_group_props = self.get_group(node_group_id)[node_group_index]
         node_gid = self._gid_lookup_fnc(row_indx)
 
-        return Node(node_id, node_type_id, node_type_props, node_group_props, None, gid=node_gid)
+        return Node(node_id, node_type_id, node_type_props, node_group_id, node_group_props, None, gid=node_gid)
 
     def get_rows(self, row_indicies):
         """Returns a set of all nodes based on list of row indicies.
@@ -285,6 +289,11 @@ class NodePopulation(Population):
         row_indx = self._index_gid2row.iloc[gid]['row_id']
         return self.get_row(row_indx)
 
+    def filter(self, **filter_props):
+        for grp in self.groups:
+            for node in grp.filter(**filter_props):
+                yield node
+
     def _build_node_id_index(self, force=False):
         if self._node_id_index_built and not force:
             return
@@ -309,6 +318,22 @@ class NodePopulation(Population):
         nxt_node = self.get_row(self.__itr_index)
         self.__itr_index += 1
         return nxt_node
+
+    def __getitem__(self, item):
+        if isinstance(item, slice):
+            # TODO: Check
+            start = item.start if item.start is not None else 0
+            stop = item.stop if item.stop is not None else self._nrows
+            row_indicies = range_itr(start, stop, item.step)
+            return NodeSet(row_indicies, self)
+
+        elif isinstance(item, int):
+            return self.get_row(item)
+
+        elif isinstance(item, list):
+            return NodeSet(item)
+        else:
+            print('Unable to get item using {}.'.format(type(item)))
 
 
 class EdgePopulation(Population):
@@ -364,11 +389,11 @@ class EdgePopulation(Population):
 
     @staticmethod
     def get_source_population(pop_group_h5):
-        return get_attribute_h5(pop_group_h5['source_node_id'], 'network', None)
+        return get_attribute_h5(pop_group_h5['source_node_id'], 'node_population', None)
 
     @staticmethod
     def get_target_population(pop_group_h5):
-        return get_attribute_h5(pop_group_h5['target_node_id'], 'network', None)
+        return get_attribute_h5(pop_group_h5['target_node_id'], 'node_population', None)
 
     @property
     def edge_types_table(self):
@@ -392,7 +417,6 @@ class EdgePopulation(Population):
                     raise Exception('index {} in {} edges is missing column {}.'.format(index_name, self.name,
                                                                                         'node_id_to_range'))
                 if 'range_to_edge_id' not in index_grp:
-                    # TODO: make this more general, i.e 'id_to_range' thus we can index on gids, edge_types, etc
                     raise Exception('index {} in {} edges is missing column {}.'.format(index_name, self.name,
                                                                                         'range_to_edge_id'))
 
@@ -463,10 +487,10 @@ class EdgePopulation(Population):
         edge_group_index = self._group_index_ds[index]
         edge_group_props = self.get_group(edge_group_id)[edge_group_index]
         return Edge(trg_node_id=trg_node, src_node_id=src_node, source_pop=self.source_population,
-                    target_pop=self.target_population, group_props=edge_group_props, edge_types_props=edge_types_props)
+                    target_pop=self.target_population, group_id = edge_group_id,
+                    group_props=edge_group_props, edge_types_props=edge_types_props)
 
     def filter(self, **filter_props):
-
         selected_edge_types = set(self.edge_types_table.edge_type_ids)
         types_filter = False  # Do we need to filter results by edge_type_id
         if 'edge_type_id' in filter_props:
@@ -557,8 +581,11 @@ class EdgePopulation(Population):
 
     def _get_index(self, index_struct, lookup_id):
         # TODO: Use a EdgeSet instead
-        edges_table = index_struct.edge_table
+        if lookup_id >= len(index_struct.lookup_table):
+            # TODO: Store length in index
+            raise StopIteration
 
+        edges_table = index_struct.edge_table
         lookup_beg, lookup_end = index_struct.lookup_table[lookup_id]
         for i in range_itr(lookup_beg, lookup_end):
             edge_indx_beg, edge_indx_end = edges_table[i]
