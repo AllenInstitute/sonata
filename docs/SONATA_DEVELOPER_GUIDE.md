@@ -846,7 +846,7 @@ The "run" block specifies some global parameters of the simulation run, such as 
 
 ### Conditions Configuration
 
-This block specifies optional global parameters with reserved meaning associated with manipulation of the "in silico preparation".
+This block specifies optional global parameters with reserved meaning associated with manipulation of the "in silico preparation".dsff 
 
 Example:
 
@@ -1379,4 +1379,3 @@ Allen folks to fill in
 For the case that the model_template follows the *bmtk* schema, the following is the expected structure of the hoc template.
 
 Allen folks to fill in
-
