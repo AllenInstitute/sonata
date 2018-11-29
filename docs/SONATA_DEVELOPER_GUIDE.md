@@ -113,10 +113,7 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
   </tr>
 </table>
 
-
-* Point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**)
-
-   	Point soma will be interpreted in NEURON as cylinder with L=radius
+* Single sample point soma, interpreted as a sphere with radius from column 6 (**Cylindrical somas are not used**).
 
 * Types: The following types are currently used.
 
@@ -157,7 +154,12 @@ It is recommended, but not required, that morphologies in a network have a stand
 
 ### <a name="ion_channels">Representing ion channel, point neuron and synapse models
 
-To represent point neuron models, synapses and ion channels NEURON MOD files are used.  Models provided as standard by NEURON are also valid, such as ExpSyn, IntFire1.
+Representation of point neuron models, synapses and ion channels depends on
+the target simulator.
+
+For NEURON, NEURON MOD files are used.  Models provided as standard by NEURON
+are also valid, such as ExpSyn, IntFire1. For NEST and PyNN, the names of
+built-in/standard point neuron and synapse models are used.
 
 To support reproducible random numbers in NEURON, it is required to define conventions for the configuration of random number generators, and how they are assigned to channel models, synapses random number generators.  To this end, NEURON mechanisms should follow idioms in the MOD files, so that a uniform and automated approach to random number configuration can be employed.  Such an approach was out of scope of the current format specification, and will be the subject of future versions.
 
@@ -401,7 +403,7 @@ The details of how node and edge populations are defined and represented are des
 
 In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
 
-A model_type attribute allows nodes to be configured as "biophysical", “point_soma”, etc. and also “virtual” one may be provided to specify external (or “virtual”) nodes that are not explicitly simulated but provide inputs to the network.
+A model_type attribute allows nodes to be configured as `biophysical`, `point_neuron`, etc. and also `virtual` one may be provided to specify external (or `virtual`) nodes that are not explicitly simulated but provide inputs to the network.
 
 A typical network may include multiple simulated populations as well as multiple populations of external input nodes.
 
@@ -486,7 +488,6 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
   </tr>
 </table>
 
-
 Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 ##### Nodes - Required Attributes
@@ -497,31 +498,40 @@ Table 1: The Layout  of the HDF5 file format for describing nodes.
 
 **node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type.  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.
 
-**model_type** - Has four valid values: , "biophysical"”,“virtual”, “single_compartment”, “point_process”.  In the future, more model_types may be defined. The meaning of each of these model types is as follows.
+**model_type** - Has 4 valid values: `biophysical`, `virtual`, `single_compartment`, and `point_neuron`.  In the future, more `model_types` may be defined. The meaning of each of these model types is as follows.
 
-The model_type=*"single_compartment"”* is a single-compartment model of a neuron.   A cylindrical compartment is created with length equal to diameter, and the diameter being defined by an additional expected dynamics_param “D”, which if not specified defaults to 1 micron.  The voltage of the neuron is defined by the voltage of the compartment.  Further, the passive mechanism is inserted, and the additional mechanism named in the “model_template” required attribute. Note that a single compartment of length = diameter has the same effective area as that of a sphere of the same diameter (see [NEURON documentation](https://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/geometry.html)).
+The `model_type`=`single_compartment` is a single-compartment model of a neuron.   A cylindrical compartment is created with length equal to diameter, and the diameter being defined by an additional expected dynamics_param “D”, which if not specified defaults to 1 micron.  The voltage of the neuron is defined by the voltage of the compartment.  Further, the passive mechanism is inserted, and the additional mechanism named in the “model_template” required attribute. Note that a single compartment of length = diameter has the same effective area as that of a sphere of the same diameter (see [NEURON documentation](https://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/geometry.html)).
 
-The model_type=*"point_process"* results in a point process neuron, i.e. a NEURON artificial cell.  The point process model is named in the “model_template” required attribute.
+The `model_type`=`point_neuron` results in a point process neuron. The actual
+model type is defined by the `model_template` required attribute. In NEURON the
+the `model_template` will point to an NMOD file. For the NEST and PyNN,
+`model_template` will provide the name of a built-in neuron model. See below
+for details.
 
-The model_type=*"virtual"* results in a placeholder neuron, which is not otherwise simulated, but can be the source of spikes which result in post-synaptic events.
+The `model_type`=`virtual` results in a placeholder neuron, which is not otherwise simulated, but can be the source of spikes which result in post-synaptic events.
 
-The model_type=*"biophysical"* results in a compartmental neuron.  The attribute **morphology** must be defined, either via the node or node_type.
+The `model_type`=`biophysical` results in a compartmental neuron.  The attribute **morphology** must be defined, either via the node or node_type.
+
 
 **model_template** - Used to reference a template or class describing the electrophysical properties and mechanisms of the node(s). Its value and interpretation is context-dependent on the corresponding ‘model_type’. When there is no applicable model template for a given model type (i.e. model_type=virtual) it is assigned a value of NULL. Otherwise it uses a colon-separated string-pair with the following syntax:
 
-*<schema>*:*<resource>*
+*`schema`*:*`resource`*
 
-*<schema>* is a keyword used to identify the type of template being specified. Reserved options include:
+*`schema`* is a keyword used to identify the type of template being specified. Reserved options include:
 
-nml: Template is described by a NeuroML file. Valid for biophysical model types.
+- **nml**: Template is described by a NeuroML file. Valid for biophysical model types.
 
-actdb: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types
+- **ctdb**: Template is described using a pre-generated hoc template specifically designed to run AIBS cell type models. Valid for both biophysical and single_compartment model types.
 
-hoc: Template is described using a customized hoc file. Valid for both biophysical and single_compartmentmodel types
+- **hoc**: Template is described using a customized hoc file. Valid for both biophysical and single_compartment model types.
 
-nrn: Valid for both point_process and single_compartment model types. For a point_process model type, <resource> should specify the name of NEURON simulator point_process (i.e. IntFire1, IntFire2).  For a single_compartment type, <resource> should specify the name of the mechanism to insert.
+- **nrn**: Valid for both `point_neuron` and `single_compartment` model types. For a `point_neuron` model type, <resource> should specify the name of NEURON simulator `point_neuron` (i.e. IntFire1, IntFire2).  For a `single_compartment` type, <resource> should specify the name of the mechanism to insert.
 
-*<resource>* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
+- **nest**: Indicates that the model is a built-in NEST model.
+
+- **pynn**: Indicates that the model is a standard PyNN model.
+
+*`resource`* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
 
 **node_group_id** - Assigns each node to a specific group of nodes.
 
@@ -547,78 +557,21 @@ Each morphology is first moved from its original coordinates in SWC to such a lo
 
 **recenter** [INT8] - Optional reserved attribute, if the value is set to 0, morphology would _not_ be moved to (0, 0, 0) prior to rotation / translation.
 
-**dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group, in the corresponding nodes HDF5.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group.
+**dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group in the corresponding H5 dataset.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group.
 
 Note that if an override is defined  for a given name in both the nodes HDF5 file and the nodes_types CSV file, then the HDF5 file will override the latter.
 
 The namespace of parameters depends on model_type, and are defined as follows.
 
-**For point_soma models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.
+**For `single_compartment` models**, it is the namespace of the NEURON Section containing the "pas" and user requested soma mechanism.
 
-**For point_process models**, it is the namespace of the point_process/artificial cell mechanism.
+**For `point_neuron` models**, it is the namespace of the point neuron model.
 
-**For biophysical models** defined according to the *nml *schema (see above), names take the form "<id>.<attribute>", where <id> is the id of an element and <attribute> an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
+**For `biophysical` models** defined according to the *nml* schema (see above), names take the form **id**.**attribute**, where **id** is the id of an element and **attribute** an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
 
-**For biophysical models** defined according to the *bmtk *(see above), the namespace definition is to be filled in by the Allen folks.
+For `biophysical` models defined according to the *bmtk* (see above), the namespace definition is to be filled in by the Allen folks.
 
-**For biophysical models** defined according to the *hoc *(see above), the namespace definition is to be filled in by the Allen folks.
-
-For a conceptual schematic of the architecture relating node attributes *model_type*,* model*, and *dynamics_params* overrides and their namespaces at the node_type and nodes level, see Table 2.
-
-<table>
-  <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Model Type</td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td></td>
-    <td>point_process</td>
-    <td>point_soma</td>
-    <td>biophysical</td>
-  </tr>
-  <tr>
-    <td>Parameter
-Override</td>
-    <td>Node
-level</td>
-    <td>dynamics_params HDF5 group</td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>Node_type
-level</td>
-    <td>dynamics_params .json</td>
-    <td></td>
-    <td></td>
-  </tr>
-  <tr>
-    <td>Model
-Object</td>
-    <td>Parameter
-Namespace</td>
-    <td>point process</td>
-    <td>Section ∪ pas ∪
-user mechanism</td>
-    <td><id>.<attr>
-∈ .nml file</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td>Model</td>
-    <td>point process name</td>
-    <td>mechanism name</td>
-    <td>.nml file</td>
-  </tr>
-</table>
-
-
-Table 2: A conceptual schematic of the architecture relating node attributes* model*, and *dynamics_params* overrides at the node_type and nodes level for each model_type.  The namespace of both node_type and node level parameter overrides are given uniquely by the model object parameter namespace.  Node level parameter overrides take precedence over node_type level parameter overrides.
+For `biophysical` models defined according to the *hoc* (see above), the namespace definition is to be filled in by the Allen folks.
 
 #### <a name="neuron_networks_edges">Representing Edges
 
@@ -758,7 +711,7 @@ The edge populations as defined above only allow fast enumeration of the edges f
 
 The indexing has been designed for networks where if two nodes are connected, they tend to have multiple edges connecting them (multi-synapse connections in detailed morphology networks). For single edge networks this index has excessive overhead. For maximum space and time efficiency, edges connecting two nodes should be contiguous in the edge population. In any case, the index allows edges between different nodes to be placed in any order in the population datasets.
 
-The indexing is rooted at a single group called indices which is a subgroup of an edge population group. For convenience, the prefix /edges/*<population_name>*/indices/ is stripped from the following layout description:
+The indexing is rooted at a single group called indices which is a subgroup of an edge population group. For convenience, the prefix /edges/**population_name**/indices/ is stripped from the following layout description:
 
 <table>
   <tr>
@@ -911,7 +864,7 @@ overwritten.
 
 The default behaviour is for simulators to produce spike data (a series of
 gid, timestamp pairs). By default the name of the file is "spikes.h5" and it
-is written to <output_dir>. The name of the output file for spikes can be
+is written to "output_dir". The name of the output file for spikes can be
 configured with the optional attribute "spikes_file" (using a relative or
 absolute path in spikes_file has undefined behaviour)
 
@@ -1401,7 +1354,7 @@ See CodeJam talks on this topic:
 
 model_processing is a string attribute of nodes allowing the specification of alternative
 
-processing approaches in the model construction behaviour of biophysical neurons. The following values are currently defined (more will be defined in the future, as required).  It is currently not valid to specify this attribute for model_type != "biophysical”.
+processing approaches in the model construction behaviour of biophysical neurons. The following values are currently defined (more will be defined in the future, as required).  It is currently not valid to specify this attribute for model_type != `biophysical`.
 
 For model_processing=*"fullaxon",* the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
 

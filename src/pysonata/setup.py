@@ -15,11 +15,19 @@ def prepend_find_packages(*roots):
 
     return packages
 
+
+with open('README.md', 'r') as fhandle:
+    long_description = fhandle.read()
+
+
 setup(
     name='sonata',
-    version=0.1,
+    version='0.0.1',
     description='SONATA Data Format',
-    package_data={'': ['*.md', '*.txt', '*.cfg', '**/*.json', '**/*.hoc', '**/*.h5', '**/*.csv']},
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/AllenInstitute/bmtk',
+    package_data={'': ['*.md', '*.txt', '*.cfg', '**/*.json', '**/*.hoc']},
     tests_require=['pytest'],
     install_requires=[
         'jsonschema',
