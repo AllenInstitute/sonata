@@ -14,15 +14,15 @@
   "networks": {
     "nodes": [
       {
-        "nodes_file": "$NETWORK_DIR/10_cells_iclamp_nodes.h5",
-        "node_types_file": "$NETWORK_DIR/10_cells_iclamp_node_types.csv"
+        "nodes_file": "$NETWORK_DIR/ten_cells_iclamp_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/ten_cells_iclamp_node_types.csv"
       }
     ],
 
     "edges": [
       {
-        "edges_file": "$NETWORK_DIR/10_cells_iclamp_10_cells_iclamp_edges.h5",
-        "edge_types_file": "$NETWORK_DIR/10_cells_iclamp_10_cells_iclamp_edge_types.csv"
+        "edges_file": "$NETWORK_DIR/ten_cells_iclamp_ten_cells_iclamp_edges.h5",
+        "edge_types_file": "$NETWORK_DIR/ten_cells_iclamp_ten_cells_iclamp_edge_types.csv"
       }
     ]
   }

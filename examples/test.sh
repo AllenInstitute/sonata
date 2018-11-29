@@ -51,7 +51,7 @@ python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.jso
 assert_recently_edited_file "output/spikes.h5"
 
 
-cd ../../10_cells_iclamp/bmtk_build/
+cd ../../ten_cells_iclamp/bmtk_build/
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 pwd

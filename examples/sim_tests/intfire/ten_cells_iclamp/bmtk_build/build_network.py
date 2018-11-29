@@ -9,7 +9,7 @@ import numpy as np
 from neuron import h
 from bmtk.builder import NetworkBuilder
 
-net = NetworkBuilder("10_cells_iclamp")
+net = NetworkBuilder("ten_cells_iclamp") # ten aot 10, as NeuroML doesn't like ids that start with a digit...
 
 def generate_positions(N, x0=0.0, x1=300.0, y0=0.0, y1=100.0):
     X = np.random.uniform(x0, x1, N)
