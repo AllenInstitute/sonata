@@ -43,6 +43,8 @@ class Group(object):
         self._types_index_col = self._types_table.index_column_name
 
         self._group_columns = ColumnProperty.from_h5(h5_group)
+        # TODO: combine group_columns, group_column_names and group_columns_map, doesn't need to be 3 structures
+        self._group_column_map = {col.name: col for col in self._group_columns}
         self._group_column_names = set(col.name for col in self._group_columns)
         self._group_table = {prop: h5_group[prop.name] for prop in self._group_columns}
         self._ncolumns = len(self._group_columns)
@@ -75,8 +77,31 @@ class Group(object):
         return self._group_columns
 
     @property
+    def group_columns(self):
+        return self._group_columns
+
+    @property
     def all_columns(self):
         return self._all_columns
+
+    @property
+    def has_gids(self):
+        return self._parent.has_gids
+
+    @property
+    def parent(self):
+        return self._parent
+
+    def get_dataset(self, column_name):
+        return self._group_table[column_name]
+
+    def column(self, column_name, group_only=False):
+        if column_name in self._group_column_map:
+            return self._group_column_map[column_name]
+        elif not group_only and column_name in self._types_table.columns:
+            return self._types_table.column(column_name)
+        else:
+            return KeyError
 
     def check_format(self):
         # Check that all the properties have the same number of rows
@@ -266,6 +291,7 @@ class NodeGroup(Group):
 
             if group_filter:
                 # Filter by group property values
+                # TODO: Allow group properties to handle lists
                 src_failed = True
                 for k, v in group_prop_filter.items():
                     if node[k] != v:
@@ -305,6 +331,27 @@ class EdgeGroup(Group):
 
     def to_dataframe(self):
         raise NotImplementedError
+
+    def _get_parent_ds(self, parent_ds):
+        self.build_indicies()
+        ds_vals = np.zeros(self._indicies_count, dtype=parent_ds.dtype)
+        c_indx = 0
+        for indx_range in self._parent_indicies:
+            indx_beg, indx_end = indx_range[0], indx_range[1]
+            n_indx = c_indx + (indx_end - indx_beg)
+            ds_vals[c_indx:n_indx] = parent_ds[indx_beg:indx_end]
+            c_indx = n_indx
+
+        return ds_vals
+
+    def src_node_ids(self):
+        return self._get_parent_ds(self.parent._source_node_id_ds)
+
+    def trg_node_ids(self):
+        return self._get_parent_ds(self.parent._target_node_id_ds)
+
+    def node_type_ids(self):
+        return self._get_parent_ds(self.parent._type_id_ds)
 
     def get_values(self, property_name, all_rows=False):
         # TODO: Need to take into account if property_name is in the edge-types

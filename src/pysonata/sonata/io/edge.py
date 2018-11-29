@@ -41,12 +41,13 @@ class EdgeSet(object):
 
 
 class Edge(object):
-    def __init__(self, src_node_id, trg_node_id, source_pop, target_pop, group_props, edge_types_props):
+    def __init__(self, src_node_id, trg_node_id, source_pop, target_pop, group_id, group_props, edge_types_props):
         self._src_node_id = src_node_id
         self._trg_node_id = trg_node_id
         self._source_population = source_pop
         self._target_population = target_pop
         self._group_props = group_props
+        self._group_id = group_id
         self._edge_type_props = edge_types_props
 
     @property
@@ -66,6 +67,14 @@ class Edge(object):
         return self._target_population
 
     @property
+    def group_id(self):
+        return self._group_id
+
+    @property
+    def edge_type_id(self):
+        return self._edge_type_props['edge_type_id']
+
+    @property
     def dynamics_params(self):
         raise NotImplementedError
 
@@ -75,4 +84,7 @@ class Edge(object):
         elif prop_key in self._edge_type_props:
             return self._edge_type_props[prop_key]
         else:
-            raise KeyError
+            raise KeyError('Property {} not found in edge.'.format(prop_key))
+
+    def __contains__(self, prop_key):
+        return prop_key in self._group_props or prop_key in self._edge_type_props

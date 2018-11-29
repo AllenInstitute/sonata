@@ -171,5 +171,3 @@ if __name__ == '__main__':
     test_group_df(net())
     test_group_properties(net())
     test_group_search(net())
-
-
