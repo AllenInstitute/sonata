@@ -17,3 +17,5 @@ examples/**/output/config.json
 /examples/sim_tests/intfire/ten_cells_iclamp/bmtk_test/output/spikes.h5
 /examples/sim_tests/intfire/one_cell_iclamp/bmtk_test/output/membrane_potential.h5
 /examples/sim_tests/intfire/one_cell_iclamp/bmtk_test/output/spikes.h5
+/examples/sim_tests/intfire/ten_cells_spikes/bmtk_test/output/membrane_potential.h5
+/examples/sim_tests/intfire/ten_cells_spikes/bmtk_test/output/

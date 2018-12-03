@@ -1,2 +1,2 @@
 edge_type_id target_query source_query delay weight_function syn_weight dynamics_params
-100 pop_name=='Exc' pop_name=='VirtualCells' 0.0 wmax 0.5 instanteneousExc.json
+100 pop_name=='Exc' * 0.0 wmax 5 instanteneousExc.json

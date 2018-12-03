@@ -4,20 +4,18 @@ import numpy as np
 from bmtk.builder.networks import NetworkBuilder
 
 
-net = NetworkBuilder("ten_cells_spikes")
+net_pre = NetworkBuilder("pre")
+net_post = NetworkBuilder("post")
 
 
-net.add_nodes(N=30, pop_name='VirtualCells', ei='e', location='TW', model_type='virtual')
+net_pre.add_nodes(N=5, pop_name='VirtualCells', ei='e', location='TW', model_type='virtual')
 
-net.add_nodes(N=24, pop_name='Exc', location='VisL4', ei='e',
+net_post.add_nodes(N=5, pop_name='Exc', location='VisL4', ei='e',
               model_type='point_process',  # use point_process to indicate were are using point model cells
               model_template='nrn:IntFire1',  # Tell the simulator to use the NEURON built-in IntFire1 type cell
               dynamics_params='IntFire1_exc_1.json')
-'''
-net.add_nodes(N=6, pop_name='LIF_inh', location='VisL4', ei='i',
-              model_type='point_process',
-              model_template='nrn:IntFire1',
-              dynamics_params='IntFire1_inh_1.json')'''
+
+
               
 
 def recurrent_connections(src_cells, trg_cell, n_syns):
@@ -39,15 +37,17 @@ def recurrent_connections_low2(src_cells, trg_cell, n_syns):
     
     return synapses
 
-'''              
-net.add_edges(source=net.nodes(pop_name='VirtualCells'), target=net.nodes(pop_name='Exc'),
+        
+net_pre.add_edges(source=net_pre.nodes(), target=net_post.nodes(pop_name='Exc'),
              iterator='all_to_one',
              connection_rule=recurrent_connections_low,
              connection_params={'n_syns': 1},
-             syn_weight=0.5,
+             syn_weight=5,
              weight_function='wmax',
              delay=0.0,
-             dynamics_params='instanteneousExc.json')'''
+             dynamics_params='instanteneousExc.json')
+'''                 
+  '''
              
 
 '''
@@ -92,7 +92,6 @@ net.add_edges(source={'ei': 'e'}, target={'pop_name': 'LIF_exc'},
               dynamics_params='instanteneousExc.json')
 '''
 
-net.build()
 
 
 
@@ -126,7 +125,12 @@ tw.add_edges(source=tw.nodes(), target=net.nodes(pop_name='LIF_inh'),
 tw.build()
 tw.save(output_dir='../input/network')'''
 
-net.save(output_dir='../input/network')
+
+net_pre.build()
+net_pre.save(output_dir='../input/network')
+
+net_post.build()
+net_post.save(output_dir='../input/network')
 
 
 print 'done'
