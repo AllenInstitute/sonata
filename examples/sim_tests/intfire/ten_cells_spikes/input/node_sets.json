@@ -1,0 +1,12 @@
+{
+  "point_nodes": {
+    "model_type": "point_process"
+  },
+  "virtual_nodes": {
+    "model_type": "virtual"
+  },
+  "e_nodes": {
+    "model_type": "point_process",
+    "ei": "e"
+  }
+}

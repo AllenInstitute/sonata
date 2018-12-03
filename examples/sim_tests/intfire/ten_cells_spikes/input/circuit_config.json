@@ -1,0 +1,23 @@
+{
+  "manifest": {
+    "$NETWORK_DIR": "../input/network",
+    "$COMPONENT_DIR": "../../../shared_components"
+  },
+
+  "components": {
+    "morphologies_dir": "$COMPONENT_DIR/morphologies",
+    "synaptic_models_dir": "$COMPONENT_DIR/synaptic_models",
+    "point_neuron_models_dir": "$COMPONENT_DIR/point_neuron_models_dir"
+  },
+
+  "networks": {
+    "nodes": [
+      {
+        "nodes_file": "$NETWORK_DIR/ten_cells_spikes_nodes.h5",
+        "node_types_file": "$NETWORK_DIR/ten_cells_spikes_node_types.csv"
+      }
+    ]
+
+  }
+}
+

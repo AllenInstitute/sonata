@@ -1,0 +1,52 @@
+{
+  "manifest": {
+    "$OUTPUT_DIR": "./output",
+    "$INPUT_DIR": "../input"
+  },
+
+  "run": {
+    "tstop": 3000.0,
+    "dt": 0.1,
+    "dL": 20.0,
+    "spike_threshold": -15,
+    "nsteps_block": 5000,
+    "overwrite_output_dir": true
+  },
+
+  "target_simulator":"NEURON",
+
+  "conditions": {
+    "celsius": 34.0,
+    "v_init": -80
+  },
+
+  "node_sets_file": "$INPUT_DIR/node_sets.json",
+
+  "inputs": {
+    "virtual_nodes_spikes": {
+      "input_type": "spikes",
+      "module": "h5",
+      "input_file": "$INPUT_DIR/tw_spikes.h5",
+      "node_set": "virtual_nodes"
+    }
+  },
+
+
+  "output":{
+    "output_dir": "$OUTPUT_DIR",
+    "log_file": "log.txt",
+    "spikes_file": "spikes.h5",
+    "spikes_sort_order": "time"
+  },
+  
+  
+  "reports": {
+    "membrane_potential": {
+      "cells": "point_nodes",
+      "variable_name": "m",
+      "module": "membrane_report",
+      "sections": "soma"
+    }
+  }
+  
+}
