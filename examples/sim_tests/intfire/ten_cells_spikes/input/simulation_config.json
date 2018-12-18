@@ -27,7 +27,7 @@
       "input_type": "spikes",
       "module": "h5",
       "input_file": "$INPUT_DIR/tw_spikes.h5",
-      "node_set": "virtual_nodes"
+      "node_set": "pre"
     }
   },
 

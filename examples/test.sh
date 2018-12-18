@@ -85,6 +85,7 @@ python build_network.py
 python run_bionet.py 
 assert_recently_edited_file "output/spikes.h5"
 
+
 cd ../300_intfire
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
@@ -96,11 +97,8 @@ python run_bionet.py
 assert_recently_edited_file "output/spikes.h5"
 
 
-
-                                        cd ..
-                                        exit
-
-
+if [ "$1" = "-all" ]
+then
 
 cd ../300_cells
 echo
@@ -112,5 +110,11 @@ python build_network.py
 python run_bionet.py  
 
 cd ..
+
+else
+    echo
+    echo "   Skipping long simulations with a long generation/run time! Run this script with -all to include these!"
+    echo
+fi
 
 echo "Done!!"
