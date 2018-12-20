@@ -573,6 +573,19 @@ For `biophysical` models defined according to the *bmtk* (see above), the namesp
 
 For `biophysical` models defined according to the *hoc* (see above), the namespace definition is to be filled in by the Allen folks.
 
+#### Nodes - Enum datatypes
+
+It is often the case that attributes storing strings have a limited number of possible values (for instance, `model_type`, or cell morphological type).
+For space efficiency, these attributes are better be represented with *enumerations*, i.e. data types consisting of a limited set of named integer values.
+
+However, Enum Datatypes offered by HDF5 impose a limit on the total number of possible values due to 64K limit on object header limitation:</br>
+https://support.hdfgroup.org/HDF5/hdf5-quest.html
+
+To work around this limitation, we support *explicit enumerations* in SONATA Nodes / Edges HDF5 files.
+Each attribute `/<population>/<group>/X` with integer datatype MAY have a corresponding attribute `/<population>/<group>/@library/X` with a limited set of string values. In this case `X` SHOULD be interpreted as an index into `@library/X`; and querying `X` values SHOULD return corresponding string values instead of integers.
+HDF5 group `@library` is reserved for this purpose.
+
+
 #### <a name="neuron_networks_edges">Representing Edges
 
 Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
@@ -1360,4 +1373,3 @@ Allen folks to fill in
 For the case that the model_template follows the *bmtk* schema, the following is the expected structure of the hoc template.
 
 Allen folks to fill in
-
