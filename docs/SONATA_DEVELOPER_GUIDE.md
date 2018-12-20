@@ -150,7 +150,7 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
 
 It is not required that the soma is located at 0,0,0 in the SWC file, but in cases where the morphology has a soma, the soma will be re-centered to 0,0,0 upon loading into the circuit.  Node translations will then be applied to this recentered morphology. This behavior can be overridden by the optional reserved attribute "recenter" for nodes and node_types.  See "Representing networks of neurons" for more details.
 
-It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.  For circuits for which this is true, the circuit producer can declare it with the "standardized_morphology_orientation" entry in the circuit_config.json, so downstream users can safely assume it.  See "Tying it all together - the circuit_config file" for more details.
+It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.
 
 ### <a name="ion_channels">Representing ion channel, point neuron and synapse models
 
@@ -407,13 +407,12 @@ A model_type attribute allows nodes to be configured as `biophysical`, `point_ne
 
 A typical network may include multiple simulated populations as well as multiple populations of external input nodes.
 
-Each node in a population has a node type.  Attributes can be assigned to nodes and node types, whereby a node assumes attributes of itsnode type, and can override them at the individual node level.  Below, attributes which have specified interpretation and expected units (where applicable) are defined, and are either "required" or “optional reserved”.
+Each node in a population has a node type.  Attributes can be assigned to nodes and node types, whereby a node assumes attributes of its node type, and can override them at the individual node level.  Below, attributes which have specified interpretation and expected units (where applicable) are defined, and are either "required" or “optional reserved”.
 
-Node types are defined in node types CSV files containing named columns, one for each attribute of a node type. First, the node_type_id column is required, and defines the node_type_id of each row. To allowmultiple populations define their own node_type_id’s independently, a population column is also required to resolve collisions between node_type_id’s among different populations.  Other "required" attributes must either be defined by the population (see below), or be defined in a column in the associated node types CSV.  The node types CSV may also include “optional reserved” columns names.  Apart from these reserved names, the user is free to define any number of additional named columns to suit their needs.  Node type columns will be assigned to node attributes with the column name as the key and the value coming from the row with a node’s assigned node_type_id.
+Node types are defined in node types CSV files containing named columns, one for each attribute of a node type. First, the node_type_id column is required, and defines the node_type_id of each row. To allow multiple populations define their own node_type_id’s independently, a population column is also required to resolve collisions between node_type_id’s among different populations.  Other "required" attributes must either be defined by the population (see below), or be defined in a column in the associated node types CSV.  The node types CSV may also include “optional reserved” columns names.  Apart from these reserved names, the user is free to define any number of additional named columns to suit their needs.  Node type columns will be assigned to node attributes with the column name as the key and the value coming from the row with a node’s assigned node_type_id.
+Non scalar attributes may be included in the node types CSV file provided the attribute values are quoted and their components are separated by spaces.
 
 Populations are serialized in nodes HDF5 files, and have a single  associated node types CSV file to define the valid node_type_ids for the populations in the HDF5 file, and assign attributes applying to all nodes in with a given node_type_id.  A node_types CSV file may be shared by multiple population HDF5 files. Node groups are represented as HDF5 groups (with population as parent) containing a dataset for each parameter of length equal to the number of  nodes in the group. In the case a node attribute is defined in both the node types CSV and the nodes HDF5, the value in the nodes HDF5 overrides the node types CSV value.
-
-
 
 The HDF5 nodes file layout is designed to store multiple named populations that each may have multiple node groups, but each population with all of its node groups must be self-contained within one HDF5 file..  For each population, the node_id and node_type_id datasets are required because they uniquely identify nodes within a population irrespective of a model_type used. The node_group and node_group_index are required because they identify the location of the group specific data for each node.The model_type attribute is required, but may be defined only in the node_types CSV. The layout of the nodes HDF5 is as shown in Table 1.
 
@@ -549,13 +548,24 @@ For model_processing=*"fullaxon"*, the biophysical neuron will construct and sim
 
 **x, y, z** - position of the soma in world coordinates.
 
-**rotation_angle_zaxis [FLOAT], rotation_angle_yaxis[FLOAT], rotation_angle_xaxis[FLOAT]** - rotation of the morphology around the soma.
+**orientation** [4 FLOAT] - (w, x, y, z) quaternion with the local to world rotation of the morphology around the soma center.
 
-Each morphology is first moved from its original coordinates in SWC to such a location that the soma is at (0, 0, 0).  Then, three rotations are applied to each morphology, in exactly the following sequence: (1) rotation around the z-axis; (2) rotation around the y-axis; (3) rotation around the x-axis; all rotations are around the axes of the global coordinate system.  Then, each morphology is shifted to such a location that its soma is at (x, y, z) coordinates specified in the node/node_type files.  The angles for the three rotations are also provided in the nodes/node_types files, in radians.  If a column is not provided, it is assumed that the rotation angle around that axis is 0 (that is, no rotation around that axis is applied).
+To place morphologies in world coordinates, a translation is applied first to move each morphology's soma center to (0, 0, 0) in its local coordinates system.
+Then, the rotation implied by this quaternion is applied to the morphology.
+Finally, each morphology is translated to move the soma center to the (x, y, z) location specified in the node/node_type files.
+
+**rotation_angle_zaxis [FLOAT], rotation_angle_yaxis[FLOAT], rotation_angle_xaxis[FLOAT]** - alternative representation of the rotation of the morphology around the soma.
+
+This is an alternative representation to quaternions for cell orientation.
+Implementations are required to support both representations, but users are strongly encouraged to only use quaternions due to its non ambiguity.
+Files should not contain both representations, being implementation defined which one takes precedence otherwise.
+The local to world coordinate system rotation specified by these three angles is formed in exactly the following sequence: (1) rotation around the z-axis; (2) rotation around the y-axis; (3) rotation around the x-axis; all rotations are around the axes of the world coordinate system.
+All angles are in radians.
+If a column is not provided, it is assumed that the rotation angle around that axis is 0 (that is, no rotation around that axis is applied).
 
 **morphology** [TEXT] - Name of the detailed morphology for a given node or node type. For name `foo`, the corresponding SWC file would be found at `$morphologies_dir/foo.swc`, where `$morphologies_dir` is specified in the [network config](#network_config).
 
-**recenter** [INT8] - Optional reserved attribute, if the value is set to 0, morphology would _not_ be moved to (0, 0, 0) prior to rotation / translation.
+**recenter** [INT8] - Optional reserved attribute, if the value is set to 0, morphologies would _not_ be moved to (0, 0, 0) prior to rotation / translation.
 
 **dynamics_params** - Define parameter overrides for nodes. This attribute can exist in the node_types.csv file in which case a .json file is referenced, which should contain a dictionary of keys and values.  A key should be a valid name in the namespace of parameters of the model, and the value specifies the assigned parameter override. Alternatively, dynamics_params overrides can be specified for each individual node in a group in the corresponding H5 dataset.  In this case,  a dynamics_params HDF5 group contains datasets named according to the parameter of the model to override in the namespace of parameters of the model (see Table 1). The length of such datasets is the number of nodes in the group.
 
