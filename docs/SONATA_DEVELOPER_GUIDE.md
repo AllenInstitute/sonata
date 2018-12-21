@@ -577,14 +577,10 @@ For `biophysical` models defined according to the *hoc* (see above), the namespa
 
 It is often the case that string attributes have a limited number of possible values (for instance, `model_type`, or cell morphological type).
 For space efficiency, it is better to represent these attributes with *enumerations*, i.e. data types consisting of a limited set of named integer values.
-
-However, Enum Datatypes offered by HDF5 impose a limit on the total number of possible values due to [64K limit on object header limitation](https://support.hdfgroup.org/HDF5/hdf5-quest.html).
-https://support.hdfgroup.org/HDF5/hdf5-quest.html
-
- To work around this limitation, SONATA nodes/edges HDF5 files may use *explicit enumerations*.
+However, Enum Datatypes offered by HDF5 impose a limit on the total number of possible values due to [64K limit on object header](https://support.hdfgroup.org/HDF5/hdf5-quest.html).
+To work around this limitation, SONATA nodes/edges HDF5 files may use *explicit enumerations*.
 Each attribute `/<population>/<group>/X` with integer datatype may have a corresponding attribute `/<population>/<group>/@library/X` with a limited set of string values.
 The group `@library` is reserved for this purpose.
-
 
 #### <a name="neuron_networks_edges">Representing Edges
 
