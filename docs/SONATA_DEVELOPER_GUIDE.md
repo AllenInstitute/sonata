@@ -766,7 +766,7 @@ The source_to_target/range_to_edge_id dataset defines ranges of edges in the edg
 
 The datasets from the target_to_source group are defined symmetrically. From this symmetry is easy to infer that edges should be grouped by source, target pairs, otherwise an important overhead will be incurred in one or both of the indices.
 
-### <a name="neuron_config">Tying it all together - the network/circuit config file
+### <a name="network_config">Tying it all together - the network/circuit config file
 
 The config file is a .json file that defines the relative location of each part of the network:
 
@@ -803,7 +803,7 @@ Where to find the .nml for biophysical neuron model types:
 
 Where to find the hoc templates for the edges:
 
-           "templates": "$COMPONENT_DIR/hoc_templates",
+           "templates_dir": "$COMPONENT_DIR/hoc_templates",
         },
 
 The network is defined by nodes and edges. In the example below, a V1 model is being simulated (with recurrent connections) that receives input from virtual LGN source nodes. Each population of nodes should contain "nodes" and “node_types” while each population of edges should “edges”, “edge_types”.
