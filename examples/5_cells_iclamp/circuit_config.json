@@ -8,7 +8,7 @@
   "components": {
     "morphologies_dir": "$COMPONENT_DIR/morphologies",
     "mechanisms_dir":"$COMPONENT_DIR/mechanisms",
-    "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_templates/json"
+    "biophysical_neuron_models_dir": "$COMPONENT_DIR/biophysical_neuron_templates/nml"
   },
 
   "networks": {
