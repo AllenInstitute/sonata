@@ -10,4 +10,5 @@ examples/**/output/log.txt
 examples/**/output/config.json
 .idea
 .cache
-
+**/mechanisms/x86_64
+.ipynb_checkpoints/

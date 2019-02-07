@@ -124,3 +124,13 @@ class Node(object):
 
     def __contains__(self, prop_key):
         return prop_key in self._group_props or prop_key in self._node_type_props
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        ret_dict = self._node_type_props.copy()
+        ret_dict.update(self._group_props)
+        ret_dict['node_id'] = self.node_id
+        ret_dict['node_type_id'] = self.node_type_id
+        return str(ret_dict)
