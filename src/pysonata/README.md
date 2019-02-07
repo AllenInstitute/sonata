@@ -25,4 +25,4 @@ Note:
 
 ## Reading in Data Files (Nodes and Edges)
 
-* [pySONATA Tutorial](docs/Tutorial\ -\ pySONATA.ipynb)
+* [pySONATA Tutorial](docs/Tutorial%20-%20pySONATA.ipynb)
