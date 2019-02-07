@@ -117,6 +117,11 @@ class TypesTable(object):
             # merge all dataframes together
             merged_table = self._dataframes[0].reset_index()  # TODO: just merge on the indicies rather than reset
             for df in self._dataframes[1:]:
+                #print merged_table.dtypes
+                #print merged_table
+                #print '----'
+                #print df.dtypes
+                #exit()
                 merged_table = merged_table.merge(df.reset_index(), how='outer')
             merged_table.set_index(self.index_column_name, inplace=True)
 

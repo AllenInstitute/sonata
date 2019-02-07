@@ -70,6 +70,10 @@ class Population(object):
         return self._types_table
 
     @property
+    def type_ids(self):
+        return np.array(self._type_id_ds)
+
+    @property
     def group_id_ds(self):
         return self._group_id_ds
 
@@ -233,7 +237,13 @@ class NodePopulation(Population):
         self._has_gids = True
 
     def to_dataframe(self):
-        raise NotImplementedError
+        if len(self.groups) == 1:
+            return self.get_group(self.group_ids[0]).to_dataframe()
+        else:
+            dataframes = []
+            for grp_id in self.group_ids:
+                dataframes.append(self.get_group(grp_id)).to_datframe()
+            return dataframes
 
     def get_row(self, row_indx):
         # TODO: Use helper function so we don't have to lookup gid/node_id twice
@@ -285,6 +295,11 @@ class NodePopulation(Population):
         row_indx = self._index_gid2row.iloc[gid]['row_id']
         return self.get_row(row_indx)
 
+    def filter(self, **filter_props):
+        for grp in self.groups:
+            for node in grp.filter(**filter_props):
+                yield node
+
     def _build_node_id_index(self, force=False):
         if self._node_id_index_built and not force:
             return
@@ -309,6 +324,22 @@ class NodePopulation(Population):
         nxt_node = self.get_row(self.__itr_index)
         self.__itr_index += 1
         return nxt_node
+
+    def __getitem__(self, item):
+        if isinstance(item, slice):
+            # TODO: Check
+            start = item.start if item.start is not None else 0
+            stop = item.stop if item.stop is not None else self._nrows
+            row_indicies = range_itr(start, stop, item.step)
+            return NodeSet(row_indicies, self)
+
+        elif isinstance(item, int):
+            return self.get_row(item)
+
+        elif isinstance(item, list):
+            return NodeSet(item)
+        else:
+            print('Unable to get item using {}.'.format(type(item)))
 
 
 class EdgePopulation(Population):
@@ -364,23 +395,33 @@ class EdgePopulation(Population):
 
     @staticmethod
     def get_source_population(pop_group_h5):
-        return get_attribute_h5(pop_group_h5['source_node_id'], 'network', None)
+        return get_attribute_h5(pop_group_h5['source_node_id'], 'node_population', None)
 
     @staticmethod
     def get_target_population(pop_group_h5):
-        return get_attribute_h5(pop_group_h5['target_node_id'], 'network', None)
+        return get_attribute_h5(pop_group_h5['target_node_id'], 'node_population', None)
 
     @property
     def edge_types_table(self):
         return self._types_table
 
+    @property
+    def indices_group(self):
+        if 'indices' in self._pop_group:
+            return self._pop_group['indices']
+        elif 'indicies' in self._pop_group:
+            # spelling mistake, keeping in for backwards compatibility
+            return self._pop_group['indicies']
+        else:
+            return None
+
     def to_dataframe(self):
         raise NotImplementedError
 
     def build_indicies(self):
-        if 'indicies' in self._pop_group:
-            indicies_grp = self._pop_group['indicies']
-            for index_name, index_grp in indicies_grp.items():
+        indices_grp = self.indices_group
+        if indices_grp is not None:
+            for index_name, index_grp in indices_grp.items():
                 # TODO: Let __IndexStruct build the indicies
                 # Make sure subgroup has the correct datasets
                 if not isinstance(index_grp, h5py.Group):
@@ -557,8 +598,11 @@ class EdgePopulation(Population):
 
     def _get_index(self, index_struct, lookup_id):
         # TODO: Use a EdgeSet instead
-        edges_table = index_struct.edge_table
+        if lookup_id >= len(index_struct.lookup_table):
+            # TODO: Store length in index
+            raise StopIteration
 
+        edges_table = index_struct.edge_table
         lookup_beg, lookup_end = index_struct.lookup_table[lookup_id]
         for i in range_itr(lookup_beg, lookup_end):
             edge_indx_beg, edge_indx_end = edges_table[i]

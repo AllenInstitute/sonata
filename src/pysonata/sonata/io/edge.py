@@ -76,3 +76,11 @@ class Edge(object):
             return self._edge_type_props[prop_key]
         else:
             raise KeyError
+
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        ret_dict = self._edge_type_props.copy()
+        ret_dict.update(self._group_props)
+        return str(ret_dict)

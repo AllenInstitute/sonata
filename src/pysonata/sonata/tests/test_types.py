@@ -25,7 +25,6 @@ def test_node_types(net):
     assert(1 in node_types)
     node_type1 = node_types[1]
     assert(node_type1['ei'] == 'e')
-    assert(node_type1['model_template'] is None)
     assert(node_type1['node_type_id'] == 1)
     assert(node_type1['location'] == 'LGN')
 
@@ -63,4 +62,4 @@ def test_edge_types(net):
 
 if __name__ == '__main__':
     test_node_types(net())
-    test_edge_types(net())
+    #test_edge_types(net())
