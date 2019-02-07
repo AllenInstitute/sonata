@@ -33,7 +33,7 @@
     }
   },
 
-  "output":{
+  "output": {
     "log_file": "log.txt",
     "output_dir": "$OUTPUT_DIR",
     "spikes_file": "spikes.h5",

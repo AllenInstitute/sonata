@@ -163,13 +163,11 @@ def test_group_search(net):
 
 
 if __name__ == '__main__':
-    #test_population_lookup(net())
-    #test_population_itr(net())
-    #test_node_set(net())
+    test_population_lookup(net())
+    test_population_itr(net())
+    test_node_set(net())
     test_group(net())
     test_group_iter(net())
     test_group_df(net())
-    #test_group_properties(net())
-    #test_group_search(net())
-
-
+    test_group_properties(net())
+    test_group_search(net())

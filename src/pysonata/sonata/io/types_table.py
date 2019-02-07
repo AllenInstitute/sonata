@@ -21,6 +21,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 import numpy as np
+import pandas as pd
 import numbers
 import math
 
@@ -45,6 +46,9 @@ class TypesTable(object):
 
         self._cached_node_types = {}
         self._df_cache = None
+
+        self._itr_indx = 0
+        self._itr_end = 0
 
     @property
     def index_column_name(self):
@@ -93,13 +97,18 @@ class TypesTable(object):
         if not silent and column_key not in self.columns:
             raise KeyError
 
+        is_list = isinstance(column_val, list)
         selected_ids = []  # running list of valid type-ids
         column_dtype = self.column(column_key).dtype
         for df in self._column_map[column_key]:
             # if a csv column has all NONE values, pandas will load the values as float(NaN)'s. Thus for str/object
             # columns we need to check dtype otherwise we'll get an invalid comparisson.
             if df[column_key].dtype == column_dtype:
-                indicies = df[df[column_key] == column_val].index
+                if is_list:
+                    indicies = df[df[column_key].isin(column_val)].index
+                else:
+                    indicies = df[df[column_key] == column_val].index
+
                 if len(indicies) > 0:
                     selected_ids.extend(list(indicies))
 
@@ -117,18 +126,46 @@ class TypesTable(object):
             # merge all dataframes together
             merged_table = self._dataframes[0].reset_index()  # TODO: just merge on the indicies rather than reset
             for df in self._dataframes[1:]:
-                #print merged_table.dtypes
-                #print merged_table
-                #print '----'
-                #print df.dtypes
-                #exit()
-                merged_table = merged_table.merge(df.reset_index(), how='outer')
+                try:
+                    merged_table = merged_table.merge(df.reset_index(), how='outer')
+                except ValueError as ve:
+                    # There is a potential issue if merging where one dtype is different from another (ex, if all
+                    # model_template's are NONE pandas will load column as float64). First solution is to find columns
+                    # that differ and upcast columns as object's (TODO: look for better solution)
+                    right_df = df.reset_index()
+                    for col in set(merged_table.columns) & set(right_df.columns):
+                        # find all shared columns whose dtype differs
+                        if merged_table[col].dtype != right_df[col].dtype:
+                            # change column(s) dtype to object
+                            merged_table[col] = merged_table[col] if merged_table[col].dtype == object \
+                                else merged_table[col].astype(object)
+                            right_df[col] = right_df[col] if right_df[col].dtype == object \
+                                else right_df[col].astype(object)
+
+                    merged_table = merged_table.merge(right_df, how='outer')
+
             merged_table.set_index(self.index_column_name, inplace=True)
 
         if cache:
             self._df_cache = merged_table
 
         return merged_table
+
+    def __iter__(self):
+        self._itr_indx = 0
+        self._itr_end = len(self.type_ids)
+        return self
+
+    def next(self):
+        return self.__next__()
+
+    def __next__(self):
+        if self._itr_indx >= self._itr_end:
+            raise StopIteration
+
+        ntid = self.type_ids[self._itr_indx]
+        self._itr_indx += 1
+        return self[ntid]
 
     def __getitem__(self, type_id):
         if isinstance(type_id, tuple):
@@ -152,6 +189,9 @@ class TypesTable(object):
 
     def __contains__(self, type_id):
         return type_id in self._index_typeid2df
+
+    def __repr__(self):
+        return repr(self.to_dataframe())
 
 
 class NodeTypesTable(TypesTable):

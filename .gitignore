@@ -2,6 +2,12 @@
 **/*.egg-info/
 **/*~
 src/pysonata/sonata/tests/tmp
+src/pysonata/build
+src/pysonata/dist
+src/pysonata/.pytest_cache
+**/mechanisms/x86_64
+examples/**/output/log.txt
+examples/**/output/config.json
 .idea
 .cache
 **/mechanisms/x86_64

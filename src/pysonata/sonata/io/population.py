@@ -257,7 +257,7 @@ class NodePopulation(Population):
         node_group_props = self.get_group(node_group_id)[node_group_index]
         node_gid = self._gid_lookup_fnc(row_indx)
 
-        return Node(node_id, node_type_id, node_type_props, node_group_props, None, gid=node_gid)
+        return Node(node_id, node_type_id, node_type_props, node_group_id, node_group_props, None, gid=node_gid)
 
     def get_rows(self, row_indicies):
         """Returns a set of all nodes based on list of row indicies.
@@ -433,7 +433,6 @@ class EdgePopulation(Population):
                     raise Exception('index {} in {} edges is missing column {}.'.format(index_name, self.name,
                                                                                         'node_id_to_range'))
                 if 'range_to_edge_id' not in index_grp:
-                    # TODO: make this more general, i.e 'id_to_range' thus we can index on gids, edge_types, etc
                     raise Exception('index {} in {} edges is missing column {}.'.format(index_name, self.name,
                                                                                         'range_to_edge_id'))
 
@@ -504,10 +503,10 @@ class EdgePopulation(Population):
         edge_group_index = self._group_index_ds[index]
         edge_group_props = self.get_group(edge_group_id)[edge_group_index]
         return Edge(trg_node_id=trg_node, src_node_id=src_node, source_pop=self.source_population,
-                    target_pop=self.target_population, group_props=edge_group_props, edge_types_props=edge_types_props)
+                    target_pop=self.target_population, group_id = edge_group_id,
+                    group_props=edge_group_props, edge_types_props=edge_types_props)
 
     def filter(self, **filter_props):
-
         selected_edge_types = set(self.edge_types_table.edge_type_ids)
         types_filter = False  # Do we need to filter results by edge_type_id
         if 'edge_type_id' in filter_props:
