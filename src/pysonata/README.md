@@ -25,5 +25,4 @@ Note:
 
 ## Reading in Data Files (Nodes and Edges)
 
-*Please stay tuned...(although the sonata/tests/ directory has some good examples)*
-
+* [pySONATA Tutorial](docs/Tutorial%20-%20pySONATA.ipynb)
