@@ -237,7 +237,13 @@ class NodePopulation(Population):
         self._has_gids = True
 
     def to_dataframe(self):
-        raise NotImplementedError
+        if len(self.groups) == 1:
+            return self.get_group(self.group_ids[0]).to_dataframe()
+        else:
+            dataframes = []
+            for grp_id in self.group_ids:
+                dataframes.append(self.get_group(grp_id)).to_datframe()
+            return dataframes
 
     def get_row(self, row_indx):
         # TODO: Use helper function so we don't have to lookup gid/node_id twice
@@ -399,13 +405,23 @@ class EdgePopulation(Population):
     def edge_types_table(self):
         return self._types_table
 
+    @property
+    def indices_group(self):
+        if 'indices' in self._pop_group:
+            return self._pop_group['indices']
+        elif 'indicies' in self._pop_group:
+            # spelling mistake, keeping in for backwards compatibility
+            return self._pop_group['indicies']
+        else:
+            return None
+
     def to_dataframe(self):
         raise NotImplementedError
 
     def build_indicies(self):
-        if 'indicies' in self._pop_group:
-            indicies_grp = self._pop_group['indicies']
-            for index_name, index_grp in indicies_grp.items():
+        indices_grp = self.indices_group
+        if indices_grp is not None:
+            for index_name, index_grp in indices_grp.items():
                 # TODO: Let __IndexStruct build the indicies
                 # Make sure subgroup has the correct datasets
                 if not isinstance(index_grp, h5py.Group):

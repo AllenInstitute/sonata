@@ -155,7 +155,6 @@ class NodeGroup(Group):
     @property
     def node_ids(self):
         self.build_indicies()
-        # print self._parent_indicies
         return self._parent.inode_ids(self._parent_indicies)
 
     @property

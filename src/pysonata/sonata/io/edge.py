@@ -86,5 +86,13 @@ class Edge(object):
         else:
             raise KeyError('Property {} not found in edge.'.format(prop_key))
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        ret_dict = self._edge_type_props.copy()
+        ret_dict.update(self._group_props)
+        return str(ret_dict)
+
     def __contains__(self, prop_key):
         return prop_key in self._group_props or prop_key in self._edge_type_props
