@@ -1,0 +1,2 @@
+edge_type_id target_query source_query delay weight_function syn_weight dynamics_params
+100 pop_name=='Exc' * 0.1 wmax 5 ExcToExc.json
