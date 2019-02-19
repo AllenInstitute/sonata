@@ -97,6 +97,18 @@ python run_bionet.py
 assert_recently_edited_file "output/spikes.h5"
 
 
+cd ../300_pointneurons
+echo
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+pwd
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+
+
+python build_network.py
+python run_pointnet.py 
+assert_recently_edited_file "output/spikes.h5"
+
+
 if [ "$1" = "-all" ]
 then
 
