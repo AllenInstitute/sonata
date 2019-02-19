@@ -63,6 +63,31 @@ python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.jso
 assert_recently_edited_file "output/spikes.h5"
 
 
+cd ../../ten_cells_spikes/bmtk_build/
+echo
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+pwd
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+
+python build_network.py
+cd ../bmtk_test/
+python ../../../shared_components/scripts/run_bionet.py NEURON ../input/config.json
+assert_recently_edited_file "output/spikes.h5"
+
+
+cd ../../ten_cells_spikes2/bmtk_build/
+echo
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+pwd
+echo "+++++++++++++++++++++++++++++++++++++++++++"
+
+python build_network.py
+cd ../bmtk_test/
+python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.json
+assert_recently_edited_file "output/spikes.h5"
+assert_recently_edited_file "output/membrane_potential.h5"
+
+
 cd ../../../../9_cells/
 
 echo
