@@ -1,0 +1,4 @@
+node_type_id ei pop_id pop_name location model_type
+100 e tON_001 tON LGN virtual
+101 e tOFF_001 tOFF LGN virtual
+102 e tONOFF_001 tONOFF LGN virtual
