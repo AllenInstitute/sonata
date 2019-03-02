@@ -1,14 +1,22 @@
 import os
 import numpy as np
-import random
-import math
+from build_helpers import *
 
-from bmtk.builder.networks import NetworkBuilder
 from bmtk.builder.bionet import SWCReader
+from bmtk.builder.networks import NetworkBuilder
+
 
 # Percentage of 45,000 network to build, default to 1 percent (~ 450 cells)
 PERCENTAGE_CELLS = 0.01
-WEIGHT_ADJ = np.sqrt(1.0/PERCENTAGE_CELLS)
+WEIGHT_ADJ = np.sqrt(1.0/PERCENTAGE_CELLS)  # A general rule for adjust weight based on change in cell pop
+
+# Build the layer as a cylinder, the radius will be calculated based on cylinder height, density and Num of cells
+# NOTE: Due to the way recurrent and lgn --> l4 synaptic connections are made it's a good idea to adjust the height
+#   based on the number of cells to ensure we have a flat disk of about the same radius
+CYL_CENTER = np.array([0, -370.0, 0])
+CYL_HEIGHT = 100.0*PERCENTAGE_CELLS
+CYL_DENSITY = 0.0002
+
 
 cell_models = [
     {
@@ -43,7 +51,7 @@ cell_models = [
     },
     {
         'model_name': 'PV1',
-        'N': int(PERCENTAGE_CELLS**800),
+        'N': int(PERCENTAGE_CELLS*800),
         'ei': 'i',
         'model_type': 'biophysical',
         'morphology': 'Pvalb_470522102_m',
@@ -56,7 +64,7 @@ cell_models = [
         'N': int(PERCENTAGE_CELLS*700),
         'ei': 'i',
         'model_type': 'biophysical',
-        'morphology': 'Pvalb_469628681_m.swc',
+        'morphology': 'Pvalb_469628681_m',
         'electrophysiology': '473862421_fit.json',
         'rotation_angle_zaxis': -3.684439949,
         'model_template': 'nml:Cell_473862421.cell.nml'
@@ -79,112 +87,28 @@ cell_models = [
     }
 ]
 
-
-def lerp(v0, v1, t):
-    return v0 * (1.0 - t) + v1 * t
-
-
-def distance_weight(delta_p, w_min, w_max, r_max):
-    r = np.linalg.norm(delta_p)
-    if r >= r_max:
-        return 0.0
-    else:
-        return lerp(w_max, w_min, r / r_max)
-
-
-def orientation_tuning_weight(tuning1, tuning2, w_min, w_max):
-
-    # 0-180 is the same as 180-360, so just modulo by 180
-    delta_tuning = math.fmod(abs(tuning1 - tuning2), 180.0)
-
-    # 90-180 needs to be flipped, then normalize to 0-1
-    delta_tuning = delta_tuning if delta_tuning < 90.0 else 180.0 - delta_tuning
-
-    # t = delta_tuning / 90.0
-    return lerp(w_max, w_min, delta_tuning / 90.0)
-
-
-def distance_tuning_connection_handler(source, target, d_weight_min, d_weight_max, d_max, t_weight_min,
-                                       t_weight_max, nsyn_min, nsyn_max):
-    # Avoid self-connections.n_nodes
-    sid = source.node_id
-    tid = target.node_id
-    if sid == tid:
-        if sid % 100 == 0:
-            print "processing connections for node",  sid
-        return None
-
-    # first create weights by euclidean distance between cells
-    # DO NOT use PERIODIC boundary conditions in x and y!
-    dw = distance_weight(np.array([source['x'], source['y']]) - np.array([target['x'], target['y']]), d_weight_min,
-                         d_weight_max, d_max)
-
-    # drop the connection if the weight is too low
-    if dw <= 0:
-        return None
-
-    # next create weights by orientation tuning [ aligned, misaligned ] --> [ 1, 0 ]
-    # Check that the orientation tuning property exists for both cells; otherwise,
-    # ignore the orientation tuning.
-    if source['tuning_angle'] > 0 and target['tuning_angle'] > 0:
-        tw = dw * orientation_tuning_weight(source['tuning_angle'],
-                                            target['tuning_angle'],
-                                            t_weight_min, t_weight_max)
-    else:
-        tw = dw
-
-    # drop the connection if the weight is too low
-    if tw <= 0:
-        return None
-
-    # filter out nodes by treating the weight as a probability of connection
-    if random.random() > tw:
-        return None
-
-    # Add the number of synapses for every connection.
-    # It is probably very useful to take this out into a separate function.
-
-    tmp_nsyn = random.randint(nsyn_min, nsyn_max)
-    return tmp_nsyn
-
-
-def distance_connection_handler(source, target, d_weight_min, d_weight_max, d_max, nsyn_min, nsyn_max):
-    # Avoid self-connections.
-    sid = source.node_id
-    tid = target.node_id
-
-    if sid == tid:
-        if sid % 100 == 0:
-            print "processing connections for node", sid
-        return None
-
-    # first create weights by euclidean distance between cells
-    # DO NOT use PERIODIC boundary conditions in x and y!
-    dw = distance_weight(np.array([source['x'], source['y']]) - np.array([target['x'], target['y']]),
-                               d_weight_min, d_weight_max, d_max)
-
-    # drop the connection if the weight is too low
-    if dw <= 0:
-        return None
-
-    # filter out nodes by treating the weight as a probability of connection
-    if random.random() > dw:
-        return None
-
-    # Add the number of synapses for every connection.
-    # It is probably very useful to take this out into a separate function.
-
-    tmp_nsyn = random.randint(nsyn_min, nsyn_max)
-    # print('{} ({}) --> {} ({})'.format(sid, source['name'], tid, target['name']))
-    return tmp_nsyn
-
+# Cacluated dimensions of column
+n_nodes = sum(v['N'] for v in cell_models)
+n_point_nodes = sum(v['N'] for v in cell_models if v['model_type'] == 'point_process')
+cyl_center, cyl_height, cyl_radius = cylinder_from_density(n_nodes, density=CYL_DENSITY, height=CYL_HEIGHT,
+                                                           center=CYL_CENTER)
+radius_biophys = ((n_nodes - n_point_nodes) / (n_nodes * 1.0))**0.5 * cyl_radius
 
 net = NetworkBuilder('l4')
 for model_params in cell_models:
     N = model_params['N']
-    positions = np.random.rand(N, 3)*[100.0, -300.0, 100.0]
+
+    # get positions
+    r_outer = radius_biophys
+    r_inner = 0.0
+    if model_params['model_type'] == 'point_process':
+        # place point-neurons on the outer ring
+        r_outer = cyl_radius
+        r_inner = radius_biophys
+    positions = generate_random_positions(N, center=cyl_center, height=cyl_height, radius_outer=r_outer,
+                                          radius_inner=r_inner)
     rotation_angle_yaxis = np.random.uniform(0.0, 2*np.pi, (N,))
-    tuning_angle = np.linspace(0, 360.0, N, endpoint=False) if model_params['ei'] == 'e' else [-1.0]*N
+    tuning_angle = np.linspace(0, 360.0, N, endpoint=False) if model_params['ei'] == 'e' else [np.NaN]*N
     net.add_nodes(x=positions[:, 0],
                   y=positions[:, 1],
                   z=positions[:, 2],
@@ -192,8 +116,6 @@ for model_params in cell_models:
                   tuning_angle=tuning_angle,
                   **model_params)
 
-# net.build()
-# net.save_nodes('tmp_nodes.h5', 'tmp_node_types.csv')
 
 morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies', p['morphology']))
                 for p in cell_models if 'morphology' in p}
@@ -219,13 +141,6 @@ def build_edges(src, trg, sections=['basal', 'apical'], dist_range=[50.0, 150.0]
     return sec_ids, sec_xs, coords[0][0], coords[0][1], coords[0][2], dist[0], swctype[0]
 
 
-def gaussianLL(src, trg, weight, weight_sigma=50.0):
-    src_tuning = src['tuning_angle']
-    tar_tuning = trg['tuning_angle']
-    delta_tuning = abs(abs(abs(180.0 - abs(float(tar_tuning) - float(src_tuning)) % 360.0) - 90.0) - 90.0)
-    return weight * math.exp(-(delta_tuning / weight_sigma) ** 2)
-
-
 cparameters = {'d_weight_min': 0.0, 'd_weight_max': 1.0, 'd_max': 160.0, 'nsyn_min': 3, 'nsyn_max': 7}
 
 # inh --> bio inh
@@ -235,7 +150,7 @@ cm = net.add_edges(source={'ei': 'i'}, target={'ei': 'i', 'model_type': 'biophys
                    delay=2.0,
                    dynamics_params='GABA_InhToInh.json',
                    model_template='exp2syn')
-cm.add_properties('syn_weight', rule=0.0002, dtypes=np.float)
+cm.add_properties('syn_weight', rule=0.0002*WEIGHT_ADJ, dtypes=np.float)
 cm.add_properties(['sec_id', 'sec_x', 'pos_x', 'pos_y', 'pos_z', 'dist', 'type'],
                   rule=build_edges,
                   rule_params={'sections': ['somatic', 'basal'], 'dist_range': [0.0, 1e+20]},
@@ -315,7 +230,7 @@ cparameters = {'d_weight_min': 0.0, 'd_weight_max': 0.34, 'd_max': 300.0, 't_wei
 
 # exc --> Scnn1a
 cm = net.add_edges(source={'ei': 'e'}, target={'model_name': 'Scnn1a'},
-                   connection_rule=10, #distance_tuning_connection_handler,
+                   connection_rule=distance_tuning_connection_handler,
                    connection_params=cparameters,
                    delay=2.0,
                    dynamics_params='AMPA_ExcToExc.json',
@@ -361,5 +276,8 @@ cm = net.add_edges(source={'ei': 'e'}, target={'model_name': 'LIF_exc'},
                    model_template='exp2syn')
 cm.add_properties('syn_weight', rule=0.0019*WEIGHT_ADJ, dtypes=np.float)
 
+print('Building Network')
 net.build()
+
+print('Saving Network')
 net.save(output_dir='network')
