@@ -1069,7 +1069,7 @@ There can be one or more reports in the block, each one identified by a unique n
         }
 
 Simulators are expected to create a file for each specified report under the
-output directory using the file name <report_name>.<ext>, where ext is the
+output directory using the file name `<report_name>.<ext>`, where `ext` is the
 file extension specific to the report configuration. The file name can be
 overriden with the attribute "file_name".
 
@@ -1258,8 +1258,8 @@ the Node Set namespace, and needn’t be declared explicitly.
 ### **Output file formats**
 
 Each report name in the "reports" block results in a separate HDF5 file with
-the filename <report_name>.h5 written to the output directory (unless the user
-provides a different file name).
+the filename `<report_name>.h5` written to the output directory (unless the
+user provides a different file name).
 
 #### <a name="spike_file"></a>Spike file
 
