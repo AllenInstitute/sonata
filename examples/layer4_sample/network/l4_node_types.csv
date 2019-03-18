@@ -1,0 +1,8 @@
+node_type_id ei model_type electrophysiology model_template morphology dynamics_params rotation_angle_zaxis model_name
+100 e biophysical 472363762_fit.json nml:Cell_472363762.cell.nml Scnn1a_473845048_m NULL -3.646878266 Scnn1a
+101 e biophysical 473863510_fit.json nml:Cell_473863510.cell.nml Rorb_325404214_m NULL -4.159763785 Rorb
+102 e biophysical 473863035_fit.json nml:Cell_473863035.cell.nml Nr5a1_471087815_m NULL -2.639275277 Nr5a1
+103 i biophysical 472912177_fit.json nml:Cell_472912177.cell.nml Pvalb_470522102_m NULL -2.539551891 PV1
+104 i biophysical 473862421_fit.json nml:Cell_473862421.cell.nml Pvalb_469628681_m NULL -3.684439949 PV2
+105 e point_process NULL nrn:IntFire1 NULL IntFire1_exc_1.json NULL LIF_exc
+106 i point_process NULL nrn:IntFire1 NULL IntFire1_inh_1.json NULL LIF_inh
