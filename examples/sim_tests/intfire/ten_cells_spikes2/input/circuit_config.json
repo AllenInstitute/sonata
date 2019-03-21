@@ -29,6 +29,8 @@
         "edge_types_file": "$NETWORK_DIR/pre_post_edge_types.csv"
       }
     ]
-  }
+  },
+
+  "target_simulator": "NEST"
 }
 

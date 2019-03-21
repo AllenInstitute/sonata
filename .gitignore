@@ -24,3 +24,4 @@ examples/**/output/config.json
 .ipynb_checkpoints/
 /examples/sim_tests/intfire/ten_cells_spikes2/bmtk_test/output
 /examples/checkouth5.sh
+/examples/sim_tests/intfire/ten_cells_spikes2/bmtk_test/membrane_potential_pynn.h5

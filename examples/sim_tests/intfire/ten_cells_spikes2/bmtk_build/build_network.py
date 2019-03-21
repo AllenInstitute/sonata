@@ -10,7 +10,7 @@ net_post = NetworkBuilder("post")
 
 net_pre.add_nodes(N=5, pop_name='VirtualCells', ei='e', location='TW', model_type='virtual')
 
-net_post.add_nodes(N=5, pop_name='Exc', location='VisL4', ei='e',
+net_post.add_nodes(N=5, pop_name='Exc', location='VisL4', ei='e', 
               model_type='point_process',  # use point_process to indicate were are using point model cells
               model_template='nest:iaf_psc_alpha',  # Tell the simulator to use the NEURON built-in IntFire1 type cell
               dynamics_params='472363762_point.json')
@@ -27,7 +27,7 @@ def recurrent_connections(src_cells, trg_cell, n_syns):
 
 def recurrent_connections_low(src_cells, trg_cell, n_syns):
     
-    synapses = [n_syns*(np.random.random() > .1) for i in range(len(src_cells))]
+    synapses = [n_syns*(np.random.random() > .5) for i in range(len(src_cells))]
  
     return synapses
 
@@ -42,7 +42,7 @@ net_pre.add_edges(source=net_pre.nodes(), target=net_post.nodes(pop_name='Exc'),
              iterator='all_to_one',
              connection_rule=recurrent_connections_low,
              connection_params={'n_syns': 1},
-             syn_weight=5,
+             syn_weight=25,
              weight_function='wmax',
              delay=0.1,
              dynamics_params='ExcToExc.json')
