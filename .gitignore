@@ -25,3 +25,4 @@ examples/**/output/config.json
 /examples/sim_tests/intfire/ten_cells_spikes2/bmtk_test/output
 /examples/checkouth5.sh
 /examples/sim_tests/intfire/ten_cells_spikes2/bmtk_test/membrane_potential_pynn.h5
+/examples/sim_tests/intfire/ten_cells_iclamp_nest/bmtk_test/output
