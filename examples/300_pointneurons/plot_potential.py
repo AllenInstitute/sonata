@@ -16,7 +16,7 @@ from optparse import OptionParser
 from bmtk.utils.cell_vars import CellVarsFile
 
 
-def plot_vars(file_names, cell_var='v', gid_list=[]):
+def plot_vars(file_names, cell_var='v', gid_list=[], t_min=None, t_max=None):
     """Plots variable traces for a SONATA h5 file. If multiple spike files are specified will do a side-by-side
     comparsion for each gid.
 
@@ -29,11 +29,16 @@ def plot_vars(file_names, cell_var='v', gid_list=[]):
     assert(len(file_names) > 0)
 
     # Use bmtk to parse the cell-var files
-    cell_var_files = [CellVarsFile(fn) for fn in file_names]
+    cell_var_files = []
+    for fn in file_names:
+        try:
+            cell_var_files.append(CellVarsFile(fn, h5_root="/report/internal"))
+        except KeyError:
+            cell_var_files.append(CellVarsFile(fn))
 
     # get first spike file and properties
     cvf_base = cell_var_files[0]
-    xlim = [cvf_base.time_trace[0], cvf_base.time_trace[-1]]  # Use the same x-axis across all subplots
+    xlim = [t_min or cvf_base.time_trace[0], t_max or cvf_base.time_trace[-1]]  # Use the same x-axis across all subplots
     gid_list = cvf_base.gids if not gid_list else gid_list  # if gid_list is None just get all gids in first file
     n_cells = len(cvf_base.gids)
 
@@ -64,6 +69,8 @@ if __name__ == '__main__':
                       action='callback',
                       callback=lambda option, opt, value, parser: setattr(parser.values, option.dest, [int(v) for v in value.split(',')]),
                       help='comma seperated list of gids to plot')
+    parser.add_option('--tmin', type=float, dest='t_min', default=None)
+    parser.add_option('--tmax', type=float, dest='t_max', default=None)
     options, args = parser.parse_args()
 
     if len(args) == 0:
@@ -71,6 +78,10 @@ if __name__ == '__main__':
         if not os.path.exists('output/membrane_potential.h5'):
             raise Exception('Please specifiy hdf5 file to read in arguments. Exiting!')
         else:
-            plot_vars('output/membrane_potential.h5', cell_var=options.cell_var)
+            plot_vars('output/membrane_potential.h5', cell_var=options.cell_var, t_min=options.t_min, t_max=options.t_max)
     else:
-        plot_vars(file_names=args, cell_var=options.cell_var, gid_list=options.gids)
+        plot_vars(file_names=args, cell_var=options.cell_var, gid_list=options.gids, t_min=options.t_min, t_max=options.t_max)
+    if len(args) == 1:
+        plt.savefig(args[0].replace(".h5", ".png"))
+    else:
+        plt.savefig("comparison_{}.png".format(options.cell_var))

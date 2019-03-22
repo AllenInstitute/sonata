@@ -3,5 +3,8 @@
     "population": "external"
   },
 
-  "recorded_cells": [0, 80, 160, 240, 270]
+  "recorded_cells": {
+      "population": "internal",
+      "node_id": [0, 80, 160, 240, 270]
+  }
 }
