@@ -1,2 +1,2 @@
-edge_type_id target_query source_query delay weight_function syn_weight dynamics_params model_template
-100 pop_name=='Exc' * 0.1 wmax 25 ExcToExc.json static_synapse
+edge_type_id target_query source_query delay weight_function dynamics_params model_template
+100 pop_name=='Exc' * 0.1 wmax ExcToExc.json static_synapse
