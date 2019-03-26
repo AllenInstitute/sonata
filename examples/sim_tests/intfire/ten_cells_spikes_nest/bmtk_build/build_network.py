@@ -7,10 +7,11 @@ from bmtk.builder.networks import NetworkBuilder
 net_pre = NetworkBuilder("pre")
 net_post = NetworkBuilder("post")
 
+num_pre_post = 5
 
-net_pre.add_nodes(N=5, pop_name='VirtualCells', ei='e', location='TW', model_type='virtual')
+net_pre.add_nodes(N=num_pre_post, pop_name='VirtualCells', ei='e', location='TW', model_type='virtual')
 
-net_post.add_nodes(N=5, pop_name='Exc', location='VisL4', ei='e', 
+net_post.add_nodes(N=num_pre_post, pop_name='Exc', location='VisL4', ei='e', 
               model_type='point_process',  # use point_process to indicate were are using point model cells
               model_template='nest:iaf_psc_alpha',  # Tell the simulator to use the NEURON built-in IntFire1 type cell
               dynamics_params='472363762_point.json')
@@ -27,7 +28,7 @@ def recurrent_connections(src_cells, trg_cell, n_syns):
 
 def recurrent_connections_low(src_cells, trg_cell, n_syns):
     
-    synapses = [n_syns*(np.random.random() > .5) for i in range(len(src_cells))]
+    synapses = [n_syns*(np.random.random() > 0.5) for i in range(len(src_cells))]
  
     return synapses
 
@@ -42,56 +43,11 @@ net_pre.add_edges(source=net_pre.nodes(), target=net_post.nodes(pop_name='Exc'),
              iterator='all_to_one',
              connection_rule=recurrent_connections_low,
              connection_params={'n_syns': 1},
-             syn_weight=25,
+             syn_weight=25, 
+             model_template='static_synapse',
              weight_function='wmax',
              delay=0.1,
              dynamics_params='ExcToExc.json')
-'''                 
-  '''
-             
-
-'''
-net.add_edges(source={'ei': 'i'}, target={'ei': 'i', 'model_type': 'point_process'},
-              iterator='all_to_one',
-              connection_rule=recurrent_connections,
-              connection_params={'n_syns': 10},
-              syn_weight=0.01,
-              weight_function='wmax',
-              delay=0.0,
-              dynamics_params='instanteneousInh.json')
-
-
-
-net.add_edges(source={'ei': 'i'}, target={'ei': 'e', 'model_type': 'point_process'},
-              iterator='all_to_one',
-              connection_rule=recurrent_connections,
-              connection_params={'n_syns': 10},
-              syn_weight=0.15,
-              weight_function='wmax',
-              delay=0.0,
-              dynamics_params='instanteneousInh.json')
-
-
-net.add_edges(source={'ei': 'e'}, target={'pop_name': 'LIF_inh'},
-              iterator='all_to_one',
-              connection_rule=recurrent_connections,
-              connection_params={'n_syns': 10},
-              syn_weight=0.3,
-              weight_function='wmax',
-              delay=0.0,
-              dynamics_params='instanteneousExc.json')
-
-
-net.add_edges(source={'ei': 'e'}, target={'pop_name': 'LIF_exc'},
-              iterator='all_to_one',
-              connection_rule=recurrent_connections_low2,
-              connection_params={'n_syns': 1},
-              syn_weight=0.002,
-              weight_function='wmax',
-              delay=2.0,
-              dynamics_params='instanteneousExc.json')
-'''
-
 
 
 
