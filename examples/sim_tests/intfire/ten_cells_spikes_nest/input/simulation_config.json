@@ -1,6 +1,6 @@
 {
   "manifest": {
-    "$OUTPUT_DIR": "../bmtk_test/output",
+    "$OUTPUT_DIR": "../test/output",
     "$INPUT_DIR": "../input"
   },
 
