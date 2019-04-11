@@ -46,7 +46,7 @@ pwd
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 
 python build_network.py
-cd ../bmtk_test/
+cd ../test/
 python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.json
 assert_recently_edited_file "output/spikes.h5"
 
@@ -58,7 +58,7 @@ pwd
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 
 python build_network.py
-cd ../bmtk_test/
+cd ../test/
 python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.json
 assert_recently_edited_file "output/spikes.h5"
 
@@ -70,7 +70,7 @@ pwd
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 
 python build_network.py
-cd ../bmtk_test/
+cd ../test/
 python ../../../shared_components/scripts/run_bionet.py NEURON ../input/config.json
 assert_recently_edited_file "output/spikes.h5"
 
@@ -82,7 +82,7 @@ pwd
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 
 python build_network.py
-cd ../bmtk_test/
+cd ../test/
 python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.json
 assert_recently_edited_file "output/spikes.h5"
 assert_recently_edited_file "output/membrane_potential.h5"
@@ -130,8 +130,8 @@ echo "+++++++++++++++++++++++++++++++++++++++++++"
 
 
 python build_network.py
-python run_pointnet.py 
-assert_recently_edited_file "output/spikes.h5"
+########python run_pointnet.py 
+########assert_recently_edited_file "output/spikes.h5"
 
 
 if [ "$1" = "-all" ]
