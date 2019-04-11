@@ -39,7 +39,7 @@ assert_recently_edited_file ()
 #######################################################################
 
 
-cd sim_tests/intfire/one_cell_iclamp/bmtk_build/
+cd sim_tests/intfire/one_cell_iclamp_nest/bmtk_build/
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 pwd
@@ -51,7 +51,7 @@ python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.jso
 assert_recently_edited_file "output/spikes.h5"
 
 
-cd ../../ten_cells_iclamp/bmtk_build/
+cd ../../ten_cells_iclamp_nest/bmtk_build/
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 pwd
@@ -63,7 +63,7 @@ python ../../../shared_components/scripts/run_bionet.py NEST ../input/config.jso
 assert_recently_edited_file "output/spikes.h5"
 
 
-cd ../../ten_cells_spikes/bmtk_build/
+cd ../../ten_cells_spikes_nrn/bmtk_build/
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 pwd
@@ -75,7 +75,7 @@ python ../../../shared_components/scripts/run_bionet.py NEURON ../input/config.j
 assert_recently_edited_file "output/spikes.h5"
 
 
-cd ../../ten_cells_spikes2/bmtk_build/
+cd ../../ten_cells_spikes_nest/bmtk_build/
 echo
 echo "+++++++++++++++++++++++++++++++++++++++++++"
 pwd

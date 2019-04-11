@@ -17,5 +17,8 @@
         "node_types_file": "$NETWORK_DIR/one_cell_iclamp_node_types.csv"
       }
     ]
-  }
+  },
+  
+
+  "target_simulator": "NEST"
 }
