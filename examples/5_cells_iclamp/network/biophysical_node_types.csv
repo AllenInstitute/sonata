@@ -1,6 +1,6 @@
-node_type_id model_processing model_type model_template morphology ei model_name
-104 aibs_perisomatic biophysical nml:Cell_473862421.cell.nml Pvalb_469628681_m i PV2
-100 aibs_perisomatic biophysical nml:Cell_472363762.cell.nml Scnn1a_473845048_m e Scnn1a
-101 aibs_perisomatic biophysical nml:Cell_473863510.cell.nml Rorb_325404214_m e Rorb
-102 aibs_perisomatic biophysical nml:Cell_473863035.cell.nml Nr5a1_471087815_m e Nr5a1
-103 aibs_perisomatic biophysical nml:Cell_472912177.cell.nml Pvalb_470522102_m i PV1
+node_type_id ei model_processing morphology model_template model_type model_name
+104 i aibs_perisomatic Pvalb_469628681_m nml:Cell_473862421.cell.nml biophysical PV2
+100 e aibs_perisomatic Scnn1a_473845048_m nml:Cell_472363762.cell.nml biophysical Scnn1a
+101 e aibs_perisomatic Rorb_325404214_m nml:Cell_473863510.cell.nml biophysical Rorb
+102 e aibs_perisomatic Nr5a1_471087815_m nml:Cell_473863035.cell.nml biophysical Nr5a1
+103 i aibs_perisomatic Pvalb_470522102_m nml:Cell_472912177.cell.nml biophysical PV1

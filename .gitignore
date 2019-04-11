@@ -12,3 +12,15 @@ examples/**/output/config.json
 .cache
 **/mechanisms/x86_64
 .ipynb_checkpoints/
+/examples/sim_tests/intfire/*/test/x86_64
+/examples/sim_tests/intfire/*/test/LEMS*.xml
+/examples/sim_tests/intfire/*/test/*.dat
+/examples/sim_tests/intfire/*/test/report*txt
+/examples/sim_tests/intfire/*/test/*spikes
+/examples/sim_tests/intfire/*/test/*.net.nml
+/examples/sim_tests/intfire/*/test/*_nrn.py
+/examples/sim_tests/intfire/*/test/*.mod
+/examples/sim_tests/intfire/*/test/output/*h5
+/examples/sim_tests/intfire/*/test/output/log.txt
+/examples/sim_tests/intfire/*/test/output/*dat
+/examples/checkouth5.sh
