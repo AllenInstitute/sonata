@@ -1,0 +1,20 @@
+{
+  "point_nodes": {
+    "model_type": "point_process"
+  },
+  "e_nodes": {
+    "model_type": "point_process",
+    "ei": "e"
+  },
+  "pre": {
+    "population": "pre"
+  },
+  "post": {
+    "population": "post"
+  },
+  "recorded_cells": {
+      "population": "post",
+      "node_id": [0, 1, 2, 3, 4]
+  }
+
+}
