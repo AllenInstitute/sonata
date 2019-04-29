@@ -134,18 +134,14 @@ external.add_nodes(N=100, model_type='virtual', ei='e')
 cm = external.add_edges(target=internal.nodes(ei='e'), source=external.nodes(),
                         connection_rule=lambda *_: np.random.binomial(1, .7),
                         dynamics_params='ExcToExc.json',
-                        model_template='static_synapse',
-                        # syn_weight=50.0,
-                        delay=2.0)
+                        model_template='static_synapse')
 cm.add_properties('syn_weight', rule=50.0, dtypes=np.float)
 
 
 cm = external.add_edges(target=internal.nodes(ei='i'), source=external.nodes(),
                         connection_rule=lambda *_: np.random.binomial(1, .7),
                         dynamics_params='ExcToInh.json',
-                        model_template='static_synapse',
-                        # syn_weight=75.0,
-                        delay=2.0)
+                        model_template='static_synapse')
 cm.add_properties('syn_weight', rule=65.0, dtypes=np.float)
 
 

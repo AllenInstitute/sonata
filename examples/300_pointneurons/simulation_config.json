@@ -20,7 +20,7 @@
     "v_init": -80
   },
 
-  "node_sets_file": "node_sets.json",
+  "node_sets_file": "$BASE_DIR/node_sets.json",
 
   "inputs": {
     "external_spike_trains": {
