@@ -11,4 +11,5 @@ plot_spikes('network/internal_nodes.h5',
             'output/spikes.h5', 
             group_key='model_name', 
             legend=False,
-            title=title)
+            title=title,
+            font_size=13)

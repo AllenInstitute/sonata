@@ -34,3 +34,5 @@ examples/**/output/config.json
 /examples/300_pointneurons/x86_64
 /examples/300_pointneurons/comparison_V_m.png
 /examples/300_pointneurons/sim.net.nml
+/examples/300_pointneurons/output/membrane_potential.h5
+/examples/300_pointneurons/output/spikes.h5
