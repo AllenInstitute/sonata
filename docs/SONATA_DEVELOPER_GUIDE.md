@@ -548,7 +548,7 @@ For model_processing=*"fullaxon"*, the biophysical neuron will construct and sim
 
 **x, y, z** - position of the soma in world coordinates.
 
-**orientation** [4 FLOAT] - (w, x, y, z) quaternion with the local to world rotation of the morphology around the soma center.
+**orientation_[w|x|y|z]** - quaternion with the local to world rotation of the morphology around the soma center.
 
 To place morphologies in world coordinates, a translation is applied first to move each morphology's soma center to (0, 0, 0) in its local coordinates system.
 Then, the rotation implied by this quaternion is applied to the morphology.
