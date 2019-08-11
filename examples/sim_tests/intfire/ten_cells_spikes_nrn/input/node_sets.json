@@ -1,0 +1,9 @@
+{
+  "point_nodes": {
+    "model_type": "point_process"
+  },
+  "e_nodes": {
+    "model_type": "point_process",
+    "ei": "e"
+  }
+}

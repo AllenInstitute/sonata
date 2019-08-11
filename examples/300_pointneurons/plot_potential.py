@@ -33,7 +33,8 @@ def plot_vars(file_names, cell_var='v', gid_list=[], t_min=None, t_max=None):
     for fn in file_names:
         try:
             cell_var_files.append(CellVarsFile(fn, h5_root="/report/internal"))
-        except KeyError:
+        except KeyError as e:
+            print('Exception: %s'%e)
             cell_var_files.append(CellVarsFile(fn))
 
     # get first spike file and properties
@@ -47,6 +48,14 @@ def plot_vars(file_names, cell_var='v', gid_list=[], t_min=None, t_max=None):
         for i, cvf in enumerate(cell_var_files):
             # plot all traces
             ax[subplot].plot(cvf.time_trace, cvf.data(gid, cell_var), label=file_names[i])
+            time_steps = cvf.time_trace
+            data = cvf.data(gid, cell_var)
+            fn = 'output/gid_%s.dat'%gid
+            f = open(fn,'w')
+            print('Writing %i points to %s'%(len(time_steps), fn))
+            for ti in range(len(time_steps)):
+                f.write('%s\t%s\n'%(time_steps[ti]/1000,data[ti]/1000))
+            f.close()
 
         ax[subplot].yaxis.set_label_position("right")
         ax[subplot].set_ylabel('gid {}'.format(gid), fontsize='xx-small')
@@ -58,6 +67,10 @@ def plot_vars(file_names, cell_var='v', gid_list=[], t_min=None, t_max=None):
             # Use the last plot to get the legend
             handles, labels = ax[subplot].get_legend_handles_labels()
             fig.legend(handles, labels, loc='upper right')
+            
+    for cvf in cell_var_files:
+        # Note: depends on: https://github.com/AllenInstitute/bmtk/pull/73
+        cvf.close()
 
     plt.show()
 
