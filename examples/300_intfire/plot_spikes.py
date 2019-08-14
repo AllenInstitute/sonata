@@ -1,3 +1,4 @@
-from bmtk.analyzer.visualization.spikes import plot_spikes
+from bmtk.analyzer.spike_trains import plot_raster
 
-plot_spikes('network/v1_nodes.h5', 'network/v1_node_types.csv', 'output/spikes.h5', group_key='model_name')
+
+plot_raster(config_file='config.json')
