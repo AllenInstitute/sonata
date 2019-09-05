@@ -25,6 +25,7 @@ import json
 import shutil
 import re
 import copy
+import sys
 
 
 def from_json(config_file, validator=None):
@@ -34,9 +35,9 @@ def from_json(config_file, validator=None):
     :param validator: A SimConfigValidator object to validate json file. Won't validate if set to None
     :return: A dictionary, verified against json validator and with manifest variables resolved.
     """
-    if isinstance(config_file, file):
+    if is_file(config_file):
         conf = json.load(config_file)
-    elif isinstance(config_file, basestring):
+    elif is_string(config_file):
         conf = json.load(open(config_file, 'r'))
     else:
         raise Exception('{} is not a file or file path.'.format(config_file))
@@ -47,6 +48,21 @@ def from_json(config_file, validator=None):
 
     # Will resolve manifest variables and validate
     return from_dict(conf, validator)
+
+
+def is_file(f):
+    if sys.version_info[0] == 2:
+        return isinstance(f, file)
+    else:
+        return hasattr(f, 'read')
+
+
+def is_string(s):
+    if sys.version_info[0] == 2:
+        str_type = basestring
+    else:
+        str_type = str
+    return isinstance(s, str_type)
 
 
 def from_dict(config_dict, validator=None):
@@ -71,7 +87,7 @@ def from_dict(config_dict, validator=None):
     # In our work with Blue-Brain it was agreed that 'network' and 'simulator' parts of config may be split up into
     # separate files. If this is the case we build each sub-file separately and merge into this one
     for childconfig in ['network', 'simulation']:
-        if childconfig in conf and isinstance(conf[childconfig], basestring):
+        if childconfig in conf and is_string(conf[childconfig]):
             # Try to resolve the path of the network/simulation config files. If an absolute path isn't used find
             # the file relative to the current config file. TODO: test if this will work on windows?
             conf_str = conf[childconfig]
@@ -153,7 +169,7 @@ def __recursive_insert(json_obj, manifest):
     :param manifest: A dictionary of variable values
     :return: A new json dictionar config file with variables resolved
     """
-    if isinstance(json_obj, basestring):
+    if is_string(json_obj):
         return __find_variables(json_obj, manifest)
 
     elif isinstance(json_obj, list):
@@ -191,6 +207,3 @@ def __find_variables(json_str, manifest):
             json_str = json_str.replace(var.group(), manifest[var_lookup])
 
     return json_str
-
-
-
