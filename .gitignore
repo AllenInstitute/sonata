@@ -36,3 +36,4 @@ examples/**/output/config.json
 /examples/300_pointneurons/sim.net.nml
 /examples/300_pointneurons/output/membrane_potential.h5
 /examples/300_pointneurons/output/spikes.h5
+/tutorials/pySonata/output
