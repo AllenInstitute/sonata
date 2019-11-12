@@ -861,6 +861,7 @@ The "run" block specifies some global parameters of the simulation run, such as 
         "dt": 0.1,
         "dL": 20,
         "spike_threshold": -15,
+        "random_seed": none
     },
 
 ### Conditions Configuration
@@ -975,6 +976,13 @@ The "inputs" block of the simulation config allows the definition of inputs to t
     <td>node_set</td>
     <td>The name of the  node_set defining the input.  In some cases, such as spike input types, all members of the node_set should be model_type=“virtual”.  </td>
     <td>string</td>
+    <td>False</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>random_seed</td>
+    <td>A seed value for a random generator, when trying to ensure reproducibility of an input with stochastic components.</td>
+    <td>integer or hashable string</td>
     <td>False</td>
     <td></td>
   </tr>
