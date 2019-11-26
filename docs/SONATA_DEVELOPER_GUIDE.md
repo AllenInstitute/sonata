@@ -714,13 +714,13 @@ Table 2: Layout of the file format for describing edges.
 
 **model_template** - String name of the template to create an object from parameters in dynamics_params. Can have NULL entries.
 
-**afferent_center_position** - For edges that represent synapses in morphologically detailed networks, this attributes specified the x, y, z position in network global spatial coordinates of the synapse along the dendrite axis of the post-synaptic neuron. For synapses on the soma this location is at the soma center.
+**afferent_center_[x|y|z]** - For edges that represent synapses in morphologically detailed networks, these attributes specify `x`, `y`, `z` position in network global spatial coordinates of the synapse along the dendrite axis of the post-synaptic neuron. For synapses on the soma this location is at the soma center.
 
-**afferent_surface_position** - Same as afferent_center_position, but the for the synapse location on the soma or dendrite surface.
+**afferent_surface_[x|y|z]** - Same as **afferent_center_[x|y|z]**, but the for the synapse location on the soma or dendrite surface.
 
-**efferent_center_position** - Same as afferent_center_position but for the synapse position at the axon of the presynaptic cell.
+**efferent_center_[x|y|z]** - Same as **afferent_center_[x|y|z]**, but for the synapse position at the axon of the presynaptic cell.
 
-**efferent_surface_position** - Same as efferent_center_position, but the for the synapse location on the axon surface
+**efferent_surface_[x|y|z]** - Same as **efferent_center_[x|y|z]**, but the for the synapse location on the axon surface.
 
 Note, that similar to the nodes description, if a variable exists in both the edges HDF5 file and the edge_types CSV file, then the HDF5 file will override the latter.
 

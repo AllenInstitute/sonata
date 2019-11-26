@@ -23,10 +23,10 @@ with open('README.md', 'r') as fhandle:
 setup(
     name='sonata',
     version='0.0.1',
-    description='SONATA Data Format',
+    description='SONATA Data Format API',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/AllenInstitute/bmtk',
+    url='https://github.com/AllenInstitute/sonata',
     package_data={'': ['*.md', '*.txt', '*.cfg', '**/*.json', '**/*.hoc']},
     tests_require=['pytest'],
     install_requires=[

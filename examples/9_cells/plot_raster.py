@@ -1,3 +1,4 @@
-from bmtk.analyzer.spike_trains import raster_plot
+from bmtk.analyzer.spike_trains import plot_raster
 
-raster_plot('network/cortex_nodes.h5', 'network/cortex_node_types.csv', 'output/spikes.h5')
+
+plot_raster(config_file='config.json')
