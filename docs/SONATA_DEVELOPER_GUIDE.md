@@ -863,6 +863,59 @@ The "run" block specifies some global parameters of the simulation run, such as 
         "spike_threshold": -15,
     },
 
+<table>
+  <tr>
+    <td>Key</td>
+    <td>Description</td>
+    <td>Type</td>
+    <td>Required</td>
+    <td>Default</td>
+  </tr>
+  <tr>
+    <td>tstart</td>
+    <td>Start time of the simulation.</td>
+    <td>float</td>
+    <td>False</td>
+    <td>0.0</td>
+  </tr>
+  <tr>
+    <td>tstop</td>
+    <td>Stop time of the simulation.</td>
+    <td>float</td>
+    <td>True</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dt</td>
+    <td>Time step size.</td>
+    <td>float</td>
+    <td>True</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dL</td>
+    <td>For compartmental cell models, used to define the minimum segment size of each given section. For a section of length L > dL, the section will be partitioned into 1 + 2 \* int(section.L / (2\*dL)) segments.</td>
+    <td>float</td>
+    <td>False</td>
+    <td> </td>
+  </tr>
+  <tr>
+    <td>spike_threshold</td>
+    <td>The default membrane potential value at which it can be assumed an action potential can be recorded.</td>
+    <td>float</td>
+    <td>False</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>block_step_size</td>
+    <td>Used by the simulator to determine after how many time steps should it save the simulation and results (assume such behavior is available).</td>
+    <td>int</td>
+    <td>False</td>
+    <td></td>
+  </tr>
+</table>
+
+
 ### Conditions Configuration
 
 This block specifies optional global parameters with reserved meaning associated with manipulation of the "in silico preparation".
