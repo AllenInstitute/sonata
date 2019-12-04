@@ -17,3 +17,30 @@ For further details on SONATA, see:
 
 https://github.com/AllenInstitute/sonnet/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
 
+
+## Software Development Tools
+
+* [pySONATA](https://github.com/AllenInstitute/sonata/tree/master/src/pysonata) - A python based API for reading and writing SONATA files. See README for install instructions.
+
+* [libSONATA](https://github.com/BlueBrain/libsonata) - A C++ library for reading SONATA files, including Python bindings. See README for install instructions.
+
+* [NDX Simulation Output](https://github.com/ben-dichter-consulting/ndx-simulation-output) - A NWB extension for converting NWB:N files to and from SONATA.
+
+
+## Software that has SONATA support (not exhaustive)
+
+* [PyNN](https://neuralensemble.org/PyNN/)
+
+* [Brion/Brain](https://github.com/BlueBrain/Brion)
+
+* [Brain Modeling Toolkit (BMTK)](https://github.com/AllenInstitute/bmtk)
+
+* [NetPyNE](http://www.netpyne.org/)
+
+* [RTNeuron](https://github.com/BlueBrain/RTNeuron)
+
+* [pyNeuroML](https://github.com/NeuroML/pyNeuroML)
+
+
+
+
