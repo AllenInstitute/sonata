@@ -3,18 +3,17 @@ import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 def plot_data(reports_file, y_axis, title):
     cellvar_h5 = h5py.File(reports_file, 'r')
-    gids = np.array(cellvar_h5['/mapping/gids'])
-    soma_locs = np.array(cellvar_h5['/mapping/index_pointer'])  # location of soma
-    t_start = cellvar_h5['/mapping/time'][0]
-    t_stop = cellvar_h5['/mapping/time'][1]
-    dt = cellvar_h5['/mapping/time'][2]
+    gids = np.array(cellvar_h5['/report/biophysical/mapping/node_ids'])
+    soma_locs = np.array(cellvar_h5['/report/biophysical/mapping/index_pointer'])  # location of soma
+    t_start = cellvar_h5['/report/biophysical/mapping/time'][0]
+    t_stop = cellvar_h5['/report/biophysical/mapping/time'][1]
+    dt = cellvar_h5['/report/biophysical/mapping/time'][2]
     time_steps = np.linspace(t_start, t_stop, (t_stop-t_start)/float(dt))
 
     n_plots = len(gids)
-    data_table = np.array(cellvar_h5['/data'])
+    data_table = np.array(cellvar_h5['/report/biophysical/data'])
     f, axarr = plt.subplots(n_plots, 1)
     f.suptitle(title)
     for i, (gid, soma_index) in enumerate(zip(gids, soma_locs)):
