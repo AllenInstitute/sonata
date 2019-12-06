@@ -579,9 +579,9 @@ The namespace of parameters depends on model_type, and are defined as follows.
 
 **For `biophysical` models** defined according to the *nml* schema (see above), names take the form **id**.**attribute**, where **id** is the id of an element and **attribute** an attribute of said element in the nml file defining the biophysical model.  For example “g_pas_apic.erev” refers to the “erev” attribute of the “g_pas_apic” element of the nml biophysics block defining the channel composition of the model.  It is worth noting that namespaces defined in this way apply equally to dynamics_params overrides at the node_types and node levels for all model types.
 
-For `biophysical` models defined according to the *bmtk* (see above), the namespace definition is to be filled in by the Allen folks.
+For `biophysical` models defined according to the *bmtk* (see above).
 
-For `biophysical` models defined according to the *hoc* (see above), the namespace definition is to be filled in by the Allen folks.
+For `biophysical` models defined according to the *hoc* (see above).
 
 #### Nodes - Enum datatypes
 
@@ -1370,12 +1370,3 @@ For model_processing="aibs_perisomatic”, the axon is removed, and is replaced 
 
 For model_processing="...”, ...
 
-### Model Template Structure
-
-For the case that the model_template follows the *hoc* schema, the following is the expected structure of the hoc template.
-
-Allen folks to fill in
-
-For the case that the model_template follows the *bmtk* schema, the following is the expected structure of the hoc template.
-
-Allen folks to fill in

@@ -7,7 +7,7 @@ The design and architecture of SONATA  builds on  both organizations’ expertis
 
 The SONATA Data Format provides:
 
-* Facilities for representing nodes (cells) and edges (synapses/junctions) of a network. It uses table-based data structures, hdf5 and csv, to represent nodes, edges and their respective properties. Furthermore indexing procedures  are specified to enable fast, parallelizable, and efficient partial lookup of individual nodes and edges. The use of hdf5 provides efficiency both in file size and IO time. , The format includes specific properties and naming conventions, but also allows modelers to extend node and edge model properties as they desire, to ensure models can be used with a variety of simulation frameworks and use cases.
+* Facilities for representing nodes (cells) and edges (synapses/junctions) of a network. It uses table-based data structures, hdf5 and csv, to represent nodes, edges and their respective properties. Furthermore, indexing procedures  are specified to enable fast, parallelizable, and efficient partial lookup of individual nodes and edges. The use of hdf5 provides efficiency both in file size and IO time. The format includes specific properties and naming conventions, but also allows modelers to extend node and edge model properties as they desire, to ensure models can be used with a variety of simulation frameworks and use cases.
 
 * A JSON-based file format for configuring simulations, including specifying variables to record from, and stimuli to apply. 
 
