@@ -37,3 +37,5 @@ examples/**/output/config.json
 /examples/300_pointneurons/output/membrane_potential.h5
 /examples/300_pointneurons/output/spikes.h5
 /tutorials/pySonata/output
+/examples/300_pointneurons/spikes_oldformat.h5
+/examples/shared_components/mechanisms/modfiles/x86_64
