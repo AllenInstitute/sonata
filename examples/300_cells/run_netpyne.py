@@ -12,12 +12,15 @@ from netpyne.conversion import sonataImport
 import h5py
 import json
 import numpy as np
+import os
 from matplotlib import pyplot as plt
 
 
-rootFolder = '/home/padraig/git/sonataPGmaster/examples/300_cells/'
-outFolder = '/home/padraig/git/sonataPGmaster/examples/300_cells/output'
-sonataConfigFile = rootFolder+'config.json'
+rootFolder = os.path.abspath('.')
+outFolder = os.path.abspath('output')+'/'
+sonataConfigFile = rootFolder+'/config.json'
+
+print('Loading SONATA network from %s'%sonataConfigFile)
 
 # Options
 importSonataModel = 1
@@ -27,7 +30,7 @@ saveJsonConns = 0
 runPlot = 1
 compareRaster = 1
 compareTraces = 0
-saveSpikesToBMTK = 0
+saveSpikesToBMTK = 1
 plotSpikesUsingBMTK = 0
 
 # Improt SONATA model and instantiate in netpyne
@@ -142,7 +145,7 @@ if compareRaster:
     netpyneSpkid = np.array(d['spkid'])
 
     # load spiks from bmtk HDF5
-    dataFile=rootFolder+'output/spikes.h5'
+    dataFile=rootFolder+'/output/spikes.h5'
     h5data = h5py.File(dataFile, 'r')
     bmtkSpkt = np.array(h5data['spikes']['timestamps']) 
     bmtkSpkid = np.array(h5data['spikes']['gids']) 
@@ -179,7 +182,7 @@ if compareTraces:
         json.dump(netpyneTracesList, f)
 
     # load traces from bmtk HDF5
-    dataFile=rootFolder+'output/membrane_potential.h5'
+    dataFile=rootFolder+'/output/membrane_potential.h5'
     h5data = h5py.File(dataFile, 'r')
     bmtkTraces = np.array(h5data['data'])  # shape (30000, 9)
 
