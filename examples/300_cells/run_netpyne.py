@@ -147,8 +147,8 @@ if compareRaster:
     # load spiks from bmtk HDF5
     dataFile=rootFolder+'/output/spikes.h5'
     h5data = h5py.File(dataFile, 'r')
-    bmtkSpkt = np.array(h5data['spikes']['timestamps']) 
-    bmtkSpkid = np.array(h5data['spikes']['gids']) 
+    bmtkSpkt = np.array(h5data['spikes']['internal']['timestamps']) 
+    bmtkSpkid = np.array(h5data['spikes']['internal']['node_ids']) 
 
     # plot both spike times overlayed
     recordStep = sim.cfg.recordStep
