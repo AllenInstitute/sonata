@@ -3,10 +3,14 @@ import numpy as np
 
 from bmtk.builder import NetworkBuilder
 from bmtk.builder.bionet import SWCReader
-from bmtk.utils.io.spike_trains import PoissonSpikesGenerator
 from bmtk.builder.auxi.node_params import positions_columinar, xiter_random
 
+
 build_recurrent_edges = True
+
+# Use seed 0 to allows replicable networks everytime it is rebuilt. Removing or changing seed value will build
+# a network with similar architect but different connection probabilities.
+np.random.seed(0)
 
 print('Building internal network')
 # List of non-virtual cell models
