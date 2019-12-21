@@ -772,8 +772,9 @@ The config file is a .json file that defines the relative location of each part 
 
     {
         "target_simulator":"NEURON",
+        "target_simulator_version": ">=7.4",
 
-target_simulator can be "NEURON", “PyNN”, “NEST”, etc.  It specifies the intended target simulator of the circuit description.  For now, this field is intended as a declaration, and an implementation may decide to throw an error for unsupported targets.  In practice, mechanism and parameter names are tailored to the given target simulator.  For model_type=biophysical NEURON is supported, but not PyNN or NEST.
+target_simulator can be "NEURON", “PyNN”, “NEST”, etc.  It specifies the intended target simulator of the circuit description.  For now, this field is intended as a declaration, and an implementation may decide to throw an error for unsupported targets.  In practice, mechanism and parameter names are tailored to the given target simulator.  For model_type=biophysical NEURON is supported, but not PyNN or NEST. Similarly one can specifying which version(s) are required to reproduce the results using the _optional_ target_simulator_version attribute.
 
 The "manifest" section of the config file provides a convenient handle on setting variables that point to base paths.  These variables can be then used in the rest of the config file to point to various directories that share the first portion of the path.
 
