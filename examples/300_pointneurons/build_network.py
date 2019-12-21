@@ -2,9 +2,12 @@ import os
 import numpy as np
 
 from bmtk.builder import NetworkBuilder
-from bmtk.builder.bionet import SWCReader
-from bmtk.utils.io.spike_trains import PoissonSpikesGenerator
 from bmtk.builder.auxi.node_params import positions_columinar, xiter_random
+
+
+# Use seed 0 to allows replicable networks everytime it is rebuilt. Removing or changing seed value will build
+# a network with similar architect but different connection probabilities.
+np.random.seed(0)
 
 build_recurrent_edges = True
 
@@ -37,32 +40,6 @@ cell_models = [
         'dynamics_params': '473862421_point.json'
     }
 ]
-
-'''
-morphologies = {p['model_name']: SWCReader(os.path.join('../shared_components/morphologies',
-                                                        '{}.swc'.format(p['morphology'])))
-                for p in cell_models}
-def build_edges(src, trg, sections=['basal', 'apical'], dist_range=[50.0, 150.0]):
-    """Function used to randomly assign a synaptic location based on the section (soma, basal, apical) and an
-    arc-length dist_range from the soma. This function should be passed into the network and called during the build
-    process.
-
-    :param src: source cell (dict)
-    :param trg: target cell (dict)
-    :param sections: list of target cell sections to synapse onto
-    :param dist_range: range (distance from soma center) to place
-    :return:
-    """
-    # Get morphology and soma center for the target cell
-    swc_reader = morphologies[trg['model_name']]
-    target_coords = [trg['x'], trg['y'], trg['z']]
-
-    sec_ids, sec_xs = swc_reader.choose_sections(sections, dist_range)  # randomly choose sec_ids
-    coords = swc_reader.get_coord(sec_ids, sec_xs, soma_center=target_coords)  # get coords of sec_ids
-    dist = swc_reader.get_dist(sec_ids)
-    swctype = swc_reader.get_type(sec_ids)
-    return sec_ids, sec_xs, coords[0][0], coords[0][1], coords[0][2], dist[0], swctype[0]
-'''
 
 # Build a network of 300 biophysical cells to simulate
 internal = NetworkBuilder("internal")

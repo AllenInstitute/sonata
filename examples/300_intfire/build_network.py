@@ -149,4 +149,4 @@ tw.add_edges(source=tw.nodes(), target=net.nodes(model_name='LIF_inh'),
 
 tw.build()
 tw.save(output_dir='network')
-print 'done'
+print('done')
