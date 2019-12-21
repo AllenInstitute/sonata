@@ -4,6 +4,11 @@ import numpy as np
 from bmtk.builder.networks import NetworkBuilder
 
 
+# Use seed 0 to allows replicable networks everytime it is rebuilt. Removing or changing seed value will build
+# a network with similar architect but different connection probabilities.
+np.random.seed(0)
+
+
 # Step 1: Create a v1 mock network of 14 cells (nodes) with across 7 different cell "types"
 net = NetworkBuilder("v1")
 
@@ -16,6 +21,7 @@ net.add_nodes(N=60, model_name='LIF_inh', location='VisL4', ei='i',
               model_type='point_process',
               model_template='nrn:IntFire1',
               dynamics_params='IntFire1_inh_1.json')
+
 
 def recurrent_connections(src_cells, trg_cell, n_syns):
     if np.random.random() > 0.3:
@@ -33,8 +39,6 @@ net.add_edges(source={'ei': 'i'}, target={'ei': 'i', 'model_type': 'point_proces
               weight_function='wmax',
               delay=2.0,
               dynamics_params='instanteneousInh.json')
-
-
 
 net.add_edges(source={'ei': 'i'}, target={'ei': 'e', 'model_type': 'point_process'},
               iterator='all_to_one',
@@ -145,4 +149,4 @@ tw.add_edges(source=tw.nodes(), target=net.nodes(model_name='LIF_inh'),
 
 tw.build()
 tw.save(output_dir='network')
-print 'done'
+print('done')

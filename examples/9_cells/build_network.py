@@ -3,9 +3,15 @@ import numpy as np
 
 from bmtk.builder import NetworkBuilder
 from bmtk.builder.bionet import SWCReader
-from bmtk.utils.io.spike_trains import PoissonSpikesGenerator
+from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
+# from bmtk.utils.io.spike_trains import PoissonSpikesGenerator
 
 use_nml = True  # True to build network with NEUROML files, false to build network with Cell-Types json files
+
+
+# Use seed 0 to allows replicable networks everytime it is rebuilt. Removing or changing seed value will build
+# a network with similar architect but different connection probabilities.
+np.random.seed(0)
 
 cell_models = [
     {
@@ -71,8 +77,9 @@ if not os.path.exists('inputs/exc_spike_trains.h5'):
     # Build spike-trains for excitatory virtual cells
     if not os.path.exists('inputs'):
         os.mkdir('inputs')
-    psg = PoissonSpikesGenerator(range(10), 10.0, tstop=3000.0)
-    psg.to_hdf5('inputs/exc_spike_trains.h5')
+    psg = PoissonSpikeGenerator(population='excvirt')
+    psg.add(node_ids=range(10), firing_rate=10.0, times=(0.0, 3.0))
+    psg.to_sonata('inputs/exc_spike_trains.h5')
 
 
 # Inhibitory connections, build this as a separate network so we can test simulation with only excitatory input and
@@ -95,5 +102,10 @@ if not os.path.exists('inputs/inh_spike_trains.h5'):
     # Build spike-trains for inhibitory virtual cells
     if not os.path.exists('inputs'):
         os.mkdir('inputs')
-    psg = PoissonSpikesGenerator(range(10), 10.0, tstop=3000.0)
-    psg.to_hdf5('inputs/inh_spike_trains.h5')
+    psg = PoissonSpikeGenerator(population='inhvirt')
+    psg.add(node_ids=range(10), firing_rate=10.0, times=(0.0, 3.0))
+    # psg = PoissonSpikeGenerator(range(10), 10.0, tstop=3000.0)
+    psg.to_sonata('inputs/inh_spike_trains.h5')
+
+    #psg = PoissonSpikeGenerator(range(10), 10.0, tstop=3000.0)
+    #psg.to_hdf5('inputs/inh_spike_trains.h5')

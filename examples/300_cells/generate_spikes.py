@@ -1,7 +1,10 @@
 import os
-from bmtk.utils.io.spike_trains import PoissonSpikesGenerator
+from bmtk.utils.reports.spike_trains import PoissonSpikeGenerator
 
 if not os.path.exists('inputs'):
     os.mkdir('inputs')
-psg = PoissonSpikesGenerator(range(100), 10.0, tstop=3000.0)
-psg.to_hdf5('inputs/external_spike_trains.h5')
+
+psg = PoissonSpikeGenerator(population='external')
+psg.add(node_ids=range(100), firing_rate=10.0, )
+psg.add(node_ids=range(100), firing_rate=10.0, times=(0.0, 3.0))
+psg.to_sonata('inputs/external_spike_trains.h5')
