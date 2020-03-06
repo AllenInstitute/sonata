@@ -40,10 +40,10 @@ Date: Q1-2018
     * [Specifying Targets - Sub-groups of Neurons](#specifying-targets---sub-groups-of-neurons)
     * [Simulation input - Stimuli](#simulation-input---stimuli)
     * [Simulation output - Reports](#simulation-output---reports)
-        * [**Example**](#example)
-        * [**Node Sets** File](#node-sets-file)
+        * [Example](#example)
+        * [Node Sets File](#node-sets-file)
             * [An Example of a Node Set File](#an-example-of-a-node-set-file)
-    * [**Output file formats**](#output-file-formats)
+    * [Output file formats](#output-file-formats)
         * [Spike file](#spike_file)
         * [Frame oriented, node element recordings](#frame-oriented-node-element-recordings)
         * [Extracellular report](#extracellular-report)
@@ -1212,7 +1212,7 @@ Some reserved attributes are the following:
 </table>
 
 
-#### **Example**
+#### Example
 
         "reports": {
             "calcium_bio": {
@@ -1246,7 +1246,7 @@ Some reserved attributes are the following:
         },
 
 
-#### **Node Sets** File
+#### Node Sets File
 
 A *node sets* json file contains subsets of cells that act as targets for
 different reports or stimulations, or can also be used to name and define the
@@ -1309,7 +1309,7 @@ the Node Set namespace, and needn’t be declared explicitly.
         "combined": ["bio_layer45", "V1_point_prime"]
     }
 
-### **Output file formats**
+### Output file formats
 
 Each report name in the "reports" block results in a separate HDF5 file with
 the filename `<report_name>.h5` written to the output directory (unless the
