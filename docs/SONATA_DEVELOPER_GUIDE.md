@@ -6,6 +6,51 @@ Version 0.1
 
 Date: Q1-2018
 
+
+* [Abstract](#abstract)
+* [Mission Statement](#mission-statement)
+* [Common conventions](#common-conventions)
+    * [HDF5](#hdf5)
+    * [CSV](#csv)
+* [Representing Circuits](#representing-circuits)
+    * [Representing biophysical neuron morphologies](#biophysical_morphologies)
+        * [SWC Format additional requirements:](#swc-format-additional-requirements)
+    * [Representing ion channel, point neuron and synapse models](#ion_channels)
+    * [Representing biophysical neuron channel distribution and composition](#biophysical_neuron_channels)
+        * [NeuroML](#neuroml)
+        * [Allen Cell Types Database JSON](#allen-cell-types-database-json)
+        * [HOC template](#hoc-template)
+    * [Representing networks of neurons](#neuron_networks)
+        * [Overview](#overview)
+        * [Representing nodes](#neuron_networks_nodes)
+            * [Nodes - Required Attributes](#nodes---required-attributes)
+        * [Nodes - Optional Reserved Attributes](#nodes---optional-reserved-attributes)
+        * [Nodes - Enum datatypes](#nodes---enum-datatypes)
+        * [Representing Edges](#neuron_networks_edges)
+            * [Edges - Required Attributes](#edges---required-attributes)
+        * [Edges - Optional Reserved Attributes](#edges---optional-reserved-attributes)
+            * [Edges - Optional indexing](#edges---optional-indexing)
+    * [Tying it all together - the network/circuit config file](#network_config)
+* [Representing Simulations](#simulations)
+    * [Specifying the Circuit/Network to Simulate](#specifying-the-circuitnetwork-to-simulate)
+    * [Time Stepping Parameters](#time-stepping-parameters)
+    * [Conditions Configuration](#conditions-configuration)
+    * [Output Configuration](#output-configuration)
+    * [Implementation Specific Parameters](#implementation-specific-parameters)
+    * [Specifying Targets - Sub-groups of Neurons](#specifying-targets---sub-groups-of-neurons)
+    * [Simulation input - Stimuli](#simulation-input---stimuli)
+    * [Simulation output - Reports](#simulation-output---reports)
+        * [**Example**](#example)
+        * [**Node Sets** File](#node-sets-file)
+            * [An Example of a Node Set File](#an-example-of-a-node-set-file)
+    * [**Output file formats**](#output-file-formats)
+        * [Spike file](#spike_file)
+        * [Frame oriented, node element recordings](#frame-oriented-node-element-recordings)
+        * [Extracellular report](#extracellular-report)
+* [Appendix](#appendix)
+    * [Background material](#background-material)
+    * [Valid Values for "model_processing"](#valid-values-for-model_processing)
+
 ## Abstract
 
 The need has arisen at both the Blue Brain Project (BBP) and the Allen Institute for Brain Science (AIBS) for efficient ways of representing circuits of neurons (composed of biophysically detailed neuron and point-neuron models) and the output of simulation thereof for analysis and visualization.  Such representations are not generally available as open-source tools in the computational neuroscience community, so both the BBP and AIBS have developed internally their own representations to meet these needs.  As the public release of these circuits is on both the AIBS and BBP roadmaps, it is desirable to converge on a data model to release these circuits, so as to provide a foundation to foster an emerging ecosystem of tools around the data model, developed by the AIBS, BBP and the community at large.
@@ -152,7 +197,7 @@ It is not required that the soma is located at 0,0,0 in the SWC file, but in cas
 
 It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.
 
-### <a name="ion_channels">Representing ion channel, point neuron and synapse models
+### <a name="ion_channels"></a>Representing ion channel, point neuron and synapse models
 
 Representation of point neuron models, synapses and ion channels depends on
 the target simulator.
@@ -165,7 +210,7 @@ To support reproducible random numbers in NEURON, it is required to define conve
 
 The forthcoming NeuroML/LEMS format shows promise for representing synapses and ion channels.  Adopting such representations promises simulator independence, and significant improvements for modernizing code-generation pipelines for NEURON, coreNEURON and NEST, and exotic compute architectures, such as GPU, SpiNNaker. However, this issue is recommended to be left to a later date, when LEMS has matured enough to represent stochastic synapses.
 
-### <a name="biophysical_neuron_channels">Representing biophysical neuron channel distribution and composition
+### <a name="biophysical_neuron_channels"></a>Representing biophysical neuron channel distribution and composition
 
 For representing the parameterization and distribution of ion channels and passive properties of neurons three formats will be supported: 1), an xml file using a NeuroML "biophysicalProperties" and “concentrationModel” block schema (cf [https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd](https://github.com/NeuroML/NeuroML2/blob/master/Schemas/NeuroML2/NeuroML_v2beta4.xsd) ) 2) a JSON file using Allen Cell Types Data Base schema. 3) a HOC template.
 
@@ -389,7 +434,7 @@ Example:
 
 https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=139653&file=/L5bPCmodelsEH/models/L5PCbiophys2.hoc#tabs-2
 
-### <a name="neuron_networks">Representing networks of neurons
+### <a name="neuron_networks"></a>Representing networks of neurons
 
 #### Overview
 
@@ -399,7 +444,7 @@ All nodes and edges, and likewise node and edge types can have be assigned  attr
 
 The details of how node and edge populations are defined and represented are described in the following sections.
 
-#### <a name="neuron_networks_nodes">Representing nodes
+#### <a name="neuron_networks_nodes"></a>Representing nodes
 
 In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
 
@@ -592,7 +637,7 @@ To work around this limitation, SONATA nodes/edges HDF5 files may use *explicit 
 Each attribute `/<population>/<group>/X` with integer datatype may have a corresponding attribute `/<population>/<group>/@library/X` with a limited set of string values.
 The group `@library` is reserved for this purpose.
 
-#### <a name="neuron_networks_edges">Representing Edges
+#### <a name="neuron_networks_edges"></a>Representing Edges
 
 Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
 
@@ -766,7 +811,7 @@ The source_to_target/range_to_edge_id dataset defines ranges of edges in the edg
 
 The datasets from the target_to_source group are defined symmetrically. From this symmetry is easy to infer that edges should be grouped by source, target pairs, otherwise an important overhead will be incurred in one or both of the indices.
 
-### <a name="network_config">Tying it all together - the network/circuit config file
+### <a name="network_config"></a>Tying it all together - the network/circuit config file
 
 The config file is a .json file that defines the relative location of each part of the network:
 
@@ -833,7 +878,7 @@ The network is defined by nodes and edges. In the example below, a V1 model is b
         }
     }
 
-## <a name="simulations">Representing Simulations
+## <a name="simulations"></a>Representing Simulations
 
 The simulation config file is a json file which ties together the definition of a simulation on a circuit.  It specifies the circuit to be used, simulator parameters, load balancing and time stepping information, stimuli (simulation input), reports (simulation output), and the specification of neuron targets (sub groups of neurons) in a node_sets_file.  Like the circuit_config.json, the simulation_config.json may contain a "manifest" block which defines paths to be re-used elsewhere in the .json file:
 
@@ -1311,7 +1356,7 @@ an integer and an optional float value.
     - **sorted** (dtype: bool, optional): Indicates whether the ids are sorted
     or not. Defaults to false if not present.
 * **/report/<population_name>/mapping/index_pointers** (dtype: uint64,
-  shape: N_nodes): Per node frame offsets.
+  shape: N_nodes+1): Per node frame offsets.
 * **/report/<population_name>/mapping/element_ids** (dtype: uint32,
   shape: N_values): All values referring to the same element must appear
   together.
@@ -1326,7 +1371,7 @@ For a node `node_ids[i]`, the data for all the recorded elements is determined
 by `data[index_pointer[i], index_pointer[i + 1]]`.
 
 For compartment reports, the values in `element_id[index_pointer[i],
-index_pointer[x + 1]]` and `element_pos[index_pointer[i], index_pointer[i + 1]]`
+index_pointer[i + 1]]` and `element_pos[index_pointer[i], index_pointer[i + 1]]`
 are used to specify the compartment’s section id and the relative position,
 respectively, for the node `i`. Note that for single compartment reports
 `element_id` and `element_pos` are just arrays of 1s. If the `element_pos`
@@ -1349,7 +1394,7 @@ Used when reporting variables that are not associated with the individual cells.
 
 The data for a particular electrode channel_id[i] found in data[i,:]
 
-## <a name="appendix">Appendix
+## <a name="appendix"></a>Appendix
 
 ### Background material
 
