@@ -393,7 +393,7 @@ https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=139653&file=/L5bPCm
 
 #### Overview
 
-We consider a network of neurons as a graph made up of of nodes (neurons) and edges (connections between the neurons). Nodes of a network can be arranged into multiple populations of neurons. For instance, a population may correspond to a brain region or a particular cell type.   The connectivity between a source population and a target population is defined by an edge population.  Nodes and edges in their respective populations are also assigned respective node and edge *types.  *Parameters assigned to node or edge types are inherited for all nodes or edges of the respective type. * *A given node or edge can be associated with one and only one node or edge type, respectively.
+We consider a network of neurons as a graph made up of of nodes (neurons) and edges (connections between the neurons). Nodes of a network can be arranged into multiple populations of neurons. For instance, a population may correspond to a brain region or a particular cell type.   The connectivity between a source population and a target population is defined by an edge population.  Nodes and edges in their respective populations are also assigned respective node and edge types.  Parameters assigned to node or edge types are inherited for all nodes or edges of the respective type. A given node or edge can be associated with one and only one node or edge type, respectively.
 
 All nodes and edges, and likewise node and edge types can have be assigned  attributes which define various aspects, such as position, rotation, type, modelparameters, etc. Nodes and edges inherit attributes from their respective types, but also override them. Some attributes are required, some are optional with reserved meaning, and others are entirely optional.  The entirely optional attributes can be added by the user for their own specific needs , and are typically ignored by the simulator software.  These optional attributes may be added by users simply for convenience to help them maintain the workflow through model building, simulation, and analysis.
 
@@ -401,7 +401,7 @@ The details of how node and edge populations are defined and represented are des
 
 #### <a name="neuron_networks_nodes">Representing nodes
 
-In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
+In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneous equations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
 
 A model_type attribute allows nodes to be configured as `biophysical`, `point_neuron`, etc. and also `virtual` one may be provided to specify external (or `virtual`) nodes that are not explicitly simulated but provide inputs to the network.
 
@@ -594,7 +594,7 @@ The group `@library` is reserved for this purpose.
 
 #### <a name="neuron_networks_edges">Representing Edges
 
-Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
+Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or more edge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
 
 The edge_types file is a CSV file of named columns. The edge_type_id column is required, and defines the edge_type_id of each row. To handle edges h5 files with multiple populations, a population column is also required to resolve collisions between edge_type_id’s among different populations. "Required" attributes must either appear in the HDF5 representation, or be defined in a column in the associated edges types CSV file.  The edge types CSV file may also include “optional reserved” column names which have specified interpretation and expected units. Apart from these reserved names, the user is free to define any number of additional named columns to suit their needs.  Columns will be assigned to edge attributes with the column name as the key and the value coming from the row with an edge’s assigned edges_type_id.
 
@@ -684,7 +684,7 @@ Table 2: Layout of the file format for describing edges.
 
 ##### Edges - Required Attributes
 
-**edge_type_id** -  Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate a edge_type_id with its associated attribute values.
+**edge_type_id** -  Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate an edge_type_id with its associated attribute values.
 
 **source_node_id** - Specifies the sender node id of the connection. The "node_population" attribute of this dataset specifies the name of the source node population in which the node is valid.
 
@@ -1302,7 +1302,7 @@ that the node elements can be identified by an element identifier composed by
 an integer and an optional float value.
 
 * **/report** (group): contains one or more groups of per population reports.
-* **/report/<population_name>/data** (dtype:float, shape: N_time x N_values):
+* **/report/<population_name>/data** (dtype: float, shape: N_time x N_values):
   Writers are encouraged to use chunking for efficient read access. Attributes:
     - **units** (dtype: str)
 * **/report/<population_name>/mapping** (group)
