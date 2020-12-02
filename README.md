@@ -18,6 +18,13 @@ For further details on SONATA, see:
 https://github.com/AllenInstitute/sonnet/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
 
 
+See the paper about SONATA: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007696.
+
+Please cite SONATA as follows:
+```
+Dai et al. The SONATA data format for efficient description of large-scale network models. PLoS Comput Biol 16(2): e1007696. https://doi.org/10.1371/journal.pcbi.1007696
+```
+
 ## Software Development Tools
 
 * [**pySONATA**](https://github.com/AllenInstitute/sonata/tree/master/src/pysonata) - A Python based API for reading and writing SONATA files.

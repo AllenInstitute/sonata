@@ -12,6 +12,8 @@ The need has arisen at both the Blue Brain Project (BBP) and the Allen Institute
 
 The objective of this document is to specify a common data model for neural circuits and simulation output which can be used and supported in the future by both AIBS and BBP.  The data model will be novel compared to other community approaches (e.g. NeuroML) in that it will be optimized for performance for simulation, analysis and visualization of large-scale circuits. This document is accompanied by an example network in the presented data format.
 
+See the paper about SONATA: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007696
+
 ## Mission Statement
 
 This document is intended to present the rationale and outcomes of discussions and analysis towards convergence.  It is a high-level document which can guide the development and public release of a standard "performance representation" data model and associated specifications, including user and developer documentation by the BBP and AIBS.  It is understood that such a data model is complementary, and should co-exist with and leverage existing model representation efforts, such as NeuroML, wherever performance considerations allow.  The latter focuses on flexible and open exchange, cross-simulator reproducibility, and rigorous declarative representation.  In contrast, the present effort focuses on representing a curated subset of models expressible in NeuroML, in compact and efficient representations leveraging existing technologies such as hdf5, SQLite, graph databases, spatial indexing, etc. to enable an ecosystem of performant simulation, analysis and visualization tools.  An import-export bridge between these two approaches will ensure a complementary and mutual benefit.
