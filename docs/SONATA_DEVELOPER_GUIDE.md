@@ -1239,10 +1239,21 @@ with the H5 types in the node files according to the following equivalence:
 
 Each entry specifies a rule. For scalar attributes a node matches the rule if
 the value of its attribute matches the value in the entry. For arrays, a node
-matches if its value matches any of the values in the array. A node is part of
-a node set if it matches all the rules in the node set definition (logical
-AND). Valid node attributes can be either the mandatory and reserved attributes
-or user defined ones.
+matches if its value matches any of the values in the array. For dictionaries,
+a simple expression language is used: {"$operator": "value"}.  The valid
+operators are:
+
+|Operator | Applicable Type | Meaning                    |
+|---------|-----------------|----------------------------|
+|$regex   | String          | ECMA-262 Regular Expression|
+|$gt      | Numeric         | Greater than               |
+|$lt      | Numeric         | Less than                  |
+|$gte     | Numeric         | Equal or greater than      |
+|$lte     | Numeric         | Equal or less than         |
+
+A node is part of a node set if it matches all the rules in the node set
+definition (logical AND). Valid node attributes can be either the mandatory and
+reserved attributes or user defined ones.
 
 Compound node sets are declared as an array of node sets names, where each name
 may refer to another compound node set or a basic node set. The final node set
