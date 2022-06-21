@@ -5,7 +5,7 @@ The SONATA Data Format is a Scalable Open Data Format for multiscale neuronal ne
 
 The design and architecture of SONATA  builds on  both organizations’ expertise with large-scale high-performance  network simulation, visualization and analysis. It was designed for memory and computational efficiency, as well as to work across multiple platforms. Even though AIBS and BBP use different approaches to modeling and use different tools, the format allows networks built by one institute to be simulated by the other and vice versa. We provide specification documentation, open-source reference APIs, and model and simulation output examples with the intention of catalyzing support and adoption of the format in the modeling community.
 
-Registering allows us to communicate with SONATA users and is encouraged, but not required: [link](https://secure2.convio.net/allins/site/SPageServer/?pagename=modeling_tools).
+Registering allows us to communicate with SONATA users and is encouraged, but not required: [Registration link](https://secure2.convio.net/allins/site/SPageServer/?pagename=modeling_tools).
 
 The SONATA Data Format provides:
 
