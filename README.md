@@ -52,6 +52,8 @@ Dai et al. The SONATA data format for efficient description of large-scale netwo
 
 * [Brion/Brain](https://github.com/BlueBrain/Brion)
 
+* [BlueCelluLab](https://github.com/BlueBrain/BlueCelluLab) - A Python API for running cell and circuit simulations using NEURON and SONATA.
+
 * [NetPyNE](http://www.netpyne.org/)
 
 * [pyNeuroML](https://github.com/NeuroML/pyNeuroML)
