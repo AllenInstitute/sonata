@@ -869,6 +869,67 @@ The "run" block specifies some global parameters of the simulation run, such as 
         "random_seed": none
     },
 
+<table>
+  <tr>
+    <td>Key</td>
+    <td>Description</td>
+    <td>Type</td>
+    <td>Required</td>
+    <td>Scope</td>
+  </tr>
+  <tr>
+    <td>tstart</td>
+    <td>Start time of a simulation (in milliseconds). If not specified is assumed start time is at 0.0 ms.</td>
+    <td>float (ms)</td>
+    <td>False</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>tstop</td>
+    <td>Stop time of a simulation (in milliseconds).</td>
+    <td>float (ms)</td>
+    <td>True</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dt</td>
+    <td>The time step of a simulation (in milliseconds)</td>
+    <td>float (ms)</td>
+    <td>True</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>dL</td>
+    <td>The default maximum lenght (in micrometers) of a compartment when using morphologically detailed cell models. If not specified it is left the underlying implementation to determine how to segment a cell into compartments.</td>
+    <td>float (μm)</td>
+    <td>False</td>
+    <td>Value may be overwritten in either the node-types or nodes file if "dL" is different for a given cell-type or individual cells, respectivly</td>
+  </tr>
+  <tr>
+    <td>spike_threshold</td>
+    <td>The default membrane potential (in millivolts) at which an action potential occurs for spiking cell models.</td>
+    <td>float (mV)</td>
+    <td>False</td>
+    <td>Value may be overwritten in either the "output" section or in one of the "reports" if a different recording requires different spiking thresholds.</td>
+  </tr>
+  <tr>
+    <td>nsteps_block</td>
+    <td>Option that allows simulation to be processed in blocks every n-steps. It is up to the specific implementation on what, if anything, to do at each processing block time.</td>
+    <td>integer</td>
+    <td>False</td>
+    <td>Either use "nsteps_block" or "tsteps_block", but not both.</td>
+  </tr>
+  <tr>
+    <td>tsteps_block</td>
+    <td>Option that allows simulation to be processed in blocks every t milliseconds. It is up to the specific implementation on what, if anything, to do at each processing block time.</td>
+    <td>integer</td>
+    <td>False</td>
+    <td>Either use "nsteps_block" or "tsteps_block", but not both.</td>
+  </tr>
+</table>
+
+
+
 ### Conditions Configuration
 
 This block specifies optional global parameters with reserved meaning associated with manipulation of the "in silico preparation".
@@ -879,6 +940,31 @@ Example:
         "celsius": 34.0,
         "v_init": -80
       },
+
+<table>
+  <tr>
+    <td>Key</td>
+    <td>Description</td>
+    <td>Type</td>
+    <td>Required</td>
+    <td>Scope</td>
+  </tr>
+  <tr>
+    <td>celsius</td>
+    <td>The default external temperature at which the simulation is assumed to be ran.</td>
+    <td>float (C)</td>
+    <td>May be overwritten in the node-type/nodes file if individual cell-types/cells are assumed to have different external temperature (and the underyling simulation tool supports multiple external temperatures).</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>v_init</td>
+    <td>The default membrane potential (in millivolts) of a cell at the time tstart.</td>
+    <td>float (mV)</td>
+    <td>False</td>
+    <td>May be overwritten in the node-type/nodes file if individual cell-types/cells have different initial starting potentials.</td>
+  </tr>
+</table>
+
 
 ### Output Configuration
 
