@@ -12,6 +12,8 @@ The need has arisen at both the Blue Brain Project (BBP) and the Allen Institute
 
 The objective of this document is to specify a common data model for neural circuits and simulation output which can be used and supported in the future by both AIBS and BBP.  The data model will be novel compared to other community approaches (e.g. NeuroML) in that it will be optimized for performance for simulation, analysis and visualization of large-scale circuits. This document is accompanied by an example network in the presented data format.
 
+See the paper about SONATA: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007696
+
 ## Mission Statement
 
 This document is intended to present the rationale and outcomes of discussions and analysis towards convergence.  It is a high-level document which can guide the development and public release of a standard "performance representation" data model and associated specifications, including user and developer documentation by the BBP and AIBS.  It is understood that such a data model is complementary, and should co-exist with and leverage existing model representation efforts, such as NeuroML, wherever performance considerations allow.  The latter focuses on flexible and open exchange, cross-simulator reproducibility, and rigorous declarative representation.  In contrast, the present effort focuses on representing a curated subset of models expressible in NeuroML, in compact and efficient representations leveraging existing technologies such as hdf5, SQLite, graph databases, spatial indexing, etc. to enable an ecosystem of performant simulation, analysis and visualization tools.  An import-export bridge between these two approaches will ensure a complementary and mutual benefit.
@@ -393,15 +395,15 @@ https://senselab.med.yale.edu/modeldb/ShowModel.cshtml?model=139653&file=/L5bPCm
 
 #### Overview
 
-We consider a network of neurons as a graph made up of of nodes (neurons) and edges (connections between the neurons). Nodes of a network can be arranged into multiple populations of neurons. For instance, a population may correspond to a brain region or a particular cell type.   The connectivity between a source population and a target population is defined by an edge population.  Nodes and edges in their respective populations are also assigned respective node and edge *types.  *Parameters assigned to node or edge types are inherited for all nodes or edges of the respective type. * *A given node or edge can be associated with one and only one node or edge type, respectively.
+We consider a network of neurons as a graph made up of of nodes (neurons) and edges (connections between the neurons). Nodes of a network can be arranged into multiple populations of neurons. For instance, a population may correspond to a brain region or a particular cell type. The connectivity between a source population and a target population is defined by an edge population.  Nodes and edges in their respective populations are also assigned respective node and edge types.  Parameters assigned to node or edge types are inherited for all nodes or edges of the respective type. A given node or edge can be associated with one and only one node or edge type, respectively.
 
-All nodes and edges, and likewise node and edge types can have be assigned  attributes which define various aspects, such as position, rotation, type, modelparameters, etc. Nodes and edges inherit attributes from their respective types, but also override them. Some attributes are required, some are optional with reserved meaning, and others are entirely optional.  The entirely optional attributes can be added by the user for their own specific needs , and are typically ignored by the simulator software.  These optional attributes may be added by users simply for convenience to help them maintain the workflow through model building, simulation, and analysis.
+All nodes and edges, and likewise node and edge types can have be assigned attributes which define various aspects, such as position, rotation, type, modelparameters, etc. Nodes and edges inherit attributes from their respective types, but also override them. Some attributes are required, some are optional with reserved meaning, and others are entirely optional. The entirely optional attributes can be added by the user for their own specific needs, and are typically ignored by the simulator software. These optional attributes may be added by users simply for convenience to help them maintain the workflow through model building, simulation, and analysis.
 
 The details of how node and edge populations are defined and represented are described in the following sections.
 
 #### <a name="neuron_networks_nodes">Representing nodes
 
-In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneousequations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
+In general, populations of neurons are heterogeneous in the  types of cell models describing each node, implying heterogeneous equations and sets of parameters.  We define a node group  as a set of nodes with a homogeneous parameter namespace implying a uniform tabular layout. A population is defined as the union of one or more groups, which need not have uniform tabular layout among them, and further defines some indexing datasets.  A population provides then a uniform view on a collection of nodes which have heterogeneous parameterization namespaces.
 
 A model_type attribute allows nodes to be configured as `biophysical`, `point_neuron`, etc. and also `virtual` one may be provided to specify external (or `virtual`) nodes that are not explicitly simulated but provide inputs to the network.
 
@@ -414,7 +416,7 @@ Non scalar attributes may be included in the node types CSV file provided the at
 
 Populations are serialized in nodes HDF5 files, and have a single  associated node types CSV file to define the valid node_type_ids for the populations in the HDF5 file, and assign attributes applying to all nodes in with a given node_type_id.  A node_types CSV file may be shared by multiple population HDF5 files. Node groups are represented as HDF5 groups (with population as parent) containing a dataset for each parameter of length equal to the number of  nodes in the group. In the case a node attribute is defined in both the node types CSV and the nodes HDF5, the value in the nodes HDF5 overrides the node types CSV value.
 
-The HDF5 nodes file layout is designed to store multiple named populations that each may have multiple node groups, but each population with all of its node groups must be self-contained within one HDF5 file..  For each population, the node_id and node_type_id datasets are required because they uniquely identify nodes within a population irrespective of a model_type used. The node_group and node_group_index are required because they identify the location of the group specific data for each node.The model_type attribute is required, but may be defined only in the node_types CSV. The layout of the nodes HDF5 is as shown in Table 1.
+The HDF5 nodes file layout is designed to store multiple named populations that each may have multiple node groups, but each population with all of its node groups must be self-contained within one HDF5 file.  For each population, the node_id and node_type_id datasets are required because they uniquely identify nodes within a population irrespective of a model_type used. The node_group and node_group_index are required because they identify the location of the group specific data for each node. The model_type attribute is required, but may be defined only in the node_types CSV. The layout of the nodes HDF5 is as shown in Table 1.
 
 <table>
   <tr>
@@ -489,15 +491,26 @@ The HDF5 nodes file layout is designed to store multiple named populations that 
 
 Table 1: The Layout  of the HDF5 file format for describing nodes.
 
+#### Nodes - Enum datatypes
+
+It is often the case that string attributes have a limited number of possible values (for instance, `model_type`, or cell morphological type).
+For space efficiency, it is better to represent these attributes with *enumerations*, i.e. data types consisting of a limited set of named integer values.
+However, Enum Datatypes offered by HDF5 impose a limit on the total number of possible values due to [64K limit on object header](https://support.hdfgroup.org/HDF5/hdf5-quest.html).
+To work around this limitation, SONATA nodes/edges HDF5 files may use *explicit enumerations*.
+Each attribute `/<population_name>/<group>/X` with integer datatype may have a corresponding attribute `/<population>/<group>/@library/X` with a limited set of string values. They are defined as ``ENUM`` below.
+The group `@library` is reserved for this purpose.
+
 ##### Nodes - Required Attributes
 
 **/nodes** - The top-level group that will contain populations.  This group must always be present.
 
 **/nodes/<population_name>** - defines a node population with the given name, which is also the node population name that will be used in edge files to specify the source or target node populations of an edge population (see below).  Multiple populations may be defined in one HDF5 file.
 
-**node_type_id** -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type.  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.
+**/nodes/<population_name>/<group>** - defines a group of neurons with the given name.
 
-**model_type** - Has 4 valid values: `biophysical`, `virtual`, `single_compartment`, and `point_neuron`.  In the future, more `model_types` may be defined. The meaning of each of these model types is as follows.
+**node_type_id** [INT] -  This is a unique integer for every node type used to associate a node to a node type.  A node type has associated attributes, and a node inherits attributes from its node type.  Attributes associated with a node override attributes inherited from the node type CSV. node_type_id is a unique integer associated with each node type and is used to index all the node type properties associated with a given node with known node_type_id.  These need not be ordered or contiguous, but must be unique.
+
+**model_type** [ENUM] - Has 4 valid values: `biophysical`, `virtual`, `single_compartment`, and `point_neuron`.  In the future, more `model_types` may be defined. The meaning of each of these model types is as follows.
 
 The `model_type`=`single_compartment` is a single-compartment model of a neuron.   A cylindrical compartment is created with length equal to diameter, and the diameter being defined by an additional expected dynamics_param “D”, which if not specified defaults to 1 micron.  The voltage of the neuron is defined by the voltage of the compartment.  Further, the passive mechanism is inserted, and the additional mechanism named in the “model_template” required attribute. Note that a single compartment of length = diameter has the same effective area as that of a sphere of the same diameter (see [NEURON documentation](https://www.neuron.yale.edu/neuron/static/docs/help/neuron/neuron/geometry.html)).
 
@@ -532,11 +545,11 @@ The `model_type`=`biophysical` results in a compartmental neuron.  The attribute
 
 *`resource`* is a reference to the template file-name or class. For file names if a full-path or url is not specified the interpreter is expected to use the "components" in the config file to find the full path (see below).
 
+#### Nodes - Optional Reserved Attributes
+
 **node_group_id** - Assigns each node to a specific group of nodes.
 
 **node_group_index** - After determining the node_group_id of a specific node, the node_group_index indicates the index within that <node-group-id> that contains all the attributes for a particular node under consideration.
-
-#### Nodes - Optional Reserved Attributes
 
 **node_id** - Assigns a key to uniquely identify and lookup a node within a population.  It is primarily used to specify the source and target of an edge (connection). If not provided, node_ids are implicitly contiguous starting from zero.
 
@@ -546,7 +559,7 @@ Example:
 
 For model_processing=*"fullaxon"*, the biophysical neuron will construct and simulate the full axon. This is the default behaviour if model_processing is undefined for a given node.
 
-**x, y, z** - position of the soma in world coordinates.
+**x [FLOAT], y [FLOAT], z [FLOAT] ** - position of the soma in world coordinates.
 
 **orientation** [4 FLOAT] - (w, x, y, z) quaternion with the local to world rotation of the morphology around the soma center.
 
@@ -583,18 +596,9 @@ For `biophysical` models defined according to the *bmtk* (see above).
 
 For `biophysical` models defined according to the *hoc* (see above).
 
-#### Nodes - Enum datatypes
-
-It is often the case that string attributes have a limited number of possible values (for instance, `model_type`, or cell morphological type).
-For space efficiency, it is better to represent these attributes with *enumerations*, i.e. data types consisting of a limited set of named integer values.
-However, Enum Datatypes offered by HDF5 impose a limit on the total number of possible values due to [64K limit on object header](https://support.hdfgroup.org/HDF5/hdf5-quest.html).
-To work around this limitation, SONATA nodes/edges HDF5 files may use *explicit enumerations*.
-Each attribute `/<population>/<group>/X` with integer datatype may have a corresponding attribute `/<population>/<group>/@library/X` with a limited set of string values.
-The group `@library` is reserved for this purpose.
-
 #### <a name="neuron_networks_edges">Representing Edges
 
-Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or moreedge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
+Analogous to nodes, edges are defined in populations stored in HDF5 files containing attributes for each edge. Each edge population is composed on one or more edge groups. Like nodes, edge groups have a uniform tabular layout, i.e. a homogeneous attribute namespace. Each HDF5 file is associated with an edge types CSV file containing attributes applied to all edges in the HDF5 file with a given edge_type_id.
 
 The edge_types file is a CSV file of named columns. The edge_type_id column is required, and defines the edge_type_id of each row. To handle edges h5 files with multiple populations, a population column is also required to resolve collisions between edge_type_id’s among different populations. "Required" attributes must either appear in the HDF5 representation, or be defined in a column in the associated edges types CSV file.  The edge types CSV file may also include “optional reserved” column names which have specified interpretation and expected units. Apart from these reserved names, the user is free to define any number of additional named columns to suit their needs.  Columns will be assigned to edge attributes with the column name as the key and the value coming from the row with an edge’s assigned edges_type_id.
 
@@ -684,7 +688,7 @@ Table 2: Layout of the file format for describing edges.
 
 ##### Edges - Required Attributes
 
-**edge_type_id** -  Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate a edge_type_id with its associated attribute values.
+**edge_type_id** -  Like the node_type_id, this is a unique integer to associate an edge to an edge type.  An edge type has associated attributes, and an edge inherits attributes from its edge type.  Attributes associated to an edge override attributes inherited from the edge type.  edge_type_ids need not be ordered or contiguous, but must be unique.  A reference implementation might be to use a id-value store, such as a dictionary to associate an edge_type_id with its associated attribute values.
 
 **source_node_id** - Specifies the sender node id of the connection. The "node_population" attribute of this dataset specifies the name of the source node population in which the node is valid.
 
@@ -772,8 +776,9 @@ The config file is a .json file that defines the relative location of each part 
 
     {
         "target_simulator":"NEURON",
+        "target_simulator_version": ">=7.4",
 
-target_simulator can be "NEURON", “PyNN”, “NEST”, etc.  It specifies the intended target simulator of the circuit description.  For now, this field is intended as a declaration, and an implementation may decide to throw an error for unsupported targets.  In practice, mechanism and parameter names are tailored to the given target simulator.  For model_type=biophysical NEURON is supported, but not PyNN or NEST.
+target_simulator can be "NEURON", “PyNN”, “NEST”, etc.  It specifies the intended target simulator of the circuit description.  For now, this field is intended as a declaration, and an implementation may decide to throw an error for unsupported targets.  In practice, mechanism and parameter names are tailored to the given target simulator.  For model_type=biophysical NEURON is supported, but not PyNN or NEST. Similarly one can specifying which version(s) are required to reproduce the results using the _optional_ target_simulator_version attribute.
 
 The "manifest" section of the config file provides a convenient handle on setting variables that point to base paths.  These variables can be then used in the rest of the config file to point to various directories that share the first portion of the path.
 
@@ -861,6 +866,7 @@ The "run" block specifies some global parameters of the simulation run, such as 
         "dt": 0.1,
         "dL": 20,
         "spike_threshold": -15,
+        "random_seed": none
     },
 
 <table>
@@ -1061,6 +1067,13 @@ The "inputs" block of the simulation config allows the definition of inputs to t
     <td>node_set</td>
     <td>The name of the  node_set defining the input.  In some cases, such as spike input types, all members of the node_set should be model_type=“virtual”.  </td>
     <td>string</td>
+    <td>False</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>random_seed</td>
+    <td>A seed value for a random generator, when trying to ensure reproducibility of an input with stochastic components.</td>
+    <td>integer or hashable string</td>
     <td>False</td>
     <td></td>
   </tr>
@@ -1379,7 +1392,7 @@ that the node elements can be identified by an element identifier composed by
 an integer and an optional float value.
 
 * **/report** (group): contains one or more groups of per population reports.
-* **/report/<population_name>/data** (dtype:float, shape: N_time x N_values):
+* **/report/<population_name>/data** (dtype: float, shape: N_time x N_values):
   Writers are encouraged to use chunking for efficient read access. Attributes:
     - **units** (dtype: str)
 * **/report/<population_name>/mapping** (group)

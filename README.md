@@ -5,6 +5,8 @@ The SONATA Data Format is a Scalable Open Data Format for multiscale neuronal ne
 
 The design and architecture of SONATA  builds on  both organizations’ expertise with large-scale high-performance  network simulation, visualization and analysis. It was designed for memory and computational efficiency, as well as to work across multiple platforms. Even though AIBS and BBP use different approaches to modeling and use different tools, the format allows networks built by one institute to be simulated by the other and vice versa. We provide specification documentation, open-source reference APIs, and model and simulation output examples with the intention of catalyzing support and adoption of the format in the modeling community.
 
+We really welcome user input, please use our [user survey form](https://docs.google.com/forms/d/e/1FAIpQLSfwZQhvHF0JH9BLrKXfAtyagy9_d-Y0x5VRX85aDY2-p9-u1g/viewform). Registering allows us to communicate with SONATA users and is encouraged, but not required: [registration link](https://secure2.convio.net/allins/site/SPageServer/?pagename=modeling_tools).
+
 The SONATA Data Format provides:
 
 * Facilities for representing nodes (cells) and edges (synapses/junctions) of a network. It uses table-based data structures, hdf5 and csv, to represent nodes, edges and their respective properties. Furthermore, indexing procedures  are specified to enable fast, parallelizable, and efficient partial lookup of individual nodes and edges. The use of hdf5 provides efficiency both in file size and IO time. The format includes specific properties and naming conventions, but also allows modelers to extend node and edge model properties as they desire, to ensure models can be used with a variety of simulation frameworks and use cases.
@@ -17,6 +19,13 @@ For further details on SONATA, see:
 
 https://github.com/AllenInstitute/sonnet/blob/master/docs/SONATA_DEVELOPER_GUIDE.md
 
+
+See the paper about SONATA: https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007696.
+
+Please cite SONATA as follows:
+```
+Dai et al. The SONATA data format for efficient description of large-scale network models. PLoS Comput Biol 16(2): e1007696. https://doi.org/10.1371/journal.pcbi.1007696
+```
 
 ## Software Development Tools
 
