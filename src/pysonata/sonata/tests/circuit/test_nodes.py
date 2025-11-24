@@ -42,6 +42,7 @@ def test_population_itr(net):
         node_count += 1
     assert(node_count == 449)
 
+    print(f"DEBUG: lgn node_id_ds len: {len(nodes['lgn']._node_id_ds)}")
     for i, node in enumerate(nodes['lgn']):
         assert(node.node_id == i)
         assert(node['location'] == 'LGN')
@@ -111,11 +112,12 @@ def test_group_df(net):
     grp_0 = v1_nodes.get_group(0)
     df = grp_0.to_dataframe()
     print(df.columns)
-    assert(df.shape == (382, 15))
+    assert(df.shape == (382, 17))
+    assert('positions.0' in df.columns)
 
     grp_1 = v1_nodes.get_group(1)
     df = grp_1.to_dataframe()
-    assert(df.shape == (67, 14))
+    assert(df.shape == (67, 16))
 
 
 def test_group_properties(net):
