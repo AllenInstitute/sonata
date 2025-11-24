@@ -212,12 +212,12 @@ class NodeGroup(Group):
         # TODO: Include dynamics_params?
         properties_df = pd.DataFrame()
         for col in self._group_columns:
-            #if col.dimension > 1:
-            #    for i in range(col.dimension):
-            #        # TODO: see if column name exists in the attributes
-            #        col_name = '{}.{}'.format(col.name, i)
-            #        properties_df[col_name] = pd.Series(self._h5_group[col.name][:, i])
-            #else:
+            if col.dimension > 1:
+                for i in range(col.dimension):
+                    # TODO: see if column name exists in the attributes
+                    col_name = '{}.{}'.format(col.name, i)
+                    properties_df[col_name] = pd.Series(self._h5_group[col.name][:, i])
+            else:
                 properties_df[col.name] = pd.Series(self._h5_group[col.name])
 
         # Build a dataframe of parent node (node_id, gid, node_types, etc)

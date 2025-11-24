@@ -242,7 +242,8 @@ class NodePopulation(Population):
         else:
             dataframes = []
             for grp_id in self.group_ids:
-                dataframes.append(self.get_group(grp_id)).to_datframe()
+                dataframes.append(self.get_group(grp_id).to_dataframe())
+            dataframes = pd.concat(dataframes)
             dataframes = dataframes.set_index('node_id')
             return dataframes
 
