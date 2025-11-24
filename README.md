@@ -57,3 +57,5 @@ Dai et al. The SONATA data format for efficient description of large-scale netwo
 * [pyNeuroML](https://github.com/NeuroML/pyNeuroML)
 
 * [RTNeuron](https://github.com/BlueBrain/RTNeuron)
+
+* [Kaspersky Neuromorphic Platform](https://github.com/KasperskyLab/knp)
