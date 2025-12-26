@@ -837,6 +837,54 @@ The network is defined by nodes and edges. In the example below, a V1 model is b
         }
     }
 
+#### Optional keys:
+
+##### In components:
+
+**alternate_morphologies:** A dictionary for different representations of the morphologies than the default .swc:
+
+    "components": {
+        ...
+       "alternate_morphologies": {
+           "neurolucida-asc": "$COMPONENT_DIR/neurolucida_morphologies",
+           "h5v1": "$COMPONENT_DIR/h5_morphologies"
+       }
+    }
+
+##### In networks::nodes/edges:
+
+**populations:** A property of a node/edge overriding all or a subset of default components.
+This property is a dictionary with keys being population names contained in the nodes_file/edges_file and the values are dictionaries. 
+The properties are the same as in `components` with the addition of `type` property.
+This allows morphologies, biophysical_neuron_models_dir, etc to be placed in separate locations for separate nodes files.
+
+    "nodes": [{
+        "nodes_file": "$NETWORK_DIR/V1/nodes.h5",
+        "node_types_file": "$NETWORK_DIR/V1/node_types.csv"
+        "populations": {
+            "node_population_a": {
+                "type": "biophysical",
+                "morphologies_dir": "...",
+                "biophysical_neuron_models_dir": "...",
+                "alternate_morphologies": {
+                    ...
+                }
+            },
+            "node_population_b": {
+                "type": "virtual"
+            }
+        }
+    }],
+    "edges": [{
+        "edges_file": "$NETWORK_DIR/V1/v1_edges.h5",
+        "edge_types_file": "$NETWORK_DIR/V1/v1_edge_types.csv"
+        "populations":{
+            "edge_population_a":{
+                "type": "chemical"
+            }
+        }
+    }]
+
 ## <a name="simulations">Representing Simulations
 
 The simulation config file is a json file which ties together the definition of a simulation on a circuit.  It specifies the circuit to be used, simulator parameters, load balancing and time stepping information, stimuli (simulation input), reports (simulation output), and the specification of neuron targets (sub groups of neurons) in a node_sets_file.  Like the circuit_config.json, the simulation_config.json may contain a "manifest" block which defines paths to be re-used elsewhere in the .json file:
