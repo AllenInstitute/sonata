@@ -1,0 +1,58 @@
+begintemplate L4PC472363762biophys
+public biophys
+
+proc biophys() {
+    forsec $o1.all {
+      insert pas
+        Ra = 138.28
+        e_pas = -92.4991149902
+    }
+
+  forsec $o1.axonal {
+    cm = 1.0
+    g_pas = 0.000457387600765
+  }
+
+  forsec $o1.apical {
+    cm = 2.12
+    g_pas = 9.58618554762e-05
+  }
+
+  forsec $o1.basal {
+    cm = 2.12
+    g_pas = 3.23932732744e-06
+  }
+
+  forsec $o1.somatic {
+    cm = 1.0
+    ena = 53.0
+    ek = -107.0
+    g_pas = 5.71881e-06
+
+    insert CaDynamics
+      gamma_CaDynamics = 0.00125108
+      decay_CaDynamics = 717.917
+    insert Ca_HVA
+      gbar_Ca_HVA = 0.000535997
+    insert Ca_LVA
+      gbar_Ca_LVA = 0.00700613
+    insert Ih
+      gbar_Ih = 4.12226e-05
+    insert Im
+      gbar_Im = 0.00120212
+    insert K_P
+      gbar_K_P = 0.0517584
+    insert K_T
+      gbar_K_T = 0.000731607
+    insert Kv3_1
+      gbar_Kv3_1 = 0.0572648
+    insert NaTs
+      gbar_NaTs = 0.98229
+    insert Nap
+      gbar_Nap = 0.000209349
+    insert SK
+      gbar_SK = 0.00019222
+ }
+}
+
+endtemplate L4PC472363762biophys
