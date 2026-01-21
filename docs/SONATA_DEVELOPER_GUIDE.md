@@ -123,6 +123,7 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
   2 - axon
   3 - basal dendrite
   4 - apical dendrite
+  5 - dendritic spine
 
 * IDs must start at 1
 
@@ -150,6 +151,16 @@ The format used is SWC ( [http://www.neuronland.org/NLMorphologyConverter/Morpho
   section plus 1. The order in which sections are assigned an ID is the order
   in which their first segment appears in the file.
 
+* Dendritic spines morphology should follow the guidelines described in the DXplorer framework: https://pubmed.ncbi.nlm.nih.gov/34591770/
+
+Naming Convention Example: "5.0_SpineHead"
+
+All dendritic spines have heads,but only some spines have necks.
+
+An additional segment is needed to describe spines with necks. Neck and head numerical prefixes must match.
+
+Naming Convention Example: "5.0_SpineHead" and "5.0_SpineNeck"
+  
 It is not required that the soma is located at 0,0,0 in the SWC file, but in cases where the morphology has a soma, the soma will be re-centered to 0,0,0 upon loading into the circuit.  Node translations will then be applied to this recentered morphology. This behavior can be overridden by the optional reserved attribute "recenter" for nodes and node_types.  See "Representing networks of neurons" for more details.
 
 It is recommended, but not required, that morphologies in a network have a standardized orientation, so that their orientation vectors in the network can be inferred from node rotation angles.
